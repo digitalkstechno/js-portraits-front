@@ -1,0 +1,2427 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Photography Studio Software Prototype</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-blue: #2196f3;
+        --sidebar-bg: #e3f2fd;
+        --panel-border: #9cc0de;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f0f2f5;
+      }
+      .app-container {
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+      /* Sidebar */
+      .sidebar {
+        width: 260px;
+        background: var(--sidebar-bg);
+        padding: 15px;
+        border-right: 2px solid var(--panel-border);
+        overflow-y: auto;
+      }
+      .sidebar h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #0d47a1;
+        font-weight: 600;
+      }
+      .sidebar small {
+        display: block;
+        margin-bottom: 12px;
+        color: #555;
+      }
+      .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .sidebar li {
+        padding: 8px 10px;
+        margin-bottom: 4px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #1e3d59;
+        display: flex;
+        align-items: center;
+        transition: all 0.2s;
+      }
+      .sidebar li i {
+        margin-right: 8px;
+        width: 16px;
+        text-align: center;
+      }
+      .sidebar li:hover {
+        background: #bbdefb;
+      }
+      .sidebar li.active {
+        background: var(--primary-blue);
+        color: #fff;
+        font-weight: 600;
+      }
+
+      /* Main */
+      .main-content {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+      }
+
+      .panel-window {
+        background: #e0f2ff;
+        border: 2px solid var(--panel-border);
+        border-radius: 4px;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+        height: 100%;
+        display: none;
+        flex-direction: column;
+      }
+      .panel-window.active {
+        display: flex;
+      }
+      .panel-header {
+        background: #d0e7ff;
+        padding: 6px 10px;
+        border-bottom: 1px solid var(--panel-border);
+        font-weight: 600;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .panel-body {
+        padding: 10px;
+        font-size: 13px;
+        overflow-y: auto;
+      }
+
+      /* Form and table styles mimicking desktop app */
+      .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 6px;
+        align-items: center;
+      }
+      .form-row label {
+        font-size: 12px;
+        min-width: 90px;
+      }
+      .form-row input,
+      .form-row select,
+      .form-row textarea {
+        font-size: 12px;
+        padding: 3px 5px;
+        border: 1px solid #b0bec5;
+        border-radius: 2px;
+        min-width: 120px;
+        background: #fff;
+      }
+      .form-row textarea {
+        resize: vertical;
+      }
+      .btn-bar {
+        margin-top: 8px;
+        display: flex;
+        gap: 6px;
+        justify-content: flex-end;
+      }
+      .btn-old {
+        background: #cfe8ff;
+        border: 1px solid #90caf9;
+        padding: 4px 14px;
+        font-size: 12px;
+        border-radius: 2px;
+        cursor: pointer;
+      }
+      .btn-old:hover {
+        background: #bbdefb;
+      }
+
+      table.old-grid {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 4px;
+        font-size: 12px;
+      }
+      table.old-grid th,
+      table.old-grid td {
+        border: 1px solid #b0bec5;
+        padding: 3px 4px;
+        white-space: nowrap;
+      }
+      table.old-grid th {
+        background: #d0e7ff;
+        font-weight: 600;
+      }
+
+      .section-title {
+        font-weight: 600;
+        border-bottom: 1px solid #b0bec5;
+        margin: 6px 0 4px;
+        padding-bottom: 2px;
+        font-size: 12px;
+      }
+
+      @media (max-width: 900px) {
+        .app-container {
+          flex-direction: column;
+        }
+        .sidebar {
+          width: 100%;
+          border-right: none;
+          border-bottom: 2px solid var(--panel-border);
+        }
+        .panel-window {
+          height: calc(100vh - 150px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- LEFT SIDEBAR -->
+      <div class="sidebar">
+        <h3>Studio ERP Prototype</h3>
+        <small>Side panel navigation like old desktop screens</small>
+        <ul id="navList">
+          <li data-panel="panel-account" class="active">
+            <i class="fas fa-user-circle"></i> Account Master
+          </li>
+          <!-- <li data-panel="panel-outdoor-party">
+            <i class="fas fa-user-friends"></i> Outdoor Party
+          </li> -->
+          <li data-panel="panel-quotation">
+            <i class="fas fa-file-invoice"></i> Quotation
+          </li>
+          <li data-panel="panel-outdoor-order">
+            <i class="fas fa-book-open"></i> Outdoor Order
+          </li>
+          <li data-panel="panel-outdoor-bill">
+            <i class="fas fa-receipt"></i> Outdoor Bill
+          </li>
+          <li data-panel="panel-outdoor-payment">
+            <i class="fas fa-credit-card"></i> Outdoor Payment
+          </li>
+          <li data-panel="panel-item-master">
+            <i class="fas fa-list"></i> Item Master
+          </li>
+          <li data-panel="panel-product-details">
+            <i class="fas fa-box"></i> Product Details
+          </li>
+          <li data-panel="panel-book-master">
+            <i class="fas fa-book"></i> Outdoor Book Master
+          </li>
+          <li data-panel="panel-book-txn">
+            <i class="fas fa-exchange-alt"></i> Book Purchase/Sale
+          </li>          
+          <li data-panel="panel-notes">
+            <i class="fas fa-sticky-note"></i> Notes Setting
+          </li>
+          <li data-panel="panel-staff-master">
+            <i class="fas fa-user-tie"></i> Staff Master
+          </li>
+          <li data-panel="panel-staff-salary">
+            <i class="fas fa-money-bill-wave"></i> Staff Salary
+          </li>
+
+          <!-- <li data-panel="panel-staff">
+            <i class="fas fa-users"></i> Staff Management
+          </li> -->
+          <!-- <li data-panel="panel-print-settings">
+            <i class="fas fa-print"></i> Print Settings
+          </li> -->
+          <li data-panel="panel-product-purchase">
+            <i class="fas fa-cart-arrow-down"></i> Product Purchase
+          </li>
+
+          <li data-panel="panel-tc-master">
+            <i class="fas fa-file-contract"></i> Terms & Conditions
+          </li>
+          <li data-panel="panel-summary">
+            <i class="fas fa-chart-line"></i> Summary Dashboard
+          </li>
+        </ul>
+      </div>
+
+      <!-- RIGHT MAIN AREA -->
+      <div class="main-content">
+        <!-- ACCOUNT MASTER (simple general account info) -->
+        <div id="panel-account" class="panel-window active">
+          <div class="panel-header">
+            <span>Account Master</span>
+            <span>General Account Info</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Account Name</label>
+              <input type="text" />
+              <label>Mobile No.</label>
+              <input type="text" />
+              <label>Email</label>
+              <input type="text" />
+            </div>
+            <div class="form-row">
+              <label>Address</label>
+              <input type="text" style="flex: 1" />
+            </div>
+            <div class="form-row">
+              <label>GST No.</label>
+              <input type="text" />
+              <label>State</label>
+              <select>
+                <option>STATE</option>
+                <option>Gujarat</option>
+                <option>Maharashtra</option>
+              </select>
+            </div>
+            <div class="btn-bar">
+              <button class="btn-old">Save</button>
+              <button class="btn-old">Delete</button>
+              <button class="btn-old">Cancel</button>
+              <button class="btn-old">Exit</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- OUTDOOR PARTY MASTER -->
+        <div id="panel-outdoor-party" class="panel-window">
+          <div class="panel-header">
+            <span>Outdoor Party Master</span>
+            <span>Customer List</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Party Name</label>
+              <input id="opName" type="text" style="width: 220px" />
+              <label>Contact Person</label>
+              <input id="opContact" type="text" style="width: 180px" />
+              <label>Mobile</label>
+              <input id="opMobile" type="text" style="width: 140px" />
+            </div>
+            <div class="form-row">
+              <label>Address</label>
+              <input id="opAddress" type="text" style="flex: 1" />
+            </div>
+            <div class="btn-bar">
+              <button class="btn-old" onclick="saveOutdoorParty()">Save</button>
+              <button class="btn-old" onclick="clearOutdoorPartyForm()">
+                Cancel
+              </button>
+            </div>
+
+            <div class="section-title">Outdoor Parties</div>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Contact</th>
+                  <th>Mobile</th>
+                  <th>Address</th>
+                </tr>
+              </thead>
+              <tbody id="outdoorPartyTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- QUOTATION PANEL (simplified) -->
+        <div id="panel-quotation" class="panel-window">
+          <div class="panel-header">
+            <span>Quotation</span>
+            <span>Outdoor Party Quotation</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Quote No.</label><input id="quoteNo" type="text" />
+              <label>Date</label><input type="date" />
+              <label>Outdoor Party</label>
+              <input type="text" id="qOutdoorParty" data-outdoor-party></>
+            </div>
+            <div class="form-row">
+              <label>Couple Name</label><input type="text" />
+              <label>Package</label><input type="text" />
+            </div>
+
+            <div class="section-title">Quotation Detail</div>
+            <div id="quotationLines"></div>
+            <button class="btn-old" onclick="addQuotationLine()">
+              Add Line
+            </button>
+
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Item Name</th>
+                  <th>Product</th>
+                  <th>Event</th>
+                  <th>Qty</th>
+                  <th>Rate</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="quotationTableBody"></tbody>
+            </table>
+
+            <div class="section-title">Terms & Conditions</div>
+            <div class="form-row">
+              <label>Fixed Terms</label>
+              <select
+                id="qTcSelect"
+                onchange="onQuotationTCChange()"
+                style="width: 260px"
+              ></select>
+              <label>Or Custom</label>
+            </div>
+            <div class="form-row">
+              <textarea id="qTcText" rows="3" style="flex: 1"></textarea>
+            </div>
+
+            <div class="btn-bar">
+              <button class="btn-old" onclick="saveQuotation()">Save</button>
+              <button class="btn-old">Delete</button>
+              <button class="btn-old">Print</button>
+              <button
+                class="btn-old"
+                onclick="goToPanel('panel-outdoor-order')"
+              >
+                Create Outdoor Order
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- OUTDOOR ORDER BOOK PANEL -->
+        <div id="panel-outdoor-order" class="panel-window">
+          <div class="panel-header">
+            <span>Outdoor Order Book</span>
+            <span>Order Confirmation</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Order No.</label>
+              <input id="orderNo" type="text" readonly />
+              <label>Date</label>
+              <input type="date" />
+              <label>Outdoor Party</label>
+              <input type="text" id="qOutdoorParty" data-outdoor-party></>
+            </div>
+            <div class="form-row">
+              <label>Search Quotation</label>
+              <input id="searchQuoteNo" type="text" placeholder="Quote No." />
+              <button
+                class="btn-old"
+                type="button"
+                onclick="loadQuotationIntoOrder()"
+              >
+                Load
+              </button>
+            </div>
+
+            <div class="form-row">
+              <label>Book</label>
+              <select id="orderBookSelect"></select>
+              <label>GST Type</label>
+              <select>
+                <option>STATE</option>
+                <option>INTER STATE</option>
+              </select>
+            </div>
+
+            <div class="section-title">Order Items (from Quotation)</div>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Item Name</th>
+                  <th>Product</th>
+                  <th>Event</th>
+                  <th>Qty</th>
+                  <th>Rate</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="orderItemsBody"></tbody>
+            </table>
+
+            <div class="btn-bar">
+              <button class="btn-old" onclick="saveOrder()">Save</button>
+              <button class="btn-old">Delete</button>
+              <button class="btn-old">Print</button>
+              <!-- In Outdoor Order footer -->
+              <button
+                class="btn-old"
+                onclick="goToPanel('panel-outdoor-bill', { from: 'order' })"
+              >
+                Outdoor Bill
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- OUTDOOR BILL PANEL -->
+        <div id="panel-outdoor-bill" class="panel-window">
+          <div class="panel-header">
+            <span>OutDoor Bill</span>
+            <span>Data Issue To Customer</span>
+          </div>
+
+          <div class="panel-body">
+            <!-- Top line -->
+            <div class="form-row">
+              <label>Book</label>
+              <select id="billBookSelect" style="width: 110px"></select>
+
+              <label>Bill No.</label>
+              <input id="billNo" type="text" style="width: 70px" />
+
+              <label>Date</label>
+              <input id="billDate" type="date" style="width: 140px" />
+            </div>
+
+            <div class="form-row">
+              <label>Outdoor Party</label>
+              <input type="text" id="qOutdoorParty" data-outdoor-party></>
+
+              <label>Order No.</label>
+              <input id="billOrderNo" type="text" style="width: 120px" />
+
+              <label>GST Type</label>
+              <select id="billGstType" style="width: 110px">
+                <option>STATE</option>
+                <option>INTER STATE</option>
+              </select>
+
+              <label>GST</label>
+              <input id="billGstNo" type="text" style="width: 130px" />
+            </div>
+
+            <div class="form-row">
+              <label>Couple Name</label>
+              <input id="billCoupleName" type="text" style="width: 210px" />
+
+              <label>Package</label>
+              <input id="billPackage" type="text" style="width: 210px" />
+
+              <!-- Search existing order -->
+              <label>Search Order</label>
+              <input id="billSearchOrderNo" type="text" style="width: 120px" />
+              <button
+                type="button"
+                class="btn-old"
+                onclick="loadOrderIntoBill()"
+              >
+                Load
+              </button>
+            </div>
+
+            <!-- Row under header (Function Date / Item / etc.) -->
+            <div class="form-row">
+              <label>Function Date</label>
+              <input id="billFuncDate" type="date" style="width: 130px" />
+
+              <label>Item Name</label>
+              <input id="billItemName" type="text" style="width: 160px" />
+
+              <label>Product</label>
+              <input id="billProductText" type="text" style="width: 160px" />
+
+              <label>Event Name</label>
+              <input id="billEventName" type="text" style="width: 160px" />
+            </div>
+
+            <!-- Items grid + right totals -->
+            <div style="display: flex; margin-top: 4px">
+              <div style="flex: 1; margin-right: 6px">
+                <table class="old-grid">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Item Name</th>
+                      <th>Product</th>
+                      <th>Event Name</th>
+                      <th>Qty</th>
+                      <th>Rate</th>
+                      <th>Total</th>
+                      <th>Place</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody id="billItemsBody"></tbody>
+                </table>
+              </div>
+
+              <!-- Right side total box -->
+              <div style="width: 220px; font-size: 12px">
+                <div class="form-row">
+                  <label>Sub Total</label>
+                  <input id="billSubTotal" type="text" readonly />
+                </div>
+                <div class="form-row">
+                  <label>Discount</label>
+                  <input id="billDiscount" type="number" value="0" />
+                </div>
+                <div class="form-row">
+                  <label>CGST %</label>
+                  <input
+                    id="billCgst"
+                    type="number"
+                    value="9"
+                    style="width: 60px"
+                  />
+                  <input id="billCgstAmt" type="text" readonly />
+                </div>
+                <div class="form-row">
+                  <label>SGST %</label>
+                  <input
+                    id="billSgst"
+                    type="number"
+                    value="9"
+                    style="width: 60px"
+                  />
+                  <input id="billSgstAmt" type="text" readonly />
+                </div>
+                <div class="form-row">
+                  <label>Net Bill Amt</label>
+                  <input id="billGrand" type="text" readonly />
+                </div>
+                <div class="form-row">
+                  <label>Bill Advance</label>
+                  <input id="billAdvance" type="number" value="0" />
+                </div>
+                <div class="form-row">
+                  <label>Total Pending</label>
+                  <input id="billPending" type="text" readonly />
+                </div>
+              </div>
+            </div>
+
+            <!-- Notes + footer buttons like screenshot -->
+            <div class="form-row" style="margin-top: 6px">
+              <label>Update By</label>
+              <input id="billUpdateBy" type="text" style="width: 160px" />
+              <label></label>
+              <input id="billUpdateKey" type="text" style="width: 160px" />
+            </div>
+
+            <div class="form-row">
+              <label>Notes</label>
+              <input id="billNotes" type="text" style="flex: 1" />
+            </div>
+
+            <div class="btn-bar" style="justify-content: space-between">
+              <div>
+                <button class="btn-old" onclick="dummySave('Bill')">
+                  Save
+                </button>
+
+                <button class="btn-old" onclick="dummyDelete()">Delete</button>
+                <button class="btn-old" onclick="dummyPrint()">
+                  Print (With Rate)
+                </button>
+                <button class="btn-old" onclick="dummyPrint()">
+                  Print (WO Rate)
+                </button>
+                <button
+                  class="btn-old"
+                  onclick="goToPanel('panel-outdoor-order', { from: 'bill' })"
+                >
+                  Cancel
+                </button>
+                <button class="btn-old" onclick="goToPanel('panel-account')">
+                  Exit
+                </button>
+              </div>
+              <div>
+                <button class="btn-old" onclick="dummySms()">Send SMS</button>
+                <button class="btn-old" onclick="dummyWhatsapp()">
+                  WhatsApp
+                </button>
+                <button class="btn-old" onclick="dummyEmail()">
+                  Send Email
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OUTDOOR PAYMENT PANEL -->
+        <!-- OUTDOOR PARTY PAYMENT DETAIL -->
+        <div id="panel-outdoor-payment" class="panel-window">
+          <div class="panel-header">
+            <span>Outdoor Party Payment Detail</span>
+            <span>Advance / Pending</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Trans No.</label>
+              <input id="payTransNo" type="text" style="width: 80px" />
+              <label>Outdoor Party</label>
+              <input type="text" id="qOutdoorParty" data-outdoor-party></>
+
+              <label>Date</label>
+              <input id="payDate" type="date" style="width: 140px" />
+              <label>Order No.</label>
+              <input id="paymentOrderNo" type="text" style="width: 80px" />
+              <label>Contact Number</label>
+              <input id="payContact" type="text" style="width: 140px" />
+            </div>
+
+            <div class="form-row">
+              <label>Bill Total Amt</label>
+              <input id="paymentBillTotal" type="text" readonly />
+              <label>Total Paid Amt</label>
+              <input id="paymentPaid" type="text" readonly />
+              <label>Total Pending Amt</label>
+              <input id="paymentPending" type="text" readonly />
+              <label>Order Total Amt</label>
+              <input id="orderTotalAmt" type="text" readonly />
+              <label>Total Paid Amt</label>
+              <input id="orderPaidAmt" type="text" readonly />
+              <label>Total Pending</label>
+              <input id="orderPendingAmt" type="text" readonly />
+            </div>
+
+            <div class="form-row">
+              <label>Payment Type</label>
+              <select id="paymentType">
+                <option>CASH</option>
+                <option>BANK</option>
+                <option>UPI</option>
+              </select>
+              <label>Amount</label>
+              <input id="paymentAmount" type="number" />
+              <label>Our Bank Name</label>
+              <input id="paymentOurBank" type="text" />
+              <label>OutParty Bank & Chq No / UPI ID</label>
+              <input id="paymentOutBank" type="text" />
+            </div>
+
+            <div class="form-row">
+              <label>Remark</label>
+              <input id="paymentRemark" type="text" style="flex: 1" />
+            </div>
+
+            <div class="section-title" style="color: red">
+              Pending Bill Detail :
+            </div>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Sr.No</th>
+                  <th>Date</th>
+                  <th>Book/Bill No</th>
+                  <th>Amount</th>
+                  <th>Pend.Amt</th>
+                  <th>ID</th>
+                </tr>
+              </thead>
+              <tbody id="pendingBillTableBody"></tbody>
+            </table>
+
+            <div class="section-title" style="color: red">Payment Detail :</div>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Pay.Type</th>
+                  <th>Amount</th>
+                  <th>Remark</th>
+                </tr>
+              </thead>
+              <tbody id="paymentTableBody"></tbody>
+            </table>
+
+            <div class="btn-bar" style="justify-content: space-between">
+              <div>
+                <button class="btn-old" onclick="savePaymentEntry()">
+                  Save
+                </button>
+                <button class="btn-old" onclick="dummyDelete()">Delete</button>
+                <button class="btn-old" onclick="dummyPrint()">Print</button>
+                <button
+                  class="btn-old"
+                  onclick="goToPanel('panel-outdoor-bill', { from: 'payment' })"
+                >
+                  Cancel
+                </button>
+                <button class="btn-old" onclick="goToPanel('panel-account')">
+                  Exit
+                </button>
+              </div>
+              <div>
+                <button class="btn-old" onclick="dummySms()">Send SMS</button>
+                <button class="btn-old" onclick="dummySms()">
+                  Send SMS (Order)
+                </button>
+                <button class="btn-old" onclick="dummyEmail()">
+                  Send Email
+                </button>
+                <button class="btn-old" onclick="dummyWhatsapp()">
+                  WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ITEM MASTER PANEL -->
+        <div id="panel-item-master" class="panel-window">
+          <div class="panel-header">
+            <span>Item Master</span>
+            <span>Like your desktop grid</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Item Name</label><input id="itemName" type="text" />
+              <label>HSN</label><input id="itemHSN" type="text" />
+              <label>In Stock</label><input id="inStock" type="checkbox" />
+              <label>In Display</label><input id="inDisplay" type="checkbox" />
+              <label>Outdoor</label><input id="outDisplay" type="checkbox" />
+              <label>Staff</label><input id="staff" type="checkbox" />
+            </div>
+            <button class="btn-old" onclick="addItem()">Save</button>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>HSN</th>
+                  <th>In Stock</th>
+                  <th>Display In</th>
+                  <th>Display Out</th>
+                  <th>Staff</th>
+                </tr>
+              </thead>
+              <tbody id="itemTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PRODUCT DETAILS PANEL -->
+        <div id="panel-product-details" class="panel-window">
+          <div class="panel-header">
+            <span>Product Detail</span>
+            <span>Rate / Size mapping</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Item</label>
+              <select id="productItemSelect"></select>
+              <label>Product Name</label><input id="productName" type="text" />
+              <label>Size</label><input id="productSize" type="text" />
+              <label>Rate</label><input id="productRate" type="number" />
+            </div>
+            <button class="btn-old" onclick="addProduct()">Save</button>
+
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Product</th>
+                  <th>Size</th>
+                  <th>Rate</th>
+                </tr>
+              </thead>
+              <tbody id="productTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- OUTDOOR BOOK MASTER PANEL (matches new screenshot) -->
+        <div id="panel-book-master" class="panel-window">
+          <div class="panel-header">
+            <span>Outdoor Book Master</span>
+            <span>Book wise grouping</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Book</label>
+              <input id="bookCode" type="text" placeholder="BM-1" />
+            </div>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Book Name</th>
+                  <th>Not Display In Out Bill</th>
+                </tr>
+              </thead>
+              <tbody id="bookTableBody"></tbody>
+            </table>
+            <div class="form-row">
+              <label>Book Name</label>
+              <input id="bookName" type="text" />
+              <label>Hide in Out Bill</label>
+              <input id="bookHide" type="checkbox" />
+            </div>
+            <div class="btn-bar">
+              <button class="btn-old" onclick="addBook()">Save</button>
+              <button class="btn-old">Delete</button>
+              <button class="btn-old">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTES SETTING PANEL (like notes.jpg) -->
+        <div id="panel-notes" class="panel-window">
+          <div class="panel-header">
+            <span>Outdoor Notes Settings</span>
+            <span>Quotation / Order / Bill Notes</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Out. Quotation</label>
+              <textarea id="noteQuotation" rows="4" style="flex: 1"></textarea>
+            </div>
+            <div class="form-row">
+              <label>Out. Order</label>
+              <textarea id="noteOrder" rows="4" style="flex: 1"></textarea>
+            </div>
+            <div class="form-row">
+              <label>Out. Bill</label>
+              <textarea id="noteBill" rows="4" style="flex: 1"></textarea>
+            </div>
+            <div class="btn-bar">
+              <button class="btn-old">Save Settings</button>
+              <button class="btn-old">Exit</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STAFF MASTER -->
+        <div id="panel-staff-master" class="panel-window">
+          <div class="panel-header">
+            <span>Staff Master</span>
+            <span>Staff Name / Salary</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Staff Name</label>
+              <input id="stfName" type="text" style="width: 220px" />
+
+              <label>Role</label>
+              <input
+                id="stfRole"
+                type="text"
+                style="width: 160px"
+                placeholder="PHOTOGRAPHER"
+              />
+              <label>Mobile</label>
+              <input id="stfMobile" type="text" style="width: 140px" />
+            </div>
+
+            <div class="form-row">
+              <label>Salary</label>
+              <input id="stfSalary" type="number" style="width: 120px" />
+              <label>Joining Date</label>
+              <input id="stfJoinDate" type="date" style="width: 150px" />
+              <label>Active</label>
+              <input id="stfActive" type="checkbox" checked />
+            </div>
+            <div class="form-row">
+              <label>Address</label>
+              <input id="stfAddress" type="text" style="flex: 1" />
+            </div>
+            <div class="btn-bar">
+              <button class="btn-old" onclick="saveStaff()">Save</button>
+              <button class="btn-old" onclick="clearStaffForm()">Cancel</button>
+            </div>
+
+            <div class="section-title">Staff List</div>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Mobile</th>
+                  <th>Salary</th>
+                  <th>Active</th>
+                </tr>
+              </thead>
+              <tbody id="staffTableMasterBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- STAFF MANAGEMENT PANEL (Staff wise report) -->
+        <div id="panel-staff" class="panel-window">
+          <div class="panel-header">
+            <span>Staff Wise Report</span>
+            <span>Outdoor Assignments</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>From Date</label><input type="date" />
+              <label>To Date</label><input type="date" />
+              <label>Staff Name</label><input type="text" />
+              <label>Outdoor Party</label><input type="text" />
+            </div>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>Outdoor Party Name</th>
+                  <th>Item Name/Product</th>
+                  <th>Order Date</th>
+                  <th>Time</th>
+                  <th>Place</th>
+                  <th>Remark</th>
+                  <th>Staff Chrg</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody id="staffTableBody">
+                <!-- demo rows -->
+                <tr>
+                  <td>1</td>
+                  <td>Rakesh Gupta</td>
+                  <td>ALBUM / 30 PAGES</td>
+                  <td>26/02/2025</td>
+                  <td>09:00</td>
+                  <td>Surat</td>
+                  <td>-</td>
+                  <td>0</td>
+                  <td>ORDER</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="btn-bar">
+              <button class="btn-old">Print</button>
+              <button class="btn-old">Preview</button>
+              <button class="btn-old">Exit</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STAFF SALARY ENTRY PANEL -->
+        <div id="panel-staff-salary" class="panel-window">
+          <div class="panel-header">
+            <span>Staff Salary Entry</span>
+            <span>Monthly / Advance / Bonus</span>
+          </div>
+
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Staff Name</label>
+              <select
+                id="salStaffId"
+                data-staff-select
+                style="width: 220px"
+              ></select>
+
+              <label>Date</label>
+              <input id="salDate" type="date" style="width: 150px" />
+
+              <label>Salary Type</label>
+              <select id="salType" style="width: 140px">
+                <option value="Salary">Salary</option>
+                <option value="Exposure">Exposure</option>
+                <!-- <option value="BONUS">BONUS</option>
+                <option value="OTHER">OTHER</option> -->
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label>Amount</label>
+              <input id="salAmount" type="number" style="width: 140px" />
+
+              <label>Month / Period</label>
+              <input
+                id="salPeriod"
+                type="text"
+                style="width: 160px"
+                placeholder="Feb 2026"
+              />
+
+              <label>Remark</label>
+              <input id="salRemark" type="text" style="flex: 1" />
+            </div>
+
+            <div class="btn-bar">
+              <button class="btn-old" onclick="saveStaffSalary()">Save</button>
+              <button class="btn-old" onclick="clearStaffSalaryForm()">
+                Cancel
+              </button>
+            </div>
+
+            <div class="section-title">Staff Salary Detail</div>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Staff</th>
+                  <th>Type</th>
+                  <th>Period</th>
+                  <th>Amount</th>
+                  <th>Remark</th>
+                </tr>
+              </thead>
+              <tbody id="staffSalaryTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PRINT SETTINGS PANEL (from print_settings.jpg) -->
+        <div id="panel-print-settings" class="panel-window">
+          <div class="panel-header">
+            <span>Print Settings</span>
+            <span>SMS & Bill Options</span>
+          </div>
+          <div class="panel-body">
+            <div class="section-title">Print Detail</div>
+            <div class="form-row">
+              <label>Company</label><input type="text" />
+              <label>Bill Line Color</label>
+              <select>
+                <option>BLACK</option>
+                <option>BLUE</option>
+              </select>
+              <label>Display Logo</label><input type="checkbox" />
+            </div>
+            <div class="form-row">
+              <label>Mobile No.</label><input type="text" /> <label>GSTIN</label
+              ><input type="text" />
+            </div>
+
+            <div class="section-title">Studio Bill Print Detail</div>
+            <div class="form-row">
+              <label><input type="checkbox" /> Save And Print</label>
+              <label><input type="checkbox" /> Direct Print</label>
+              <label><input type="checkbox" /> Print Without Rate</label>
+              <label>Bill Print Size</label>
+              <select>
+                <option>A4</option>
+                <option>A5</option>
+              </select>
+            </div>
+
+            <div class="section-title">Outdoor Print Detail</div>
+            <div class="form-row">
+              <label><input type="checkbox" /> Quotation **</label>
+              <label><input type="checkbox" /> Order **</label>
+              <label><input type="checkbox" /> Bill **</label>
+            </div>
+
+            <div class="btn-bar">
+              <button class="btn-old">Save Settings</button>
+              <button class="btn-old">Default Settings</button>
+              <button class="btn-old">Exit</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUCT PURCHASE PANEL -->
+        <div id="panel-product-purchase" class="panel-window">
+          <div class="panel-header">
+            <span>Product Purchase</span>
+            <span>Purchase Entry</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Trans No.</label><input type="text" /> <label>Date</label
+              ><input type="date" /> <label>Party Name</label
+              ><input type="text" /> <label>Bill No.</label
+              ><input type="text" />
+            </div>
+            <div class="form-row">
+              <label>Item Name</label><input type="text" />
+              <label>Size / Product Name</label><input type="text" />
+              <label>Qty</label><input type="number" /> <label>Rate</label
+              ><input type="number" />
+            </div>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>Size</th>
+                  <th>Qty</th>
+                  <th>Rate</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="purchaseTableBody"></tbody>
+            </table>
+            <div class="btn-bar">
+              <button class="btn-old">Save</button>
+              <button class="btn-old">Delete</button>
+              <button class="btn-old">Cancel</button>
+              <button class="btn-old">Send Email</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TERMS & CONDITIONS MASTER -->
+        <div id="panel-tc-master" class="panel-window">
+          <div class="panel-header">
+            <span>Terms & Conditions Master</span>
+            <span>Quotation / Order / Bill</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-row">
+              <label>Title</label>
+              <input id="tcTitle" type="text" style="width: 260px" />
+            </div>
+            <div class="form-row">
+              <label>Text</label>
+              <textarea id="tcText" rows="4" style="flex: 1"></textarea>
+            </div>
+            <div class="btn-bar">
+              <button class="btn-old" onclick="saveTC()">Save</button>
+              <button class="btn-old" onclick="clearTCForm()">Cancel</button>
+            </div>
+
+            <div class="section-title">Available Terms</div>
+            <table class="old-grid">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Preview</th>
+                </tr>
+              </thead>
+              <tbody id="tcTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SUMMARY & REPORTS DASHBOARD -->
+        <div id="panel-summary" class="panel-window">
+          <div class="panel-header">
+            <span>Financial Summary</span>
+            <span>Prototype Totals</span>
+          </div>
+          <div class="panel-body">
+            <div class="section-title">Salary Summary (Yearly)</div>
+            <p id="sumSalaryText"></p>
+
+            <div class="section-title">Revenue Summary</div>
+            <p id="sumRevenueText"></p>
+
+            <div class="section-title">Expense Summary</div>
+            <p id="sumExpenseText"></p>
+
+            <div class="section-title">Income vs Expense</div>
+            <p id="sumProfitText"></p>
+
+            <div class="btn-bar">
+              <button class="btn-old" onclick="refreshSummary()">
+                Refresh
+              </button>
+              <button class="btn-old" onclick="goToPanel('panel-quotation')">
+                Go To Quotation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOOK PURCHASE / SALE PANEL -->
+<div id="panel-book-txn" class="panel-window">
+  <div class="panel-header">
+    <span>Book Purchase / Sale</span>
+    <span>For Albums, Frames, Etc.</span>
+  </div>
+
+  <div class="panel-body">
+    <div class="form-row">
+      <label>Book</label>
+      <select id="btBookSelect" style="width: 150px"></select>
+
+      <label>Trans No.</label>
+      <input id="btTransNo" type="text" style="width: 90px" />
+
+      <label>Date</label>
+      <input id="btDate" type="date" style="width: 150px" />
+
+      <label>Type</label>
+      <select id="btType" style="width: 130px">
+        <option value="PURCHASE">Purchase</option>
+        <option value="SALE">Sale</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label>Party / Vendor</label>
+      <input id="btParty" type="text" style="width: 230px" />
+      <label>Remark</label>
+      <input id="btRemark" type="text" style="flex: 1" />
+    </div>
+
+    <div class="section-title">Item Detail</div>
+    <div id="btLinesContainer"></div>
+    <button class="btn-old" onclick="btAddLine()">Add Line</button>
+
+    <table class="old-grid">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>Rate</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody id="btLinesTableBody"></tbody>
+    </table>
+
+    <div class="form-row" style="margin-top: 6px">
+      <label>Gross Total</label>
+      <input id="btGross" type="text" readonly />
+      <label>Discount</label>
+      <input id="btDisc" type="number" value="0" />
+      <label>Net Amount</label>
+      <input id="btNet" type="text" readonly />
+    </div>
+
+    <div class="btn-bar" style="justify-content: space-between">
+      <div>
+        <button class="btn-old" onclick="saveBookTxn()">Save</button>
+        <button class="btn-old" onclick="btClearForm()">Cancel</button>
+      </div>
+      <div>
+        <button class="btn-old" onclick="goToPanel('panel-summary')">
+          Go To Summary
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      // BASIC IN-MEMORY DATA
+      let items = [
+        {
+          id: 1,
+          name: "PHOTOGRAPHY",
+          hsn: "0",
+          inStock: true,
+          inDisplay: false,
+          outDisplay: true,
+          staff: true,
+        },
+        {
+          id: 2,
+          name: "VIDEOGRAPHY",
+          hsn: "0",
+          inStock: true,
+          inDisplay: false,
+          outDisplay: true,
+          staff: true,
+        },
+      ];
+      let products = [
+        {
+          id: "p1",
+          itemId: 1,
+          name: "Photography Basic",
+          size: "8x10",
+          rate: 500,
+        },
+        {
+          id: "p2",
+          itemId: 1,
+          name: "Photography Premium",
+          size: "12x18",
+          rate: 1200,
+        },
+      ];
+      let books = [
+        { id: "b1", name: "23-24 CORE", hide: false },
+        { id: "b2", name: "OUTDOOR", hide: false },
+      ];
+      // GLOBALS
+      let quotationLinesData = [];
+      let quotations = []; // <‑‑ add
+      let selectedQuotationId = null;
+      let orderLines = [];
+      let payments = [];
+      let lastNavigationSource = null; // <‑‑ add
+      let staffList = [
+        {
+          id: 1,
+          name: "Main Photographer",
+          mobile: "",
+          role: "PHOTOGRAPHER",
+          salary: 25000,
+          active: true,
+        },
+      ];
+
+      let outdoorParties = [
+        { id: 1, name: "WED PARTY", contact: "", mobile: "", address: "" },
+      ];
+      let staffSalaryEntries = [];
+      let tcMaster = [
+        {
+          id: 1,
+          name: "Standard Outdoor Terms",
+          text: "Full payment before album delivery. Date change subject to availability.",
+        },
+        {
+          id: 2,
+          name: "Pre‑Wedding Package Terms",
+          text: "50% advance on booking, balance on event day.",
+        },
+      ];
+      let bills = [];
+      let selectedBillId = null;
+      let purchases = [];        // later you can push real purchases
+let externalExpenses = []; // lab / printing / misc
+let bookTransactions = [];   // each: {id, header, detail}
+let btLines = [];
+
+
+
+      // NAVIGATION
+      document.querySelectorAll("#navList li").forEach((li) => {
+        li.addEventListener("click", () => goToPanel(li.dataset.panel));
+      });
+
+      function saveOutdoorParty() {
+        const name = document.getElementById("opName").value.trim();
+        if (!name) return alert("Outdoor Party name required");
+
+        outdoorParties.push({
+          id: Date.now(),
+          name,
+          contact: document.getElementById("opContact").value,
+          mobile: document.getElementById("opMobile").value,
+          address: document.getElementById("opAddress").value,
+        });
+        clearOutdoorPartyForm();
+        populateOutdoorPartyTable();
+        populateOutdoorPartyDropdowns();
+      }
+
+      function clearOutdoorPartyForm() {
+        document.getElementById("opName").value = "";
+        document.getElementById("opContact").value = "";
+        document.getElementById("opMobile").value = "";
+        document.getElementById("opAddress").value = "";
+      }
+
+      function populateOutdoorPartyTable() {
+        const tbody = document.getElementById("outdoorPartyTableBody");
+        tbody.innerHTML = outdoorParties
+          .map(
+            (p) => `<tr>
+      <td>${p.name}</td>
+      <td>${p.contact}</td>
+      <td>${p.mobile}</td>
+      <td>${p.address}</td>
+    </tr>`,
+          )
+          .join("");
+      }
+
+      // Fill every "Outdoor Party" field with a searchable dropdown
+      function populateOutdoorPartyDropdowns() {
+        const partyInputs = document.querySelectorAll("[data-outdoor-party]");
+        partyInputs.forEach((sel) => {
+          sel.innerHTML =
+            '<option value="">Select Party</option>' +
+            outdoorParties
+              .map((p) => `<option value="${p.id}">${p.name}</option>`)
+              .join("");
+        });
+      }
+
+      function goToPanel(panelId, options = {}) {
+  lastNavigationSource = options.from || null;
+
+  document
+    .querySelectorAll("#navList li")
+    .forEach((li) => li.classList.remove("active"));
+  const li = document.querySelector(
+    `#navList li[data-panel="${panelId}"]`,
+  );
+  if (li) li.classList.add("active");
+
+  document
+    .querySelectorAll(".panel-window")
+    .forEach((p) => p.classList.remove("active"));
+  document.getElementById(panelId).classList.add("active");
+
+  if (panelId === "panel-outdoor-order") onEnterOutdoorOrder();
+  if (panelId === "panel-outdoor-bill") onEnterOutdoorBill();
+  if (panelId === "panel-outdoor-payment") populatePaymentTable();
+  if (panelId === "panel-summary") refreshSummary();   // show totals
+}
+
+
+      // ITEM MASTER
+      function populateItemTable() {
+        const tbody = document.getElementById("itemTableBody");
+        tbody.innerHTML = items
+          .map(
+            (it) => `
+        <tr>
+          <td>${it.name}</td>
+          <td>${it.hsn}</td>
+          <td>${it.inStock ? "✔" : ""}</td>
+          <td>${it.inDisplay ? "✔" : ""}</td>
+          <td>${it.outDisplay ? "✔" : ""}</td>
+          <td>${it.staff ? "✔" : ""}</td>
+        </tr>`,
+          )
+          .join("");
+        populateItemSelectForProduct();
+      }
+      function addItem() {
+        const name = document.getElementById("itemName").value.trim();
+        if (!name) return alert("Item name required");
+        items.push({
+          id: Date.now(),
+          name,
+          hsn: document.getElementById("itemHSN").value,
+          inStock: document.getElementById("inStock").checked,
+          inDisplay: document.getElementById("inDisplay").checked,
+          outDisplay: document.getElementById("outDisplay").checked,
+          staff: document.getElementById("staff").checked,
+        });
+        document.getElementById("itemName").value = "";
+        populateItemTable();
+      }
+
+      // PRODUCT DETAIL
+      function populateItemSelectForProduct() {
+        const sel = document.getElementById("productItemSelect");
+        sel.innerHTML =
+          '<option value="">Select Item</option>' +
+          items
+            .map((i) => `<option value="${i.id}">${i.name}</option>`)
+            .join("");
+      }
+      function populateProductTable() {
+        const tbody = document.getElementById("productTableBody");
+        tbody.innerHTML = products
+          .map((p) => {
+            const itemName = items.find((i) => i.id === p.itemId)?.name || "";
+            return `<tr><td>${itemName}</td><td>${p.name}</td><td>${p.size}</td><td>${p.rate}</td></tr>`;
+          })
+          .join("");
+      }
+      function addProduct() {
+        const itemId = parseInt(
+          document.getElementById("productItemSelect").value,
+        );
+        const name = document.getElementById("productName").value.trim();
+        if (!itemId || !name)
+          return alert("Select item and enter product name");
+        products.push({
+          id: "p" + Date.now(),
+          itemId,
+          name,
+          size: document.getElementById("productSize").value,
+          rate: parseFloat(document.getElementById("productRate").value || "0"),
+        });
+        populateProductTable();
+        document.getElementById("productName").value = "";
+      }
+
+      // BOOK MASTER
+      function populateBookTable() {
+        const tbody = document.getElementById("bookTableBody");
+        tbody.innerHTML = books
+          .map(
+            (b) => `<tr><td>${b.name}</td><td>${b.hide ? "✔" : ""}</td></tr>`,
+          )
+          .join("");
+        const selects = [
+          document.getElementById("orderBookSelect"),
+          document.getElementById("billBookSelect"),
+        ];
+        selects.forEach((sel) => {
+          sel.innerHTML = books
+            .map((b) => `<option value="${b.id}">${b.name}</option>`)
+            .join("");
+        });
+      }
+      function addBook() {
+        const name = document.getElementById("bookName").value.trim();
+        if (!name) return alert("Book name required");
+        books.push({
+          id: "b" + Date.now(),
+          name,
+          hide: document.getElementById("bookHide").checked,
+        });
+        document.getElementById("bookName").value = "";
+        populateBookTable();
+      }
+
+      // QUOTATION
+      function addQuotationLine() {
+        const id = Date.now();
+        quotationLinesData.push({
+          id,
+          itemId: null,
+          productId: null,
+          qty: 1,
+          rate: 0,
+          total: 0,
+        });
+        renderQuotationLines();
+      }
+      function renderQuotationLines() {
+        const container = document.getElementById("quotationLines");
+        container.innerHTML = quotationLinesData
+          .map((line) => {
+            const itemOptions = items
+              .map(
+                (i) =>
+                  `<option value="${i.id}" ${i.id === line.itemId ? "selected" : ""}>${i.name}</option>`,
+              )
+              .join("");
+            const productOptions = products
+              .filter((p) => !line.itemId || p.itemId === line.itemId)
+              .map(
+                (p) =>
+                  `<option value="${p.id}" ${p.id === line.productId ? "selected" : ""}>${p.name}</option>`,
+              )
+              .join("");
+            return `
+          <div class="form-row" data-id="${line.id}">
+            <label>Item</label>
+            <select onchange="onQuoteItemChange(${line.id}, this.value)"><option value="">Select</option>${itemOptions}</select>
+            <label>Product</label>
+            <select onchange="onQuoteProductChange(${line.id}, this.value)"><option value="">Select</option>${productOptions}</select>
+            <label>Qty</label>
+            <input type="number" value="${line.qty}" min="1" onchange="onQuoteQtyChange(${line.id}, this.value)" />
+            <label>Rate</label>
+            <input type="number" value="${line.rate}" onchange="onQuoteRateChange(${line.id}, this.value)" />
+            <label>Total</label>
+            <input type="text" value="${line.total}" readonly style="width:80px;" />
+          </div>`;
+          })
+          .join("");
+      }
+      function onQuoteItemChange(id, itemId) {
+        const line = quotationLinesData.find((l) => l.id === id);
+        line.itemId = parseInt(itemId);
+        line.productId = null;
+        line.rate = 0;
+        calcQuoteLine(line);
+        renderQuotationLines();
+      }
+      function onQuoteProductChange(id, productId) {
+        const line = quotationLinesData.find((l) => l.id === id);
+        line.productId = productId;
+        const prod = products.find((p) => p.id === productId);
+        line.rate = prod ? prod.rate : 0;
+        calcQuoteLine(line);
+        renderQuotationLines();
+      }
+      function onQuoteQtyChange(id, qty) {
+        const line = quotationLinesData.find((l) => l.id === id);
+        line.qty = parseInt(qty || "1");
+        calcQuoteLine(line);
+        renderQuotationLines();
+      }
+      function onQuoteRateChange(id, rate) {
+        const line = quotationLinesData.find((l) => l.id === id);
+        line.rate = parseFloat(rate || "0");
+        calcQuoteLine(line);
+        renderQuotationLines();
+      }
+      function calcQuoteLine(line) {
+        line.total = line.qty * line.rate;
+      }
+      function saveQuotation() {
+        const id = selectedQuotationId || Date.now();
+        const header = {
+          id,
+          quoteNo: document.getElementById("quoteNo").value || "Q" + id,
+          date: document.querySelector("#panel-quotation input[type='date']")
+            .value,
+          party:
+            document.querySelector(
+              "#panel-quotation input[label='Outdoor Party']",
+            )?.value || "",
+          couple:
+            document.querySelector(
+              "#panel-quotation input[label='Couple Name']",
+            )?.value || "",
+          package:
+            document.querySelector("#panel-quotation input[label='Package']")
+              ?.value || "",
+          tcText: document.getElementById("qTcText").value,
+        };
+
+        // clone detail lines
+        const detail = quotationLinesData.map((l) => ({ ...l }));
+
+        const existingIndex = quotations.findIndex((q) => q.id === id);
+        if (existingIndex >= 0) {
+          quotations[existingIndex] = { header, detail };
+        } else {
+          quotations.push({ header, detail });
+        }
+
+        selectedQuotationId = id;
+        populateQuotationTableFromQuotation(detail); // just show lines grid
+        alert("Quotation saved. You can now load it in Outdoor Order.");
+      }
+
+      function populateQuotationTableFromQuotation(detailLines) {
+        const tbody = document.getElementById("quotationTableBody");
+        tbody.innerHTML = detailLines
+          .map((l) => {
+            const itemName = items.find((i) => i.id === l.itemId)?.name || "";
+            const prod = products.find((p) => p.id === l.productId);
+            const productName = prod ? prod.name : "";
+            return `<tr>
+        <td>${new Date().toLocaleDateString()}</td>
+        <td>${itemName}</td>
+        <td>${productName}</td>
+        <td>-</td>
+        <td>${l.qty}</td>
+        <td>${l.rate}</td>
+        <td>${l.total}</td>
+      </tr>`;
+          })
+          .join("");
+      }
+
+      function populateQuotationTable() {
+        const tbody = document.getElementById("quotationTableBody");
+        tbody.innerHTML = orderLines
+          .map(
+            (l) =>
+              `<tr><td>${l.date}</td><td>${items.find((i) => i.id === l.itemId)?.name || ""}</td><td>${
+                l.productName
+              }</td><td>-</td><td>${l.qty}</td><td>${l.rate}</td><td>${l.total}</td></tr>`,
+          )
+          .join("");
+      }
+
+      // ORDER BOOK
+      function generateOrderNumber() {
+        const no =
+          "OUT" + new Date().getFullYear() + String(Date.now()).slice(-4);
+        document.getElementById("orderNo").value = no;
+        document.getElementById("billOrderNo").value = no;
+        document.getElementById("paymentOrderNo").value = no;
+      }
+      function populateOrderItems() {
+        const tbody = document.getElementById("orderItemsBody");
+        tbody.innerHTML = orderLines
+          .map(
+            (l) =>
+              `<tr><td>${l.date}</td><td>${items.find((i) => i.id === l.itemId)?.name || ""}</td><td>${
+                l.productName
+              }</td><td>-</td><td>${l.qty}</td><td>${l.rate}</td><td>${l.total}</td></tr>`,
+          )
+          .join("");
+        // also reuse for bill
+        document.getElementById("billItemsBody").innerHTML = tbody.innerHTML;
+        recalcBill();
+      }
+      // Example in‑memory orders store (you may already have something similar)
+      let orders = []; // each: { orderNo, header, detail }
+
+      // When saving order, push to orders[]
+      function saveOrder() {
+        const orderNo = document.getElementById("orderNo").value;
+        const header = {
+          orderNo,
+          party:
+            document.querySelector("#panel-outdoor-order input[type='text']")
+              .value || "",
+          // add more header fields as required
+        };
+        const detail = orderLines.map((l) => ({ ...l }));
+        const idx = orders.findIndex((o) => o.orderNo === orderNo);
+        if (idx >= 0) orders[idx] = { orderNo, header, detail };
+        else orders.push({ orderNo, header, detail });
+
+        alert(
+          "Order saved in book: " +
+            document.getElementById("orderBookSelect").value,
+        );
+      }
+      function patchOrderToBill(order) {
+        // patch lines
+        orderLines = order.detail.map((l) => ({ ...l }));
+        populateOrderItems(); // fills order grid + billItemsBody
+        // header
+        document.getElementById("billOrderNo").value = order.orderNo;
+        document.getElementById("billSearchOrderNo").value = order.orderNo;
+        document.getElementById("billParty").value = order.header.party || "";
+        // more header fields if you store them
+        recalcBill();
+      }
+
+      // manual search on bill screen
+      function loadOrderIntoBill() {
+        const no = document.getElementById("billSearchOrderNo").value.trim();
+        if (!no) {
+          alert("Enter Order No.");
+          return;
+        }
+        const order = orders.find((o) => o.orderNo === no);
+        if (!order) {
+          alert("Order not found");
+          return;
+        }
+        patchOrderToBill(order);
+      }
+
+      function loadQuotationIntoOrder() {
+        const searchNo = document.getElementById("searchQuoteNo").value.trim();
+        if (!searchNo) {
+          alert("Enter quotation no.");
+          return;
+        }
+        const q = quotations.find((q) => q.header.quoteNo === searchNo);
+        if (!q) {
+          alert("Quotation not found");
+          return;
+        }
+
+        selectedQuotationId = q.header.id;
+
+        // Patch orderLines, order grid, and also bill grid if currently linked flow
+        orderLines = q.detail.map((l) => {
+          const prod = products.find((p) => p.id === l.productId);
+          return {
+            ...l,
+            productName: prod ? prod.name : "",
+            date: q.header.date || new Date().toLocaleDateString(),
+          };
+        });
+
+        populateOrderItems(); // uses orderLines to fill grid
+        generateOrderNumber(); // gives new order no
+      }
+
+      //
+      // Hook when entering Outdoor Order
+      //
+      function onEnterOutdoorOrder() {
+        if (lastNavigationSource === "quotation" && quotations.length) {
+          // we came from quotation via button: patch using currently edited quotation
+          const currentQuoteNo = document.getElementById("quoteNo").value;
+          document.getElementById("searchQuoteNo").value = currentQuoteNo;
+          loadQuotationIntoOrder();
+        } else {
+          // external navigation: do NOT patch, leave empty; user must search
+          orderLines = [];
+          document.getElementById("searchQuoteNo").value = "";
+          document.getElementById("orderItemsBody").innerHTML = "";
+        }
+      }
+
+      function onEnterOutdoorBill() {
+        // came from Order via button => patch
+        if (lastNavigationSource === "order") {
+          const currentOrderNo = document.getElementById("orderNo").value;
+          const order = orders.find((o) => o.orderNo === currentOrderNo);
+          if (order) patchOrderToBill(order);
+        } else {
+          // opened Bill directly from sidebar or somewhere else
+          document.getElementById("billSearchOrderNo").value = "";
+          document.getElementById("billItemsBody").innerHTML = "";
+          orderLines = [];
+          recalcBill();
+        }
+      }
+
+      // BILL
+      function recalcBill() {
+        let subtotal = orderLines.reduce((sum, l) => sum + l.total, 0);
+        const disc = parseFloat(
+          document.getElementById("billDiscount").value || "0",
+        );
+        subtotal = Math.max(0, subtotal - disc);
+
+        const cgstPerc =
+          parseFloat(document.getElementById("billCgst").value || "0") / 100;
+        const sgstPerc =
+          parseFloat(document.getElementById("billSgst").value || "0") / 100;
+
+        const cgstAmt = subtotal * cgstPerc;
+        const sgstAmt = subtotal * sgstPerc;
+        const grand = subtotal + cgstAmt + sgstAmt;
+
+        document.getElementById("billSubTotal").value = subtotal.toFixed(2);
+        document.getElementById("billCgstAmt").value = cgstAmt.toFixed(2);
+        document.getElementById("billSgstAmt").value = sgstAmt.toFixed(2);
+        document.getElementById("billGrand").value = grand.toFixed(2);
+
+        const advance = parseFloat(
+          document.getElementById("billAdvance").value || "0",
+        );
+        const pending = grand - advance;
+        document.getElementById("billPending").value = pending.toFixed(2);
+
+        document.getElementById("paymentBillTotal").value = grand.toFixed(2);
+      }
+
+      // PAYMENT
+      function addPayment() {
+        const amt = parseFloat(
+          document.getElementById("paymentAmount").value || "0",
+        );
+        if (!amt) return alert("Enter amount");
+        payments.push({
+          date: new Date().toLocaleDateString(),
+          type: document.getElementById("paymentType").value,
+          amount: amt,
+          remark: document.getElementById("paymentRemark").value,
+        });
+        populatePaymentTable();
+        const paid = payments.reduce((s, p) => s + p.amount, 0);
+        document.getElementById("paymentPaid").value = paid.toFixed(2);
+        document.getElementById("paymentAmount").value = "";
+      }
+      function populatePaymentTable() {
+        const tbody = document.getElementById("paymentTableBody");
+        tbody.innerHTML = payments
+          .map(
+            (p) =>
+              `<tr><td>${p.date}</td><td>${p.type}</td><td>${p.amount.toFixed(
+                2,
+              )}</td><td>${p.remark || ""}</td></tr>`,
+          )
+          .join("");
+      }
+
+      function saveStaff() {
+        const name = document.getElementById("stfName").value.trim();
+        if (!name) return alert("Staff name required");
+
+        staffList.push({
+          id: Date.now(),
+          name,
+          role: document.getElementById("stfRole").value,
+          mobile: document.getElementById("stfMobile").value,
+          salary: parseFloat(document.getElementById("stfSalary").value || "0"),
+          joinDate: document.getElementById("stfJoinDate").value,
+          address: document.getElementById("stfAddress").value,
+          active: document.getElementById("stfActive").checked,
+        });
+        clearStaffForm();
+        populateStaffMasterTable();
+        populateStaffDropdowns();
+      }
+
+      function clearStaffForm() {
+        document.getElementById("stfName").value = "";
+        document.getElementById("stfRole").value = "";
+        document.getElementById("stfMobile").value = "";
+        document.getElementById("stfSalary").value = "";
+        document.getElementById("stfJoinDate").value = "";
+        document.getElementById("stfAddress").value = "";
+        document.getElementById("stfActive").checked = true;
+      }
+
+      function populateStaffMasterTable() {
+        const tbody = document.getElementById("staffTableMasterBody");
+        tbody.innerHTML = staffList
+          .map(
+            (s) => `<tr>
+      <td>${s.name}</td>
+      <td>${s.role}</td>
+      <td>${s.mobile}</td>
+      <td>${s.salary.toFixed(2)}</td>
+      <td>${s.active ? "✔" : ""}</td>
+    </tr>`,
+          )
+          .join("");
+      }
+
+      function populateStaffDropdowns() {
+        const staffSelects = document.querySelectorAll("[data-staff-select]");
+        staffSelects.forEach((sel) => {
+          sel.innerHTML =
+            '<option value="">All Staff</option>' +
+            staffList
+              .filter((s) => s.active)
+              .map((s) => `<option value="${s.id}">${s.name}</option>`)
+              .join("");
+        });
+      }
+
+      function saveStaffSalary() {
+        const staffId = document.getElementById("salStaffId").value;
+        if (!staffId) return alert("Select staff");
+        const amt = parseFloat(
+          document.getElementById("salAmount").value || "0",
+        );
+        if (!amt) return alert("Enter amount");
+
+        staffSalaryEntries.push({
+          id: Date.now(),
+          staffId: parseInt(staffId),
+          date:
+            document.getElementById("salDate").value ||
+            new Date().toISOString().slice(0, 10),
+          type: document.getElementById("salType").value,
+          period: document.getElementById("salPeriod").value,
+          amount: amt,
+          remark: document.getElementById("salRemark").value,
+        });
+
+        populateStaffSalaryTable();
+        clearStaffSalaryForm();
+      }
+
+      function clearStaffSalaryForm() {
+        document.getElementById("salDate").value = "";
+        document.getElementById("salType").value = "Salary";
+        document.getElementById("salAmount").value = "";
+        document.getElementById("salPeriod").value = "";
+        document.getElementById("salRemark").value = "";
+      }
+
+      function populateStaffSalaryTable() {
+        const tbody = document.getElementById("staffSalaryTableBody");
+        tbody.innerHTML = staffSalaryEntries
+          .map((e) => {
+            const st = staffList.find((s) => s.id === e.staffId);
+            const name = st ? st.name : "";
+            return `<tr>
+        <td>${e.date}</td>
+        <td>${name}</td>
+        <td>${e.type}</td>
+        <td>${e.period || ""}</td>
+        <td>${e.amount.toFixed(2)}</td>
+        <td>${e.remark || ""}</td>
+      </tr>`;
+          })
+          .join("");
+      }
+
+      function saveTC() {
+        const title = document.getElementById("tcTitle").value.trim();
+        const text = document.getElementById("tcText").value.trim();
+        if (!title || !text) return alert("Enter title and text");
+        tcMaster.push({ id: Date.now(), name: title, text });
+        clearTCForm();
+        populateTCTable();
+        populateTCSelect();
+      }
+
+      function clearTCForm() {
+        document.getElementById("tcTitle").value = "";
+        document.getElementById("tcText").value = "";
+      }
+
+      function populateTCTable() {
+        const tbody = document.getElementById("tcTableBody");
+        tbody.innerHTML = tcMaster
+          .map(
+            (t) =>
+              `<tr><td>${t.name}</td><td>${t.text.slice(0, 80)}...</td></tr>`,
+          )
+          .join("");
+      }
+
+      function populateTCSelect() {
+        const sel = document.getElementById("qTcSelect");
+        if (!sel) return;
+        sel.innerHTML =
+          '<option value="">Custom Terms</option>' +
+          tcMaster
+            .map((t) => `<option value="${t.id}">${t.name}</option>`)
+            .join("");
+      }
+
+      function onQuotationTCChange() {
+        const id = parseInt(document.getElementById("qTcSelect").value || "0");
+        const tc = tcMaster.find((t) => t.id === id);
+        document.getElementById("qTcText").value = tc ? tc.text : "";
+      }
+
+      function getYear(dateStr) {
+  return (dateStr || "").slice(0, 4);
+}
+
+// Revenue from confirmed orders (order items total)
+function getOrderRevenue(year) {
+  return orders
+    .filter((o) => !year || getYear(o.header.date) === String(year))
+    .reduce(
+      (sum, o) =>
+        sum +
+        o.detail.reduce((s, d) => s + (Number(d.total) || 0), 0),
+      0
+    );
+}
+
+// Revenue from outdoor bills (grand total incl. GST)
+function getOutdoorBillRevenue(year) {
+  return bills
+    .filter((b) => !year || getYear(b.header.date) === String(year))
+    .reduce((sum, b) => sum + (Number(b.header.grandTotal) || 0), 0);
+}
+
+// Staff salary (all staff, by year)
+function getTotalStaffSalary(year) {
+  return staffSalaryEntries
+    .filter((e) => !year || getYear(e.date) === String(year))
+    .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+}
+
+// Individual staff salary
+function getStaffSalaryFor(staffId, year) {
+  return staffSalaryEntries
+    .filter(
+      (e) =>
+        e.staffId === staffId &&
+        (!year || getYear(e.date) === String(year))
+    )
+    .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+}
+
+// Product purchases total
+function getPurchaseTotal(year) {
+  return (purchases || [])
+    .filter((p) => !year || getYear(p.date) === String(year))
+    .reduce((sum, p) => sum + (Number(p.total) || 0), 0);
+}
+
+// External lab/printing/other expenses
+function getExternalExpenseTotal(year) {
+  return (externalExpenses || [])
+    .filter((e) => !year || getYear(e.date) === String(year))
+    .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+}
+
+function refreshSummary() {
+  const year = new Date().getFullYear();
+
+  const orderRev = getOrderRevenue(year);
+  const billRev = getOutdoorBillRevenue(year);
+  const totalSalary = getTotalStaffSalary(year);
+  const purchaseTotal = getPurchaseTotal(year);
+  const externalExp = getExternalExpenseTotal(year);
+
+  const totalIncome = orderRev + billRev;
+  const totalExpense = totalSalary + purchaseTotal + externalExp;
+  const profit = totalIncome - totalExpense;
+
+  document.getElementById("sumSalaryText").innerText =
+    "Total staff salary paid in " +
+    year +
+    " : " +
+    totalSalary.toFixed(2);
+
+  document.getElementById("sumRevenueText").innerText =
+    "Revenue in " +
+    year +
+    " | Orders: " +
+    orderRev.toFixed(2) +
+    " , Outdoor bills: " +
+    billRev.toFixed(2) +
+    " , Total: " +
+    totalIncome.toFixed(2);
+
+  document.getElementById("sumExpenseText").innerText =
+    "Expenses in " +
+    year +
+    " | Purchases: " +
+    purchaseTotal.toFixed(2) +
+    " , External (lab/printing/other): " +
+    externalExp.toFixed(2) +
+    " , Total: " +
+    totalExpense.toFixed(2);
+
+  document.getElementById("sumProfitText").innerText =
+    "Income vs Expense (" +
+    year +
+    ") : " +
+    totalIncome.toFixed(2) +
+    " - " +
+    totalExpense.toFixed(2) +
+    " = " +
+    profit.toFixed(2);
+}
+
+
+
+      function saveBill() {
+        const id = selectedBillId || Date.now();
+
+        const header = {
+          id,
+          billNo: document.getElementById("billNo").value || "B" + id,
+          date: document.getElementById("billDate").value,
+          bookId: document.getElementById("billBookSelect").value,
+          partyId: parseInt(
+            document.getElementById("billOutdoorParty").value || "0",
+          ),
+          orderNo: document.getElementById("billOrderNo").value,
+          gstType: document.getElementById("billGstType").value,
+          gstNo: document.getElementById("billGstNo").value,
+          coupleName: document.getElementById("billCoupleName").value,
+          packageName: document.getElementById("billPackage").value,
+          funcDate: document.getElementById("billFuncDate").value,
+          notes: document.getElementById("billNotes").value,
+          subTotal: parseFloat(
+            document.getElementById("billSubTotal").value || "0",
+          ),
+          discount: parseFloat(
+            document.getElementById("billDiscount").value || "0",
+          ),
+          cgstPct: parseFloat(document.getElementById("billCgst").value || "0"),
+          cgstAmt: parseFloat(
+            document.getElementById("billCgstAmt").value || "0",
+          ),
+          sgstPct: parseFloat(document.getElementById("billSgst").value || "0"),
+          sgstAmt: parseFloat(
+            document.getElementById("billSgstAmt").value || "0",
+          ),
+          grandTotal: parseFloat(
+            document.getElementById("billGrand").value || "0",
+          ),
+          advance: parseFloat(
+            document.getElementById("billAdvance").value || "0",
+          ),
+          pending: parseFloat(
+            document.getElementById("billPending").value || "0",
+          ),
+        };
+
+        const detail = billItems.map((row) => ({ ...row })); // billItems is already used in recalcBill
+
+        const idx = bills.findIndex((b) => b.id === id);
+        if (idx >= 0) bills[idx] = { header, detail };
+        else bills.push({ header, detail });
+
+        selectedBillId = id;
+        alert("Outdoor Bill saved in memory.");
+      }
+
+      function btAddLine() {
+  const id = Date.now();
+  btLines.push({
+    id,
+    itemId: null,
+    productId: null,
+    qty: 1,
+    rate: 0,
+    total: 0,
+  });
+  btRenderLines();
+}
+
+function btRenderLines() {
+  const container = document.getElementById("btLinesContainer");
+  if (!container) return;
+
+  container.innerHTML = btLines
+    .map((line) => {
+      const itemOptions = items
+        .map(
+          (i) =>
+            `<option value="${i.id}" ${
+              i.id === line.itemId ? "selected" : ""
+            }>${i.name}</option>`
+        )
+        .join("");
+      const productOptions = products
+        .filter((p) => !line.itemId || p.itemId === line.itemId)
+        .map(
+          (p) =>
+            `<option value="${p.id}" ${
+              p.id === line.productId ? "selected" : ""
+            }>${p.name}</option>`
+        )
+        .join("");
+      return `
+      <div class="form-row" data-id="${line.id}">
+        <label>Item</label>
+        <select onchange="btOnItemChange(${line.id}, this.value)">
+          <option value="">Select</option>${itemOptions}
+        </select>
+        <label>Product</label>
+        <select onchange="btOnProductChange(${line.id}, this.value)">
+          <option value="">Select</option>${productOptions}
+        </select>
+        <label>Qty</label>
+        <input type="number" min="1" value="${line.qty}"
+               onchange="btOnQtyChange(${line.id}, this.value)" />
+        <label>Rate</label>
+        <input type="number" value="${line.rate}"
+               onchange="btOnRateChange(${line.id}, this.value)" />
+        <label>Total</label>
+        <input type="text" value="${line.total}" readonly style="width:80px;" />
+      </div>`;
+    })
+    .join("");
+
+  btPopulateLinesTable();
+  btRecalcTotals();
+}
+
+function btOnItemChange(id, itemId) {
+  const line = btLines.find((l) => l.id === id);
+  line.itemId = parseInt(itemId || "0");
+  line.productId = null;
+  line.rate = 0;
+  btCalcLine(line);
+  btRenderLines();
+}
+
+function btOnProductChange(id, productId) {
+  const line = btLines.find((l) => l.id === id);
+  line.productId = productId || null;
+  const prod = products.find((p) => p.id === productId);
+  line.rate = prod ? prod.rate : 0;
+  btCalcLine(line);
+  btRenderLines();
+}
+
+function btOnQtyChange(id, qty) {
+  const line = btLines.find((l) => l.id === id);
+  line.qty = parseFloat(qty || "1");
+  btCalcLine(line);
+  btRenderLines();
+}
+
+function btOnRateChange(id, rate) {
+  const line = btLines.find((l) => l.id === id);
+  line.rate = parseFloat(rate || "0");
+  btCalcLine(line);
+  btRenderLines();
+}
+
+function btCalcLine(line) {
+  line.total = (line.qty || 0) * (line.rate || 0);
+}
+
+function btPopulateLinesTable() {
+  const tbody = document.getElementById("btLinesTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = btLines
+    .map((l) => {
+      const itemName = items.find((i) => i.id === l.itemId)?.name || "";
+      const prod = products.find((p) => p.id === l.productId);
+      const productName = prod ? prod.name : "";
+      return `<tr>
+        <td>${itemName}</td>
+        <td>${productName}</td>
+        <td>${l.qty}</td>
+        <td>${l.rate}</td>
+        <td>${l.total}</td>
+      </tr>`;
+    })
+    .join("");
+}
+
+function btRecalcTotals() {
+  const gross = btLines.reduce((s, l) => s + (l.total || 0), 0);
+  const disc = parseFloat(document.getElementById("btDisc").value || "0");
+  const net = Math.max(0, gross - disc);
+  document.getElementById("btGross").value = gross.toFixed(2);
+  document.getElementById("btNet").value = net.toFixed(2);
+}
+
+function btClearForm() {
+  document.getElementById("btTransNo").value = "";
+  document.getElementById("btDate").value = "";
+  document.getElementById("btType").value = "PURCHASE";
+  document.getElementById("btParty").value = "";
+  document.getElementById("btRemark").value = "";
+  document.getElementById("btDisc").value = "0";
+  document.getElementById("btGross").value = "";
+  document.getElementById("btNet").value = "";
+  btLines = [];
+  btRenderLines();
+}
+
+function saveBookTxn() {
+  if (!btLines.length) return alert("Add at least one line");
+
+  const id = Date.now();
+  const header = {
+    id,
+    bookId: document.getElementById("btBookSelect").value,
+    transNo: document.getElementById("btTransNo").value || "BT" + id,
+    date:
+      document.getElementById("btDate").value ||
+      new Date().toISOString().slice(0, 10),
+    type: document.getElementById("btType").value, // PURCHASE or SALE
+    party: document.getElementById("btParty").value,
+    remark: document.getElementById("btRemark").value,
+    gross: parseFloat(document.getElementById("btGross").value || "0"),
+    discount: parseFloat(document.getElementById("btDisc").value || "0"),
+    net: parseFloat(document.getElementById("btNet").value || "0"),
+  };
+
+  const detail = btLines.map((l) => ({ ...l }));
+  bookTransactions.push({ header, detail });
+
+  // hook into your summary helpers
+  if (header.type === "PURCHASE") {
+    purchases.push({
+      id,
+      date: header.date,
+      bookId: header.bookId,
+      total: header.net,
+    });
+  } else {
+    // sales of albums/etc -> treat as income via bills/orders if you want,
+    // or add a separate salesIncome array.
+  }
+
+  alert("Book transaction saved.");
+  btClearForm();
+}
+
+
+      // INIT
+      window.addEventListener("load", () => {
+        populateItemTable();
+        populateProductTable();
+        populateBookTable();
+        addQuotationLine(); // at least one line
+        generateOrderNumber();
+
+        populateOutdoorPartyTable();
+        populateOutdoorPartyDropdowns();
+
+        populateStaffMasterTable();
+        populateStaffDropdowns();
+        populateStaffSalaryTable();
+
+        populateTCTable();
+        populateTCSelect();
+        populateStaffSalaryTable();
+        populateBookTable();   // already populates orderBookSelect & billBookSelect
+
+  // also populate book dropdown for this panel
+  const btBookSel = document.getElementById("btBookSelect");
+  if (btBookSel) {
+    btBookSel.innerHTML = books
+      .map((b) => `<option value="${b.id}">${b.name}</option>`)
+      .join("");
+  }
+
+  btRenderLines();
+      });
+    </script>
+  </body>
+</html>
