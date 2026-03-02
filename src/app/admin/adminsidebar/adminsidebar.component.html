@@ -1,0 +1,28 @@
+<div class="sidebar-container" [class.collapsed]="collapsed">
+  <button class="toggle-btn" (click)="toggleSidebar.emit()">
+    <span class="icon">☰</span>
+  </button>
+
+  <nav class="nav-list">
+    <button class="menu-btn">
+      <span class="btn-icon">📁</span>
+      <span class="btn-text">ACCOUNT MASTER</span>
+    </button>
+    <button class="menu-btn">
+      <span class="btn-icon">📝</span>
+      <span class="btn-text">QUOTATION</span>
+    </button>
+    <button class="menu-btn">
+      <span class="btn-icon">📝</span>
+      <span class="btn-text">ORDER FORM</span>
+    </button>
+    <button class="menu-btn">
+      <span class="btn-icon">📝</span>
+      <span class="btn-text">OUTDOOR BILL</span>
+    </button>
+    <button class="menu-btn">
+      <span class="btn-icon">📊</span>
+      <span class="btn-text">SUMMARY</span>
+    </button>
+  </nav>
+</div>

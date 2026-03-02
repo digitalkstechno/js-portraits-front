@@ -1,0 +1,33 @@
+.header {
+  height: 60px; /* Taller for a modern feel */
+  background-color: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.menu-bar {
+  display: flex;
+  gap: 25px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+.menu-bar span {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.menu-bar span:hover {
+  color: #3498db;
+  text-decoration: none;
+}
+
+/* Specific style for Exit/Log Off to stand out */
+.menu-bar span:last-child {
+  color: #e74c3c;
+  margin-left: auto; /* Pushes exit to the far right */
+}

@@ -1,0 +1,19 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden; /* Prevents double scrollbars */
+}
+
+.body-section {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.page {
+  flex: 1;
+  background-color: #f8f9fa; /* Light grey background makes white cards pop */
+  padding: 30px;
+  overflow-y: auto; /* Only the content area scrolls */
+}

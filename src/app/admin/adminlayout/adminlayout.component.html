@@ -1,0 +1,19 @@
+<div class="layout">
+  <!-- Header -->
+  <app-adminheader></app-adminheader>
+
+  <div class="body-section">
+    <!-- Sidebar -->
+    <app-adminsidebar
+      class="sidebar"
+      [collapsed]="isCollapsed"
+      (toggleSidebar)="toggleSidebar()"
+    >
+    </app-adminsidebar>
+
+    <!-- Page Content -->
+    <main class="page">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
