@@ -47,9 +47,11 @@
 
       <tbody>
         <tr *ngFor="let item of items">
-          <td>{{ item.name }}</td>
-          <td>{{ item.hsn }}</td>
-          <td><input type="checkbox" /></td>
+          <td>{{ item.item_name }}</td>
+          <td>{{ item.hsn_code }}</td>
+          <td>
+            <input type="checkbox" [checked]="item.display_in_stock" disabled />
+          </td>
           <td><input type="checkbox" /></td>
           <td><input type="checkbox" /></td>
           <td><input type="checkbox" /></td>

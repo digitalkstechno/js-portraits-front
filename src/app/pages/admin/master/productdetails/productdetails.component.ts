@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { AdminService } from '../../components/service/admin.service';
+import { ItemsService } from '../service/items.service';
 
 @Component({
   selector: 'app-productdetails',
@@ -34,39 +35,46 @@ export class ProductdetailsComponent {
     },
   ];
 
-  constructor(private service: AdminService) {}
+  constructor(private service: ItemsService) {}
 
-  ngOnInit() {}
-
-  loadProducts() {
-    this.service.getItems().subscribe({
+  ngOnInit() {
+    this.service.products$.subscribe({
       next: (res) => {
-        console.log('Response', res);
+        console.log('Products', res);
+        this.products = res.data;
+        this.pagination = {
+          page: res.page,
+          limit: this.limit,
+          pages: res.total,
+          total: res.totalPages,
+        };
       },
-      error: (err) => {
-        console.error(err);
-      },
+      error: (err) => console.error('Fetch users failed', err),
     });
+
+    this.service.searchProducts(this.page, this.limit);
   }
 
   // 🔍 Debounced search
   onSearch(value: string) {
     this.page = 1;
     this.searchText = value;
-    this.service.searchItems(this.page, this.limit, value);
+    this.service.searchProducts(this.page, this.limit, value);
   }
 
   nextPage() {
     if (this.pagination.page < this.pagination.pages) {
       this.page++;
-      this.service.searchItems(this.page, this.limit, this.searchText);
+      this.service.searchProducts(this.page, this.limit, this.searchText);
     }
   }
 
   prevPage() {
     if (this.pagination.page > 1) {
       this.page--;
-      this.service.searchItems(this.page, this.limit, this.searchText);
+      this.service.searchProducts(this.page, this.limit, this.searchText);
     }
   }
+
+  onSubmit() {}
 }

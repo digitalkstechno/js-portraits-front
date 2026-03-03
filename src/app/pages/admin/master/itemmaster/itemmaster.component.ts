@@ -16,13 +16,7 @@ export class ItemmasterComponent {
   limit = 10;
   searchText = '';
   pagination: any = { page: 1, limit: 10, total: 0, pages: 1 };
-  items = [
-    { name: 'ALBUM', hsn: '0' },
-    { name: 'CANVAS', hsn: '0' },
-    { name: 'LAMINATION', hsn: '0' },
-    { name: 'PHOTOGRAPHY', hsn: '0' },
-    { name: 'VIDEO SHOOT', hsn: '0' },
-  ];
+  items: any;
 
   constructor(
     private fb: FormBuilder,
@@ -38,21 +32,18 @@ export class ItemmasterComponent {
   }
 
   ngOnInit() {
-    this.service.products$.subscribe({
+    this.service.items$.subscribe({
       next: (res) => {
-        const users = res.users;
-        this.items = users.filter(
-          (u: any) => u.role?.roleName === 'merchandiser',
-        );
-        // console.log("users", this.users);
+        // console.log('Items', res);
+        this.items = res.data;
         this.pagination = {
-          page: res.pagination.page,
+          page: res.page,
           limit: this.limit,
-          pages: res.pagination.pages,
-          total: res.pagination.total,
+          pages: res.total,
+          total: res.totalPages,
         };
       },
-      error: (err) => console.error('Fetch users failed', err),
+      error: (err) => console.error('Fetch items failed', err),
     });
 
     this.service.searchItems(this.page, this.limit);
