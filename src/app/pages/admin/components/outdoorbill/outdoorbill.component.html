@@ -1,0 +1,233 @@
+<div class="window">
+  <div class="title-bar">
+    <span>Outdoor Bill</span>
+    <button class="close-btn">✖</button>
+  </div>
+
+  <div class="form-container">
+    <div class="main-fields">
+      <div class="field-group">
+        <div class="field-item">
+          <label>Book</label>
+          <input type="text" style="width: 80px" />
+        </div>
+        <div class="field-item">
+          <label>Bill No.</label>
+          <input type="text" style="width: 100px" />
+        </div>
+        <div class="field-item">
+          <label>Date</label>
+          <input type="text" style="width: 190px" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Outdoor Party</label>
+          <input type="text" style="width: 280px" />
+        </div>
+        <div class="field-item">
+          <label>Add</label>
+          <input type="text" style="width: 190px" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Order No.</label>
+          <input type="text" style="width: 92px" />
+        </div>
+        
+        <div class="field-item">
+            <label>GST Type</label>
+            <input type="text" style="width: 92px" />
+          </div>
+
+          <div class="field-item">
+            <label>Govt</label>
+            <input type="text" style="width: 280px" />
+          </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Couple Name</label>
+          <input type="text" style="width: 280px" />
+        </div>
+        <div class="field-item">
+            <label>GST</label>
+            <input type="text" style="width: 280px" />
+          </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Package</label>
+          <input type="text" style="width: 280px" />
+        </div>
+      </div>
+    </div>
+
+    <div class="totals-sidebar">
+      <table>
+        <thead>
+          <tr>
+            <th>Bill No</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>881</td>
+            <td>01/03/2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="item-entry-strip">
+    <div class="entry-col">
+      <label>Date</label>
+      <input type="text" style="width: 100px" />
+    </div>
+    <div class="entry-col" style="flex: 2">
+      <label>Item Name</label>
+      <input type="text" style="width: 100%" />
+    </div>
+    <div class="entry-col" style="flex: 1">
+      <label>Product</label>
+      <input type="text" style="width: 100%" />
+    </div>
+    <div class="entry-col" style="flex: 1">
+      <label>Event Name</label>
+      <input type="text" style="width: 100%" />
+    </div>
+    <div class="entry-col">
+      <label>Qty</label>
+      <input type="text" style="width: 80px" />
+    </div>
+    <div class="entry-col">
+      <label>Rate</label>
+      <input type="text" style="width: 100px" />
+    </div>
+    <div class="entry-col">
+      <label>Amount</label>
+      <input type="text" style="width: 120px; text-align: right" readonly />
+    </div>
+    <div class="entry-col">
+        <label>Place</label>
+        <input type="text" style="width: 120px; text-align: right" readonly />
+      </div>
+      <div class="entry-col">
+        <label>Time</label>
+        <input type="text" style="width: 120px; text-align: right" readonly />
+      </div>
+    <div class="entry-col">
+      <button class="btn-add">+</button>
+    </div>
+    <div class="entry-col">
+      <button class="btn-cancel">x</button>
+    </div>
+  </div>
+
+  <div
+    class="d-flex"
+    style="align-items: flex-start; background: #d8eaf3; padding-bottom: 10px"
+  >
+    <div class="table-section flex-grow-1" style="margin-right: 0">
+      <table>
+        <thead>
+          <tr>
+            <th width="80">Date</th>
+            <th>Item Name</th>
+            <th>Product</th>
+            <th>Event</th>
+            <th width="60">Qty</th>
+            <th width="90">Rate</th>
+            <th width="100">Total</th>
+            <th width="100">Place</th>
+            <th width="100">Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items; let i = index">
+            <td>{{ item.date }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.size }}</td>
+            <td>{{ item.event }}</td>
+            <td class="text-center">{{ item.qty }}</td>
+            <td class="text-right">{{ item.rate }}</td>
+            <td class="text-right">{{ item.amount }}</td>
+            <td class="text-right">{{ item.amount }}</td>
+            <td class="text-right">{{ item.amount }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer-summary" style="background: transparent; border: none; padding-top: 0">
+        <div class="summary-box">
+          <div class="summary-row">
+            <label>Sub Total</label>
+            <input type="text" value="0.00" readonly />
+          </div>
+          
+          <div class="summary-row">
+            <label>Discount</label>
+            <input type="text" value="0.00" class="editable-input" />
+          </div>
+      
+          <div class="tax-group">
+            <div class="summary-row tax-row">
+              <label>CGST (%)</label>
+              <div class="tax-inputs">
+                 <input type="text" placeholder="%" class="tax-perc" />
+                 <input type="text" value="0.00" readonly class="tax-amt" />
+              </div>
+            </div>
+      
+            <div class="summary-row tax-row">
+              <label>SGST (%)</label>
+              <div class="tax-inputs">
+                 <input type="text" placeholder="%" class="tax-perc" />
+                 <input type="text" value="0.00" readonly class="tax-amt" />
+              </div>
+            </div>
+      
+            <div class="summary-row tax-row">
+              <label>IGST (%)</label>
+              <div class="tax-inputs">
+                 <input type="text" placeholder="%" class="tax-perc" />
+                 <input type="text" value="0.00" readonly class="tax-amt" />
+              </div>
+            </div>
+          </div>
+      
+          <div class="summary-row net-total-row">
+            <label>NET TOTAL</label>
+            <input type="text" value="0.00" readonly class="highlight-net" />
+          </div>
+      
+          <div class="summary-row">
+            <label style="color: #2f855a;">Advance</label>
+            <input type="text" value="0.00" class="editable-input" />
+          </div>
+      
+          <div class="summary-row balance-due-row">
+            <label>BALANCE DUE</label>
+            <input type="text" value="0.00" readonly class="highlight-balance" />
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="btn btn-save">Save</button>
+    <button class="btn">Delete</button>
+    <button class="btn">Edit</button>
+    <button class="btn">Print</button>
+    <button class="btn btn-social">WhatsApp</button>
+    <button class="btn">Cancel</button>
+    <button class="btn btn-exit">Exit</button>
+  </div>
+</div>

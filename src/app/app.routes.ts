@@ -41,6 +41,13 @@ export const routes: Routes = [
             (m) => m.OutdoororderComponent,
           ),
       },
+      {
+        path: 'outdoor-bill',
+        loadComponent: () =>
+          import('./pages/admin/components/outdoorbill/outdoorbill.component').then(
+            (m) => m.OutdoorbillComponent,
+          ),
+      },
     ],
   },
 
