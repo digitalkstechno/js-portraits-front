@@ -6,66 +6,72 @@
   </div>
 
   <!-- Search Section -->
-  <div class="search-section">
-    <div class="row">
-      <div class="col-md-3">
-        <label>Item Name</label>
-        <input type="text" />
-      </div>
+  <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+    <div class="search-section">
+      <div class="row">
+        <div class="col-md-3">
+          <label>Item Name</label>
+          <input type="text" formControlName="item_name" />
+        </div>
 
-      <div class="col-md-3">
-        <label>HSN Code</label>
-        <input type="text" />
-      </div>
+        <div class="col-md-3">
+          <label>HSN Code</label>
+          <input type="text" formControlName="hsn_code" />
+        </div>
 
-      <div class="col-md-3">
-        <label>Entry by</label>
-        <input type="text" />
-      </div>
+        <div class="col-md-3">
+          <label>Entry by</label>
+          <input type="text" formControlName="entry_by" />
+        </div>
 
-      <div class="col-md-3">
-        <label>Updated by</label>
-        <input type="text" />
+        <div class="col-md-3">
+          <label>Updated by</label>
+          <input type="text" formControlName="updated_by" />
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Table Section -->
-  <div class="table-section">
-    <table>
-      <thead>
-        <tr>
-          <th>Item Name</th>
-          <th>HSN Code</th>
-          <th>New Display In Stock</th>
-          <th>New Display In Sale</th>
-          <th>New Display In Order</th>
-          <th>Staff Print</th>
-          <th>Stock Print</th>
-        </tr>
-      </thead>
+    <!-- Table Section -->
+    <div class="table-section">
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>HSN Code</th>
+            <th>New Display In Stock</th>
+            <th>New Display In Sale</th>
+            <th>New Display In Order</th>
+            <th>Staff Print</th>
+            <th>Stock Print</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr *ngFor="let item of items">
-          <td>{{ item.item_name }}</td>
-          <td>{{ item.hsn_code }}</td>
-          <td>
-            <input type="checkbox" [checked]="item.display_in_stock" disabled />
-          </td>
-          <td><input type="checkbox" /></td>
-          <td><input type="checkbox" /></td>
-          <td><input type="checkbox" /></td>
-          <td><input type="checkbox" /></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        <tbody>
+          <tr *ngFor="let item of items">
+            <td>{{ item.item_name }}</td>
+            <td>{{ item.hsn_code }}</td>
+            <td>
+              <input
+                type="checkbox"
+                [checked]="item.display_in_stock"
+                disabled
+              />
+            </td>
+            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <!-- Bottom Buttons -->
-  <div class="button-section">
-    <button class="btn">Save</button>
-    <button class="btn">Delete</button>
-    <button class="btn">Cancel</button>
-    <button class="btn exit">Exit</button>
-  </div>
+    <!-- Bottom Buttons -->
+    <div class="button-section">
+      <button type="submit" class="btn">Save</button>
+      <button class="btn">Delete</button>
+      <button class="btn">Cancel</button>
+      <button class="btn exit">Exit</button>
+    </div>
+  </form>
 </div>

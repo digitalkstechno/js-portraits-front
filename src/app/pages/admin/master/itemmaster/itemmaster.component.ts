@@ -11,7 +11,7 @@ import { ItemsService } from '../service/items.service';
   styleUrl: './itemmaster.component.css',
 })
 export class ItemmasterComponent {
-  itemForm!: FormGroup;
+  itemForm: FormGroup;
   page = 1;
   limit = 10;
   searchText = '';
@@ -25,7 +25,7 @@ export class ItemmasterComponent {
     this.itemForm = fb.group({
       item_name: [''],
       hsn_code: [''],
-      display_in_stock: [''],
+      display_in_stock: [false],
       entry_by: [''],
       updated_by: [''],
     });
@@ -70,5 +70,25 @@ export class ItemmasterComponent {
     }
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if (this.itemForm.invalid) {
+      console.log(true);
+      this.itemForm.markAllAsTouched();
+      return;
+    }
+
+    const payload = this.itemForm.value;
+    // console.log('Create user payload:', payload);
+
+    this.service.createItem(payload).subscribe({
+      next: (res) => {
+        console.log('Successfully created item', res);
+        this.service.searchItems(this.page, this.limit, this.searchText);
+        this.itemForm.reset();
+      },
+      error: (err: any) => {
+        console.error('Create user failed', err);
+      },
+    });
+  }
 }

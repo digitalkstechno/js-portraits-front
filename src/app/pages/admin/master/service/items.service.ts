@@ -28,12 +28,6 @@ export class ItemsService {
   // 🔥 Observable that component will subscribe to
   items$ = this.itemSearchSubject.pipe(
     debounceTime(400),
-    distinctUntilChanged(
-      (prev, curr) =>
-        prev.page === curr.page &&
-        prev.limit === curr.limit &&
-        prev.search === curr.search,
-    ),
     switchMap(({ page, limit, search }) => {
       let params = new HttpParams()
         .set('page', page.toString())
@@ -49,12 +43,6 @@ export class ItemsService {
 
   products$ = this.productSearchSubject.pipe(
     debounceTime(400),
-    distinctUntilChanged(
-      (prev, curr) =>
-        prev.page === curr.page &&
-        prev.limit === curr.limit &&
-        prev.search === curr.search,
-    ),
     switchMap(({ page, limit, search }) => {
       let params = new HttpParams()
         .set('page', page.toString())
