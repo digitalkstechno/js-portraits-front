@@ -1,0 +1,89 @@
+* {
+  box-sizing: border-box;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+.login-wrapper {
+  height: 100vh;
+  background: #2c2c2c; /* dark background like screenshot */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-window {
+  width: 500px;
+  background: #f2f2f2;
+  border: 1px solid #999;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Header Bar */
+.window-header {
+  background: #cfe8f3;
+  padding: 8px 10px;
+  font-weight: bold;
+  border-bottom: 1px solid #999;
+}
+
+/* Body */
+.window-body {
+  display: flex;
+  padding: 15px;
+}
+
+/* Left Icon Panel */
+.left-panel {
+  width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-panel img {
+  width: 70px;
+}
+
+/* Right Form */
+.right-panel {
+  flex: 1;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.form-row label {
+  width: 120px;
+  font-size: 14px;
+}
+
+.form-row input,
+.form-row select {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #999;
+  height: 28px;
+}
+
+/* Buttons */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.button-group button {
+  width: 32%;
+  padding: 6px;
+  border: 1px solid #888;
+  background: #d9edf7;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.button-group button:hover {
+  background: #bcdff1;
+}

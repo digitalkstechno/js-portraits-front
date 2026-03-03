@@ -1,1 +1,49 @@
-<p>login works!</p>
+<div class="login-wrapper">
+  <div class="login-window">
+    <!-- Header -->
+    <div class="window-header">
+      <span>Login</span>
+      <span class="close-btn">✕</span>
+    </div>
+
+    <div class="window-body">
+      <!-- Left Section -->
+      <div class="left-panel">
+        <div class="icon-circle">🔐</div>
+      </div>
+
+      <!-- Right Section -->
+      <div class="right-panel">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="form-row">
+            <label>Company</label>
+            <select formControlName="company">
+              <option value="">Select Company</option>
+              <option>The JS Portraits</option>
+              <option>Studio ERP</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label>Username</label>
+            <input type="text" formControlName="email" />
+          </div>
+
+          <div class="form-row">
+            <label>Password</label>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+            />
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="primary-btn">Login</button>
+            <button type="button" class="secondary-btn">Create Company</button>
+            <button type="button" class="danger-btn">Exit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
