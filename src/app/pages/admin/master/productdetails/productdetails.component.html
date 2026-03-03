@@ -7,56 +7,80 @@
 
   <!-- Top Form Section -->
   <div class="form-section">
-    <div class="row">
-      <div class="col">
-        <label>Sr No.</label>
-        <input type="text" />
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col">
+          <label>Sr No.</label>
+          <input type="text" />
+        </div>
+
+        <div class="col custom-search-container">
+          <label>Item Name</label>
+          
+          <div class="search-wrapper">
+            <input
+              type="text"
+              placeholder="Type to search..."
+              class="search-input"
+              [value]="selectedItemName"
+              (input)="onItemSearch($any($event.target).value)"
+              (focus)="onItemSearch(selectedItemName)" 
+            />
+            
+            <div class="custom-dropdown" *ngIf="showDropdown && items.length > 0">
+              <div 
+                class="dropdown-item" 
+                *ngFor="let item of items"
+                (mousedown)="selectItem(item)" 
+              >
+                <div class="item-info">
+                  <span class="item-text">{{ item.item_name }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <label>Size / Product Name</label>
+          <input type="text" formControlName="product_name" />
+        </div>
+
+        <div class="col">
+          <label>Bill Rate</label>
+          <input type="text" formControlName="bill_rate" />
+        </div>
+
+        <div class="col">
+          <label>Per Rate</label>
+          <input type="text" formControlName="per_rate" />
+        </div>
+
+        <div class="col">
+          <label>Op Stock</label>
+          <input type="text" />
+        </div>
+
+        <div class="col">
+          <label>Stock Rate</label>
+          <input type="text" formControlName="stock_rate" />
+        </div>
       </div>
 
-      <div class="col">
-        <label>Item Name</label>
-        <input type="text" />
+      <div class="form-row">
+        <label>Remark :</label>
+        <input type="text" class="remark-input" formControlName="remark" />
       </div>
 
-      <div class="col">
-        <label>Size / Product Name</label>
-        <input type="text" />
+      <!-- Buttons -->
+      <div class="button-row">
+        <button class="btn">Save</button>
+        <button class="btn">Delete</button>
+        <button class="btn">Edit</button>
+        <button class="btn">Cancel</button>
+        <button class="btn exit">Exit</button>
       </div>
-
-      <div class="col">
-        <label>Bill Rate</label>
-        <input type="text" />
-      </div>
-
-      <div class="col">
-        <label>P. Rate</label>
-        <input type="text" />
-      </div>
-
-      <div class="col">
-        <label>Op Stock</label>
-        <input type="text" />
-      </div>
-
-      <div class="col">
-        <label>Stock Rate</label>
-        <input type="text" />
-      </div>
-    </div>
-
-    <div class="form-row">
-      <label>Remark :</label>
-      <input type="text" class="remark-input" />
-    </div>
-
-    <!-- Buttons -->
-    <div class="button-row">
-      <button class="btn">Save</button>
-      <button class="btn">Delete</button>
-      <button class="btn">Edit</button>
-      <button class="btn">Cancel</button>
-      <button class="btn exit">Exit</button>
-    </div>
+    </form>
   </div>
 
   <!-- Search Section -->

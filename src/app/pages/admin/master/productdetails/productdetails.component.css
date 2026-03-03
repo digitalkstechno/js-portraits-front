@@ -228,3 +228,79 @@ tbody tr:hover {
   border: 1px solid #999;
   border-radius: 2px;
 }
+
+.custom-search-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #999;
+  border-radius: 2px;
+  font-size: 13px;
+  background: #fff;
+}
+
+/* Dropdown Panel */
+.custom-dropdown {
+  position: absolute;
+  top: 100%; /* Input ke thik niche */
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #6b8ea3;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 999; /* Table ke upar dikhne ke liye */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  border-radius: 0 0 4px 4px;
+}
+
+/* Individual Row */
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: #e2eff7;
+  color: #2b6cb0;
+}
+
+.item-text {
+  font-weight: 500;
+}
+
+.item-price {
+  font-size: 11px;
+  color: #38a169; /* Price green mein dikhega */
+  font-weight: bold;
+}
+
+/* Scrollbar styling */
+.custom-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-dropdown::-webkit-scrollbar-thumb {
+  background: #b5d3e3;
+  border-radius: 10px;
+}
