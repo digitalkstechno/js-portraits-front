@@ -1,6 +1,16 @@
 <header class="header">
   <div class="menu-bar">
-    <span>Master</span>
+    
+    <!-- Master Dropdown -->
+    <div class="menu-item dropdown">
+      <span (click)="toggleMaster()">Master ▾</span>
+
+      <div class="dropdown-menu" *ngIf="isMasterOpen">
+        <p routerLink="/item-master" routerLinkActive="active" (click)="closeMaster()">Item Master</p>
+        <p routerLink="/package-master" routerLinkActive="active" (click)="closeMaster()">Package Master</p>
+      </div>
+    </div>
+
     <span>Transaction</span>
     <span>Officer</span>
     <span>New Purchase</span>
