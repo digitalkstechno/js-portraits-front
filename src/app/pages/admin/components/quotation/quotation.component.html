@@ -8,96 +8,166 @@
     <div class="main-fields">
       <div class="field-group">
         <div class="field-item">
+          <label>Quotation No.</label>
+          <input type="text" style="width: 80px" />
+        </div>
+        <div class="field-item">
           <label>Date</label>
           <input type="text" style="width: 100px" />
         </div>
         <div class="field-item">
-          <label>Quotation No.</label>
-          <input type="text" style="width: 80px" />
-        </div>
-      </div>
-
-      <div class="field-group">
-        <div class="field-item" style="flex: 1">
-          <label>Customer Name</label>
-          <input type="text" style="width: 100%" />
-        </div>
-      </div>
-
-      <div class="field-group">
-        <div class="field-item">
           <label>Address</label>
-          <input type="text" style="width: 300px" />
-        </div>
-        <div class="field-item">
-          <label>Contact No.</label>
-          <input type="text" style="width: 150px" />
+          <input type="text" style="width: 190px" />
         </div>
       </div>
 
       <div class="field-group">
         <div class="field-item">
-          <label>Remark</label>
-          <input type="text" style="width: 468px" />
+          <label>Outdoor Party</label>
+          <input type="text" style="width: 280px" />
+        </div>
+        <div class="field-item">
+          <label>Contact No</label>
+          <input type="text" style="width: 190px" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Couple Name</label>
+          <input type="text" style="width: 280px" />
+        </div>
+        <div class="field-item">
+          <label>Email</label>
+          <input type="text" style="width: 190px" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Ref By</label>
+          <input type="text" style="width: 280px" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Package</label>
+          <input type="text" style="width: 280px" />
         </div>
       </div>
     </div>
 
     <div class="totals-sidebar">
-      <div class="total-row">
-        <label>Total Amount</label>
-        <input
-          type="text"
-          style="width: 100px; text-align: right"
-          value="0.00"
-        />
-      </div>
-      <div class="total-row">
-        <label>Discount</label>
-        <input
-          type="text"
-          style="width: 100px; text-align: right"
-          value="0.00"
-        />
-      </div>
-      <div class="total-row">
-        <label>Tax Amount</label>
-        <input
-          type="text"
-          style="width: 100px; text-align: right"
-          value="0.00"
-        />
-      </div>
-      <div class="total-row grand-total">
-        <label>NET TOTAL</label>
-        <span class="total-value">0.00</span>
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Prev. No</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>881</td>
+            <td>01/03/2026</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <div class="table-section">
-    <table>
-      <thead>
-        <tr>
-          <th>Sr.</th>
-          <th>Item Name</th>
-          <th>Size / Product</th>
-          <th>Qty</th>
-          <th>Rate</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of items; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.size }}</td>
-          <td>{{ item.qty }}</td>
-          <td>{{ item.rate }}</td>
-          <td>{{ item.amount }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="item-entry-strip">
+    <div class="entry-col">
+      <label>Date</label>
+      <input type="text" style="width: 100px" />
+    </div>
+    <div class="entry-col" style="flex: 2">
+      <label>Item Name</label>
+      <input type="text" style="width: 100%" />
+    </div>
+    <div class="entry-col" style="flex: 1">
+      <label>Product</label>
+      <input type="text" style="width: 100%" />
+    </div>
+    <div class="entry-col" style="flex: 1">
+      <label>Event Name</label>
+      <input type="text" style="width: 100%" />
+    </div>
+    <div class="entry-col">
+      <label>Qty</label>
+      <input type="text" style="width: 80px" />
+    </div>
+    <div class="entry-col">
+      <label>Rate</label>
+      <input type="text" style="width: 100px" />
+    </div>
+    <div class="entry-col">
+      <label>Amount</label>
+      <input type="text" style="width: 120px; text-align: right" readonly />
+    </div>
+    <div class="entry-col">
+      <button class="btn-add">+</button>
+    </div>
+    <div class="entry-col">
+      <button class="btn-cancel">x</button>
+    </div>
+  </div>
+
+  <div
+    class="d-flex"
+    style="align-items: flex-start; background: #d8eaf3; padding-bottom: 10px"
+  >
+    <div class="table-section flex-grow-1" style="margin-right: 0">
+      <table>
+        <thead>
+          <tr>
+            <th width="80">Date</th>
+            <th>Item Name</th>
+            <th>Product</th>
+            <th>Event</th>
+            <th width="60">Qty</th>
+            <th width="90">Rate</th>
+            <th width="100">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items; let i = index">
+            <td>{{ item.date }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.size }}</td>
+            <td>{{ item.event }}</td>
+            <td class="text-center">{{ item.qty }}</td>
+            <td class="text-right">{{ item.rate }}</td>
+            <td class="text-right">{{ item.amount }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div
+      class="footer-summary"
+      style="background: transparent; border: none; padding-top: 0"
+    >
+      <div class="summary-box">
+        <div class="summary-row">
+          <label>Sub Total</label>
+          <input type="text" value="0.00" readonly />
+        </div>
+        <div class="summary-row">
+          <label>Discount</label>
+          <input type="text" value="0.00" />
+        </div>
+        <div class="summary-row grand-total-highlight">
+          <label>NET TOTAL</label>
+          <input
+            type="text"
+            value="0.00"
+            style="font-weight: bold; color: #c53030"
+            readonly
+          />
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="action-bar">

@@ -79,24 +79,13 @@ input:focus {
 /* Totals Sidebar (Sub Total, Discount, etc.) */
 .totals-sidebar {
   background: #fdfdfd;
-  padding: 15px;
+  padding: 5px;
   border: 1px solid #6b8ea3;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.total-row label {
-  color: #d9534f;
-  font-size: 13px;
-} /* Reddish labels for totals */
 
 .grand-total {
   border-top: 2px solid #6b8ea3;
@@ -188,3 +177,110 @@ tbody tr:hover {
   color: #2b6cb0;
   border-color: #63b3ed;
 } /* For WhatsApp/SMS */
+
+/* Sidebar Table Styling (Mini) */
+.totals-sidebar table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 11px;
+  border: 1px solid #c6e0ee;
+}
+.totals-sidebar th {
+  background: #c6e0ee;
+  padding: 4px;
+  border: 1px solid #999;
+}
+.totals-sidebar td {
+  padding: 4px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+}
+
+.info-value {
+  font-weight: bold;
+  color: #2c3e50;
+}
+.status-badge {
+  background: #d4edda;
+  color: #155724;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+/* Item Entry Strip (Horizontal Entry Row) */
+.item-entry-strip {
+  display: flex;
+  background: #e3f1f8;
+  padding: 10px 15px;
+  gap: 10px;
+  border-bottom: 1px solid #6b8ea3;
+  align-items: flex-end;
+}
+.entry-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.entry-col label {
+  font-size: 10px;
+  font-weight: bold;
+  color: #4a6a7d;
+  text-transform: uppercase;
+}
+
+.btn-add,
+.btn-cancel {
+  background: #38a169;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-cancel {
+  background: red;
+}
+
+/* Bottom Right Footer Summary */
+.footer-summary {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 15px;
+  background: #d8eaf3;
+  border-top: 1px solid #6b8ea3;
+}
+.summary-box {
+  background: #ffffff;
+  border: 2px solid #6b8ea3;
+  padding: 10px;
+  border-radius: 4px;
+  min-width: 280px;
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.summary-row label {
+  min-width: 100px;
+  color: #4a6a7d;
+}
+.summary-row input {
+  width: 120px;
+  text-align: right;
+  padding: 3px;
+  border: 1px solid #ccc;
+}
+
+.grand-total-highlight {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 2px dashed #6b8ea3;
+}

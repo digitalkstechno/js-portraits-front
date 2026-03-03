@@ -9,8 +9,10 @@ import { SHARED_MODULES } from '../../../../constants/sharedModule';
 })
 export class QuotationComponent {
   items = [
+    { date: 'ALBUM', hsn: '0' },
     { name: 'ALBUM', hsn: '0' },
     { size: 'CANVAS', hsn: '0' },
+    { event: 'CANVAS', hsn: '0' },
     { qty: 'LAMINATION', hsn: '0' },
     { rate: 'PHOTOGRAPHY', hsn: '0' },
     { amount: 'VIDEO SHOOT', hsn: '0' },
