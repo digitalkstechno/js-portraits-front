@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { AdminService } from '../../components/service/admin.service';
+import { ItemsService } from '../service/items.service';
 
 @Component({
   selector: 'app-itemmaster',
@@ -25,7 +26,7 @@ export class ItemmasterComponent {
 
   constructor(
     private fb: FormBuilder,
-    private service: AdminService,
+    private service: ItemsService,
   ) {
     this.itemForm = fb.group({
       item_name: [''],
@@ -36,38 +37,25 @@ export class ItemmasterComponent {
     });
   }
 
-  products = [
-    {
-      item: 'PHOTOGRAPHY',
-      size: 'PHOTO FRAME',
-      stock: 0,
-      rate: 0,
-      total: 0.0,
-      billSize: 10,
-      prate: 0,
-    },
-    {
-      item: 'PHOTOGRAPHY',
-      size: 'PHOTOGRAPHY',
-      stock: 0,
-      rate: 0,
-      total: 0.0,
-      billSize: 20,
-      prate: 0,
-    },
-  ];
-
-  ngOnInit() {}
-
-  loadProducts() {
-    this.service.getItems().subscribe({
+  ngOnInit() {
+    this.service.products$.subscribe({
       next: (res) => {
-        console.log('Response', res);
+        const users = res.users;
+        this.items = users.filter(
+          (u: any) => u.role?.roleName === 'merchandiser',
+        );
+        // console.log("users", this.users);
+        this.pagination = {
+          page: res.pagination.page,
+          limit: this.limit,
+          pages: res.pagination.pages,
+          total: res.pagination.total,
+        };
       },
-      error: (err) => {
-        console.error(err);
-      },
+      error: (err) => console.error('Fetch users failed', err),
     });
+
+    this.service.searchItems(this.page, this.limit);
   }
 
   // 🔍 Debounced search
@@ -90,5 +78,6 @@ export class ItemmasterComponent {
       this.service.searchItems(this.page, this.limit, this.searchText);
     }
   }
+
   onSubmit() {}
 }
