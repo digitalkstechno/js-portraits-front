@@ -14,26 +14,7 @@ export class ProductdetailsComponent {
   limit = 10;
   searchText = '';
   pagination: any = { page: 1, limit: 10, total: 0, pages: 1 };
-  products = [
-    {
-      item: 'PHOTOGRAPHY',
-      size: 'PHOTO FRAME',
-      stock: 0,
-      rate: 0,
-      total: 0.0,
-      billSize: 10,
-      prate: 0,
-    },
-    {
-      item: 'PHOTOGRAPHY',
-      size: 'PHOTOGRAPHY',
-      stock: 0,
-      rate: 0,
-      total: 0.0,
-      billSize: 20,
-      prate: 0,
-    },
-  ];
+  products: any;
 
   constructor(private service: ItemsService) {}
 
@@ -74,6 +55,15 @@ export class ProductdetailsComponent {
       this.page--;
       this.service.searchProducts(this.page, this.limit, this.searchText);
     }
+  }
+
+  reset(input: HTMLInputElement) {
+    input.value = ''; // clear UI
+    this.searchText = '';
+    this.page = 1;
+
+    // trigger debounced reload without search
+    this.service.searchProducts(this.page, this.limit, '');
   }
 
   onSubmit() {}

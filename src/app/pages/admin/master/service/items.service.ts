@@ -40,7 +40,7 @@ export class ItemsService {
         .set('limit', limit.toString());
 
       if (search) {
-        params = params.set('userName', search);
+        params = params.set('item_name', search);
       }
 
       return this.http.get<any>(Endpoints.ITEMS, { params });
@@ -61,7 +61,7 @@ export class ItemsService {
         .set('limit', limit.toString());
 
       if (search) {
-        params = params.set('userName', search);
+        params = params.set('product_name', search);
       }
 
       return this.http.get<any>(Endpoints.PRODUCTS, { params });

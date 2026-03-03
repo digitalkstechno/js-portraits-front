@@ -61,9 +61,16 @@
 
   <!-- Search Section -->
   <div class="search-section">
-    <label>Size / Product Name :</label>
-    <input type="text" />
-    <button class="search-btn">Search</button>
+    <label>Product Name :</label>
+    <input
+      #searchInput
+      type="text"
+      placeholder="Search product"
+      (input)="onSearch(searchInput.value)"
+    />
+    <button type="button" class="btn small" (click)="reset(searchInput)">
+      x
+    </button>
   </div>
 
   <!-- Table Section -->
@@ -85,13 +92,13 @@
       <tbody>
         <tr *ngFor="let product of products; let i = index">
           <td>{{ i + 1 }}</td>
-          <td>{{ product.item }}</td>
-          <td>{{ product.size }}</td>
+          <td>{{ product.item_name?.item_name }}</td>
+          <td>{{ product.product_name }}</td>
           <td>{{ product.stock }}</td>
-          <td>{{ product.rate }}</td>
+          <td>{{ product.stock_rate }}</td>
           <td>{{ product.total }}</td>
-          <td>{{ product.billSize }}</td>
-          <td>{{ product.prate }}</td>
+          <td>{{ product.bill_rate }}</td>
+          <td>{{ product.per_rate }}</td>
         </tr>
       </tbody>
     </table>
