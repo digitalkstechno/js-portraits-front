@@ -9,4 +9,8 @@ export const Endpoints = {
 
   STAFF: `${baseUrl}/staff`,
   ROLE: `${baseUrl}/role`,
+  ITEMS: `${baseUrl}/items`,
+  PRODUCTS: `${baseUrl}/products`,
+  QUOTATION: `${baseUrl}/quotation`,
+  OUTDOOR_ORDER: `${baseUrl}/order`,
 };
