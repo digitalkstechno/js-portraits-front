@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { SHARED_MODULES } from '../../../../constants/sharedModule';
 
 @Component({
   selector: 'app-itemmaster',
-  imports: [],
+  imports: [SHARED_MODULES],
   templateUrl: './itemmaster.component.html',
   styleUrl: './itemmaster.component.css',
 })
