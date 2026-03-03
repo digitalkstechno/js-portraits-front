@@ -85,10 +85,12 @@ export class ProductdetailsComponent {
 
   // 2. Selection Logic: List se item select karna
   selectItem(item: any) {
-    this.selectedItemName = item.item_name; // Input mein naam set karein
-    this.showDropdown = false; // Dropdown band karein
+    this.selectedItemName = item.item_name;
+    this.productForm.patchValue({
+      item_name: item._id,
+    });
 
-    // Yaha aap baki fields (Rate, Qty) bhi auto-fill kar sakte hain
+    this.showDropdown = false;
     // console.log('Selected Item ID:', item._id);
   }
 
@@ -130,5 +132,25 @@ export class ProductdetailsComponent {
     this.service.searchProducts(this.page, this.limit, '');
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched();
+      return;
+    }
+
+    const payload = this.productForm.value;
+    // console.log('Create user payload:', payload);
+
+    this.service.createProduct(payload).subscribe({
+      next: (res) => {
+        console.log('Successfully created products', res);
+        this.service.searchProducts(this.page, this.limit, this.searchText);
+        this.productForm.reset();
+        this.selectedItemName = '';
+      },
+      error: (err: any) => {
+        console.error('Create products failed', err);
+      },
+    });
+  }
 }
