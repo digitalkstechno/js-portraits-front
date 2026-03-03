@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SHARED_MODULES } from '../../constants/sharedModule';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-adminheader',
@@ -9,6 +10,7 @@ import { SHARED_MODULES } from '../../constants/sharedModule';
 })
 export class AdminheaderComponent {
   isMasterOpen = false;
+  router = inject(Router);
 
   toggleMaster() {
     this.isMasterOpen = !this.isMasterOpen;
@@ -16,5 +18,10 @@ export class AdminheaderComponent {
 
   closeMaster() {
     this.isMasterOpen = false;
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 }
