@@ -1,0 +1,230 @@
+/* Container - Added border-radius and cleaner transitions */
+.window {
+  width: 98%; /* Slightly wider for data density */
+  max-width: 1300px;
+  margin: 20px auto;
+  border: 2px solid #6b8ea3;
+  background: #e9f2f7;
+  font-family: "Segoe UI", Arial, sans-serif; /* Modern font stack */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Title Bar - Improved alignment and height */
+.title-bar {
+  background: linear-gradient(#b5d3e3, #8fb8cc);
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  color: #2c3e50;
+  border-bottom: 2px solid #6b8ea3;
+}
+
+.close-btn {
+  background: #ff4d4d;
+  color: white;
+  border: 1px solid #b30000;
+  border-radius: 3px;
+  padding: 2px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.close-btn:hover {
+  background: #e60000;
+}
+
+/* Form Section - Grid-like spacing for inputs */
+.form-section {
+  padding: 15px;
+  background: #d8eaf3;
+  border-bottom: 1px solid #6b8ea3;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #4a6a7d;
+  text-transform: uppercase;
+}
+
+input[type="text"] {
+  padding: 6px 8px;
+  border: 1px solid #999;
+  border-radius: 2px;
+  font-size: 13px;
+  background: #fdfdfd;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Specific widths based on content */
+.col:nth-child(1) input {
+  width: 50px;
+} /* Sr No */
+.col:nth-child(2) input {
+  width: 180px;
+} /* Item Name */
+.col:nth-child(3) input {
+  width: 220px;
+} /* Size/Product */
+.col:nth-child(4) input,
+.col:nth-child(5) input,
+.col:nth-child(6) input,
+.col:nth-child(7) input {
+  width: 90px;
+} /* Rates & Stock */
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.remark-input {
+  flex: 1; /* Remark takes remaining space */
+  max-width: 600px;
+}
+
+/* Buttons - Refined padding and hover states */
+.button-row {
+  display: flex;
+  /* justify-content: center; */
+  gap: 12px;
+  padding: 15px;
+  background: #d8eaf3;
+  border-top: 2px solid #6b8ea3;
+}
+
+.btn {
+  padding: 6px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #7a9bad;
+  background: #f2f2f2;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: #ffffff;
+  border-color: #555;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.exit {
+  background: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
+
+/* Search Section - Centered and padded */
+.search-section {
+  padding: 12px 15px;
+  background: #e3f1f8;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #6b8ea3;
+}
+
+.search-btn {
+  padding: 5px 15px;
+  border: 1px solid #7a9bad;
+  background: #f2f2f2;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Table Section - Sticky Header & Alignment */
+.table-section {
+  height: 300px;
+  overflow-y: auto;
+  background: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th {
+  background: #c6e0ee;
+  border: 1px solid #999;
+  padding: 10px 6px;
+  position: sticky;
+  top: 0; /* Keeps header visible while scrolling */
+  z-index: 10;
+  color: #2c3e50;
+}
+
+td {
+  border: 1px solid #e0e0e0;
+  padding: 8px 6px;
+  text-align: center;
+}
+
+/* Text alignment for table columns */
+td:nth-child(2),
+td:nth-child(3) {
+  text-align: left;
+  padding-left: 12px;
+}
+
+tbody tr:nth-child(even) {
+  background: #f8fbfe;
+}
+
+tbody tr:hover {
+  background: #e2eff7;
+}
+
+/* Footer - Clean totals */
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 20px;
+  background: #d8eaf3;
+  border-top: 2px solid #6b8ea3;
+  font-size: 15px;
+  color: #2c3e50;
+}
+
+.total-value {
+  margin-left: 15px;
+  font-family: "Courier New", monospace; /* Monospaced for numbers */
+  font-weight: 800;
+  background: white;
+  padding: 2px 10px;
+  border: 1px solid #999;
+  border-radius: 2px;
+}

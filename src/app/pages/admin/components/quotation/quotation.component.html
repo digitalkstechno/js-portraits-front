@@ -1,0 +1,112 @@
+<div class="window">
+  <div class="title-bar">
+    <span>Quotation</span>
+    <button class="close-btn">✖</button>
+  </div>
+
+  <div class="form-container">
+    <div class="main-fields">
+      <div class="field-group">
+        <div class="field-item">
+          <label>Date</label>
+          <input type="text" style="width: 100px" />
+        </div>
+        <div class="field-item">
+          <label>Quotation No.</label>
+          <input type="text" style="width: 80px" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item" style="flex: 1">
+          <label>Customer Name</label>
+          <input type="text" style="width: 100%" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Address</label>
+          <input type="text" style="width: 300px" />
+        </div>
+        <div class="field-item">
+          <label>Contact No.</label>
+          <input type="text" style="width: 150px" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Remark</label>
+          <input type="text" style="width: 468px" />
+        </div>
+      </div>
+    </div>
+
+    <div class="totals-sidebar">
+      <div class="total-row">
+        <label>Total Amount</label>
+        <input
+          type="text"
+          style="width: 100px; text-align: right"
+          value="0.00"
+        />
+      </div>
+      <div class="total-row">
+        <label>Discount</label>
+        <input
+          type="text"
+          style="width: 100px; text-align: right"
+          value="0.00"
+        />
+      </div>
+      <div class="total-row">
+        <label>Tax Amount</label>
+        <input
+          type="text"
+          style="width: 100px; text-align: right"
+          value="0.00"
+        />
+      </div>
+      <div class="total-row grand-total">
+        <label>NET TOTAL</label>
+        <span class="total-value">0.00</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-section">
+    <table>
+      <thead>
+        <tr>
+          <th>Sr.</th>
+          <th>Item Name</th>
+          <th>Size / Product</th>
+          <th>Qty</th>
+          <th>Rate</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.size }}</td>
+          <td>{{ item.qty }}</td>
+          <td>{{ item.rate }}</td>
+          <td>{{ item.amount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="action-bar">
+    <button class="btn btn-save">Save</button>
+    <button class="btn">Delete</button>
+    <button class="btn">Edit</button>
+    <button class="btn">Print</button>
+    <button class="btn btn-social">WhatsApp</button>
+    <button class="btn">Cancel</button>
+    <button class="btn btn-exit">Exit</button>
+  </div>
+</div>

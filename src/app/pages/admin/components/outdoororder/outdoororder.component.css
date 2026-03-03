@@ -1,0 +1,363 @@
+/* Add this at the top of your CSS to prevent width issues */
+* {
+  box-sizing: border-box;
+}
+/* Container - Consistent with Item Master & Product Detail */
+.window {
+  width: 98%;
+  max-width: 1400px; /* Slightly wider for complex forms */
+  margin: 10px auto;
+  border: 2px solid #6b8ea3;
+  background: #e9f2f7;
+  font-family: "Segoe UI", Arial, sans-serif;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Header Section */
+.title-bar {
+  background: linear-gradient(#b5d3e3, #8fb8cc);
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  color: #2c3e50;
+  border-bottom: 2px solid #6b8ea3;
+  font-size: 16px;
+}
+
+/* Master Form Area (Top Sections) */
+.form-container {
+  padding: 15px;
+  background: #d8eaf3;
+  display: grid;
+  grid-template-columns: 1fr 300px; /* Layout for form + right-side info box */
+  gap: 15px;
+}
+
+.main-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Row & Column Logic for Inputs */
+.field-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.field-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #4a6a7d;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+input[type="text"],
+select {
+  padding: 5px 8px;
+  border: 1px solid #999;
+  border-radius: 2px;
+  font-size: 13px;
+  background: #fff;
+}
+
+input:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.totals-sidebar {
+  background: #fdfdfd;
+  padding: 6px;
+  border: 1px solid #6b8ea3;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 260px; /* Table ke liye thodi width badha di hai */
+  height: fit-content;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Sidebar Mini-Table Styling */
+.totals-sidebar table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2px;
+  font-size: 11px; /* Sidebar table ko chhota rakha hai */
+  border: 1px solid #c6e0ee;
+}
+
+.totals-sidebar th {
+  background: #c6e0ee;
+  color: #2c3e50;
+  padding: 6px 4px;
+  text-align: center;
+  border: 1px solid #6b8ea3;
+  font-weight: bold;
+}
+
+.totals-sidebar td {
+  padding: 5px 4px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  color: #333;
+}
+
+/* Zebra striping for mini-table */
+.totals-sidebar tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.totals-sidebar tbody tr:hover {
+  background: #eef7fb;
+  cursor: pointer;
+}
+
+/* Entry Table Area */
+.table-section {
+  height: 250px;
+  /* overflow-y: auto; */
+  background: white;
+  margin: 0 15px;
+  border: 1px solid #999;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+th {
+  background: #c6e0ee;
+  border: 1px solid #999;
+  padding: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+td {
+  border: 1px solid #e0e0e0;
+  padding: 6px;
+  text-align: center;
+}
+
+tbody tr:nth-child(even) {
+  background: #f8fbfe;
+}
+tbody tr:hover {
+  background: #e2eff7;
+}
+
+/* Bottom Action Bar (The large row of buttons) */
+.action-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  background: #d8eaf3;
+  border-top: 2px solid #6b8ea3;
+}
+
+.btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #7a9bad;
+  background: #f2f2f2;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.1s;
+  min-width: 80px;
+}
+
+.btn:hover {
+  background: #fff;
+  border-color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Specialized Button Colors */
+.btn-save {
+  background: #e6fffa;
+  color: #006644;
+  border-color: #38a169;
+}
+.btn-exit {
+  background: #fff5f5;
+  color: #c53030;
+  border-color: #fc8181;
+}
+.btn-social {
+  background: #ebf8ff;
+  color: #2b6cb0;
+  border-color: #63b3ed;
+} /* For WhatsApp/SMS */
+
+/* Adding specific styles for the Middle Entry Strip */
+.item-entry-strip {
+  display: flex;
+  background: #e3f1f8;
+  padding: 10px 15px;
+  gap: 10px;
+  border-bottom: 1px solid #6b8ea3;
+  align-items: flex-end;
+}
+
+.entry-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.entry-col label {
+  font-size: 10px;
+  font-weight: bold;
+  color: #4a6a7d;
+  text-transform: uppercase;
+}
+
+.entry-col input {
+  padding: 4px;
+  border: 1px solid #999;
+  font-size: 12px;
+}
+
+.btn-add {
+  background: #38a169;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex; /* Added */
+  align-items: center; /* Added */
+  justify-content: center; /* Added */
+  line-height: 1; /* Added */
+}
+
+/* Helper classes for table inputs */
+.table-input {
+  width: 95%;
+  border: none;
+  background: transparent;
+  padding: 4px;
+}
+
+.table-input:focus {
+  background: #fff;
+  outline: 1px solid #3b82f6;
+}
+
+.table-select {
+  width: 100%;
+  border: 1px solid #ccc;
+  font-size: 12px;
+}
+
+.total-input {
+  width: 100px;
+  text-align: right;
+  padding: 4px;
+  border: 1px solid #999;
+}
+
+.text-center {
+  text-align: center;
+}
+/* Ensure select boxes height matches text inputs */
+select {
+  height: 29px; /* Matches the 13px font + 5px padding + borders */
+  vertical-align: middle;
+}
+
+/* Container to push the box to the bottom right */
+.footer-summary {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px;
+  background: #d8eaf3; /* Matching your form background */
+  border-top: 1px solid #6b8ea3;
+}
+
+/* The box containing the totals */
+.summary-box {
+  background: #ffffff;
+  border: 2px solid #6b8ea3;
+  padding: 12px;
+  border-radius: 4px;
+  min-width: 280px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Individual rows inside the box */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.summary-row label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #4a6a7d;
+  min-width: 100px; /* Ensures all inputs start at the same vertical line */
+}
+
+/* Styling the inputs inside the summary box */
+.summary-row input[type="text"],
+.summary-row select {
+  width: 120px;
+  padding: 4px 8px;
+  border: 1px solid #999;
+  border-radius: 2px;
+  text-align: right; /* Numbers should be right-aligned */
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  font-size: 13px;
+}
+
+/* Make Grand Total and Payment stand out */
+.grand-total-highlight {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px dashed #6b8ea3;
+}
+
+.grand-total-highlight label {
+  color: #c53030; /* Red alert color for the final balance/payment */
+  font-size: 14px;
+}
+
+.summary-row input:focus,
+.summary-row select:focus {
+  border-color: #3b82f6;
+  outline: none;
+  background-color: #f0f7ff;
+}
+
+/* Specific styling for the dropdown */
+.summary-row select {
+  text-align: left; /* Text in dropdown stays left-aligned */
+  cursor: pointer;
+  background-color: #fff;
+}

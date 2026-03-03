@@ -6,7 +6,8 @@
       <span (click)="toggleMaster()">Master ▾</span>
 
       <div class="dropdown-menu" *ngIf="isMasterOpen">
-        <p routerLink="/item-master" routerLinkActive="active" (click)="closeMaster()">Item Master</p>
+        <p routerLink="/admin/items" routerLinkActive="active" (click)="closeMaster()">Item Master</p>
+        <p routerLink="/admin/products" routerLinkActive="active" (click)="closeMaster()">Product Master</p>
         <p routerLink="/package-master" routerLinkActive="active" (click)="closeMaster()">Package Master</p>
       </div>
     </div>

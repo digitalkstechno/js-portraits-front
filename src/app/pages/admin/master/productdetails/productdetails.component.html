@@ -1,0 +1,105 @@
+<div class="window">
+  <!-- Title Bar -->
+  <div class="title-bar">
+    <span>Product Detail</span>
+    <button class="close-btn">✖</button>
+  </div>
+
+  <!-- Top Form Section -->
+  <div class="form-section">
+    <div class="row">
+      <div class="col">
+        <label>Sr No.</label>
+        <input type="text" />
+      </div>
+
+      <div class="col">
+        <label>Item Name</label>
+        <input type="text" />
+      </div>
+
+      <div class="col">
+        <label>Size / Product Name</label>
+        <input type="text" />
+      </div>
+
+      <div class="col">
+        <label>Bill Rate</label>
+        <input type="text" />
+      </div>
+
+      <div class="col">
+        <label>P. Rate</label>
+        <input type="text" />
+      </div>
+
+      <div class="col">
+        <label>Op Stock</label>
+        <input type="text" />
+      </div>
+
+      <div class="col">
+        <label>Stock Rate</label>
+        <input type="text" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label>Remark :</label>
+      <input type="text" class="remark-input" />
+    </div>
+
+    <!-- Buttons -->
+    <div class="button-row">
+      <button class="btn">Save</button>
+      <button class="btn">Delete</button>
+      <button class="btn">Edit</button>
+      <button class="btn">Cancel</button>
+      <button class="btn exit">Exit</button>
+    </div>
+  </div>
+
+  <!-- Search Section -->
+  <div class="search-section">
+    <label>Size / Product Name :</label>
+    <input type="text" />
+    <button class="search-btn">Search</button>
+  </div>
+
+  <!-- Table Section -->
+  <div class="table-section">
+    <table>
+      <thead>
+        <tr>
+          <th>Sr.</th>
+          <th>Item Name</th>
+          <th>Size / Product Name</th>
+          <th>Opening Stock</th>
+          <th>Rate</th>
+          <th>Total</th>
+          <th>Bill Size</th>
+          <th>P. Rate</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let product of products; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ product.item }}</td>
+          <td>{{ product.size }}</td>
+          <td>{{ product.stock }}</td>
+          <td>{{ product.rate }}</td>
+          <td>{{ product.total }}</td>
+          <td>{{ product.billSize }}</td>
+          <td>{{ product.prate }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Grand Total -->
+  <div class="footer">
+    <span>Grand Total :</span>
+    <span class="total-value">0.00</span>
+  </div>
+</div>
