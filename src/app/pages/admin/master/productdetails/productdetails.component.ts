@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
+import { AdminService } from '../../components/service/admin.service';
 
 @Component({
   selector: 'app-productdetails',
@@ -8,6 +9,10 @@ import { SHARED_MODULES } from '../../../../constants/sharedModule';
   styleUrl: './productdetails.component.css',
 })
 export class ProductdetailsComponent {
+  page = 1;
+  limit = 10;
+  searchText = '';
+  pagination: any = { page: 1, limit: 10, total: 0, pages: 1 };
   products = [
     {
       item: 'PHOTOGRAPHY',
@@ -28,4 +33,40 @@ export class ProductdetailsComponent {
       prate: 0,
     },
   ];
+
+  constructor(private service: AdminService) {}
+
+  ngOnInit() {}
+
+  loadProducts() {
+    this.service.getItems().subscribe({
+      next: (res) => {
+        console.log('Response', res);
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
+  }
+
+  // 🔍 Debounced search
+  onSearch(value: string) {
+    this.page = 1;
+    this.searchText = value;
+    this.service.searchItems(this.page, this.limit, value);
+  }
+
+  nextPage() {
+    if (this.pagination.page < this.pagination.pages) {
+      this.page++;
+      this.service.searchItems(this.page, this.limit, this.searchText);
+    }
+  }
+
+  prevPage() {
+    if (this.pagination.page > 1) {
+      this.page--;
+      this.service.searchItems(this.page, this.limit, this.searchText);
+    }
+  }
 }
