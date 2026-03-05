@@ -55,6 +55,10 @@ export class AdminService {
     return this.http.get<any>(`${Endpoints.QUOTATION}/${id}`);
   }
 
+  getQuotationByNumber(num: string): Observable<any> {
+    return this.http.get<any>(`${Endpoints.QUOTATION}/${num}`);
+  }
+
   createQuotation(data: any): Observable<any> {
     return this.http.post<any>(Endpoints.QUOTATION, data);
   }
@@ -65,5 +69,18 @@ export class AdminService {
 
   deleteQuotation(id: string): Observable<void> {
     return this.http.delete<void>(`${Endpoints.QUOTATION}/${id}`);
+  }
+
+  // outdoor order
+  getOutdoorOrder(): Observable<any> {
+    return this.http.get<any>(Endpoints.OUTDOOR_ORDER);
+  }
+
+  getOutdoorOrderById(id: string): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_ORDER}/${id}`);
+  }
+
+  createOutdoorOrder(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.OUTDOOR_ORDER, data);
   }
 }

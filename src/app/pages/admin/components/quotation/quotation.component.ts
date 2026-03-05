@@ -32,10 +32,10 @@ export class QuotationComponent {
   });
 
   quotationForm: FormGroup = this.fb.group({
-    quotationNo: ['', Validators.required],
-    date: [new Date(), Validators.required],
+    quotationNo: [''],
+    date: [new Date()],
 
-    outdoorParty: ['', Validators.required],
+    outdoorParty: [''],
     address: [''],
     contactNo: [''],
     email: [''],
@@ -199,7 +199,7 @@ export class QuotationComponent {
       grandTotal: [0],
       notes: [''],
       remarks: [''],
-    })
+    });
   }
 
   // SAVE
@@ -216,6 +216,7 @@ export class QuotationComponent {
     this.quotationService.createQuotation(payload).subscribe({
       next: (res) => {
         console.log('successfully created quotation', res);
+        this.quotationForm.reset();
       },
       error: (err) => {
         console.error(err);

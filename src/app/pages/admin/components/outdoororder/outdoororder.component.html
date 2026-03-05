@@ -1,191 +1,318 @@
-<div class="window">
-  <div class="title-bar">
-    <span>Outdoor Order Book</span>
-    <button class="close-btn" (click)="close()">✖</button>
-  </div>
+<form [formGroup]="orderForm">
+  <div class="window">
+    <div class="title-bar">
+      <span>Outdoor Order Book</span>
+      <button class="close-btn" (click)="close()">✖</button>
+    </div>
 
-  <div class="form-container">
-    <div class="main-fields">
-      <div class="field-group">
-        <div class="field-item">
-          <label>Order No</label>
-          <input type="text" style="width: 80px" readonly />
+    <div class="form-container">
+      <div class="main-fields">
+        <div class="field-group">
+          <div class="field-item">
+            <label>Order No</label>
+            <input
+              type="text"
+              style="width: 80px"
+              formControlName="orderNo"
+              readonly
+            />
+          </div>
+          <div class="field-item">
+            <label>Date</label>
+            <input
+              type="text"
+              style="width: 110px"
+              placeholder="DD/MM/YYYY"
+              formControlName="date"
+            />
+          </div>
+          <div class="field-item">
+            <label>Mob No</label>
+            <input type="text" style="width: 135px" formControlName="mobNo" />
+          </div>
+          <div class="field-item">
+            <label>Quotation No</label>
+            <input
+              type="text"
+              style="width: 100px"
+              formControlName="quotationNo"
+              (keydown.enter)="$event.preventDefault(); searchQuotation()"
+              placeholder="Press Enter"
+            />
+          </div>
         </div>
-        <div class="field-item">
-          <label>Date</label>
-          <input type="text" style="width: 110px" placeholder="DD/MM/YYYY" />
+
+        <div class="field-group">
+          <div class="field-item" style="flex: 1">
+            <label>Cust Name</label>
+            <input type="text" style="width: 100%" formControlName="custName" />
+          </div>
+          <div class="field-item" style="flex: 1">
+            <label>Couple</label>
+            <input type="text" style="width: 100%" formControlName="couple" />
+          </div>
         </div>
-        <div class="field-item">
-          <label>Mob No</label>
-          <input type="text" style="width: 135px" />
+
+        <div class="field-group">
+          <div class="field-item" style="flex: 1">
+            <label>Address</label>
+            <input type="text" style="width: 100%" formControlName="address" />
+          </div>
         </div>
-        <div class="field-item">
-          <label>Quotation No</label>
-          <input type="text" style="width: 100px" />
+
+        <div class="field-group">
+          <div class="field-item" style="flex: 1">
+            <label>Remark</label>
+            <input type="text" style="width: 100%" formControlName="remark" />
+          </div>
+          <div class="field-item" style="flex: 1">
+            <label>Notes</label>
+            <input type="text" style="width: 100%" formControlName="notes" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-item" style="flex: 1">
+            <label>Package</label>
+            <input type="text" style="width: 100%" formControlName="package" />
+          </div>
         </div>
       </div>
 
-      <div class="field-group">
-        <div class="field-item" style="flex: 1">
-          <label>Cust Name</label>
-          <input type="text" style="width: 100%" />
-        </div>
-        <div class="field-item" style="flex: 1">
-          <label>Couple</label>
-          <input type="text" style="width: 100%" />
-        </div>
-      </div>
-
-      <div class="field-group">
-        <div class="field-item" style="flex: 1">
-          <label>Address</label>
-          <input type="text" style="width: 100%" />
-        </div>
-      </div>
-
-      <div class="field-group">
-        <div class="field-item" style="flex: 1">
-          <label>Remark</label>
-          <input type="text" style="width: 100%" />
-        </div>
-        <div class="field-item" style="flex: 1">
-          <label>Notes</label>
-          <input type="text" style="width: 100%" />
-        </div>
-      </div>
-
-      <div class="field-group">
-        <div class="field-item" style="flex: 1">
-          <label>Package</label>
-          <input type="text" style="width: 100%" />
-        </div>
+      <div class="totals-sidebar">
+        <span>Order Details</span>
+        <table>
+          <thead>
+            <tr>
+              <th>Ord. No</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>03/03/2026</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <div class="totals-sidebar">
-        <span>Order Details</span>
+    <!-- ITEM ENTRY -->
+    <div class="item-entry-strip">
+      <div class="entry-col">
+        <label>Date</label>
+        <input
+          type="date"
+          [(ngModel)]="entryDate"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="entry-col">
+        <label>Item Name</label>
+        <select style="width: 100%" (change)="selectItem($any($event.target).value)">
+          <option value="">Select Item</option>
+          <option *ngFor="let item of itemsList" [value]="item._id">
+            {{ item.item_name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="entry-col">
+        <label>Product</label>
+        <select style="width: 100%" (change)="selectProduct($event)">
+          <option value="">Select Product</option>
+          <option *ngFor="let p of productsList" [value]="p._id">
+            {{ p.product_name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="entry-col">
+        <label>Event Name</label>
+        <input
+          type="text"
+          style="width: 100%"
+          [(ngModel)]="entryEventName"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="entry-col">
+        <label>Qty</label>
+        <input
+          type="number"
+          style="width: 80px"
+          [(ngModel)]="entryQty"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="entry-col">
+        <label>Rate</label>
+        <input
+          type="number"
+          style="width: 120px"
+          [(ngModel)]="entryRate"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="entry-col">
+        <label>Total</label>
+        <input
+          type="text"
+          style="width: 120px; background: #f0f0f0"
+          [value]="entryTotal"
+          readonly
+        />
+      </div>
+
+      <div class="entry-col">
+        <label>Place</label>
+        <input
+          type="text"
+          style="width: 100px"
+          [(ngModel)]="entryPlace"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="entry-col">
+        <label>Time</label>
+        <input
+          type="time"
+          style="width: 120px"
+          [(ngModel)]="entryTime"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+
+      <div class="entry-col">
+        <!-- <label>&nbsp;</label> -->
+        <button type="button" class="btn-add" (click)="addItem()">+</button>
+      </div>
+      <div class="entry-col">
+        <button class="btn-cancel" (click)="resetEntryFields()">x</button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-section">
       <table>
         <thead>
           <tr>
-            <th>Ord. No</th>
             <th>Date</th>
+            <th>Item Name</th>
+            <th>Product</th>
+            <th>Event</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>Total</th>
+            <th>Time</th>
+            <th>Action</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>03/03/2026</td>
+
+        <tbody formArrayName="items">
+          <tr
+            *ngFor="let item of items.controls; let i = index"
+            [formGroupName]="i"
+          >
+            <td style="width: 120px">
+              <input type="text" formControlName="date" placeholder="---" />
+            </td>
+
+            <td>
+              <input type="text" formControlName="itemName" readonly />
+            </td>
+
+            <td>
+              <input type="text" formControlName="productName" readonly />
+
+              <input type="hidden" formControlName="productId" />
+            </td>
+            <td>
+              <input type="text" formControlName="eventName" />
+            </td>
+
+            <td style="width: 60px">
+              <input
+                type="number"
+                formControlName="qty"
+                style="text-align: center"
+              />
+            </td>
+
+            <td style="width: 90px">
+              <input
+                type="number"
+                formControlName="rate"
+                style="text-align: center"
+              />
+            </td>
+
+            <td style="width: 100px; font-weight: bold">
+              <input
+                type="number"
+                formControlName="total"
+                readonly
+                style="text-align: center"
+              />
+            </td>
+
+            <td style="width: 40px">
+              <button type="button" class="btn-remove" (click)="removeItem(i)">
+                ✖
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-  </div>
 
-  <div class="item-entry-strip">
-    <div class="entry-col">
-      <label>Date</label>
-      <input type="text" style="width: 90px" />
-    </div>
-    <div class="entry-col" style="flex: 2">
-      <label>Item Name</label>
-      <input type="text" style="width: 100%" />
-    </div>
-    <div class="entry-col" style="flex: 2">
-      <label>Product</label>
-      <input type="text" style="width: 100%" />
-    </div>
-    <div class="entry-col" style="flex: 2">
-      <label>Event Name</label>
-      <input type="text" style="width: 100%" />
-    </div>
-    <div class="entry-col">
-      <label>Qty</label>
-      <input type="text" style="width: 50px" />
-    </div>
-    <div class="entry-col">
-      <label>Rate</label>
-      <input type="text" style="width: 80px" />
-    </div>
-    <div class="entry-col">
-      <label>Total</label>
-      <input type="text" style="width: 100px" />
-    </div>
-    <div class="entry-col">
-      <label>Place</label>
-      <input type="text" style="width: 100px" />
-    </div>
-    <div class="entry-col">
-      <label>Time</label>
-      <input type="text" style="width: 80px" />
-    </div>
-    <div class="entry-col">
-      <label>&nbsp;</label>
-      <button class="btn-add">+</button>
-    </div>
-  </div>
+    <!-- FOOTER -->
+    <div class="footer-summary">
+      <div class="summary-box">
+        <div class="summary-row">
+          <label>Subtotal</label>
+          <input type="text" formControlName="subTotal" />
+        </div>
 
-  <div class="table-section">
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Item Name</th>
-          <th>Product</th>
-          <th>Event</th>
-          <th>Qty</th>
-          <th>Rate</th>
-          <th>Total</th>
-          <th>Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>cwc</td>
-          <td>cwc</td>
-          <td>cwec</td>
-          <td>cwec</td>
-          <td>cwec</td>
-          <td>cwec</td>
-          <td>cwec</td>
-          <td>cwec</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        <div class="summary-row">
+          <label>Discount</label>
+          <input type="text" formControlName="discount" />
+        </div>
 
-  <div class="footer-summary">
-    <div class="summary-box">
-      <div class="summary-row">
-        <label>Subtotal</label>
-        <input type="text" />
-      </div>
-      <div class="summary-row">
-        <label>Discount</label>
-        <input type="text" />
-      </div>
-      <div class="summary-row">
-        <label>Advance</label>
-        <input type="text" />
-      </div>
-      <div class="summary-row">
-        <label>Grand Total</label>
-        <input type="text" />
-      </div>
-      <div class="summary-row grand-total-highlight">
-        <label>Payment</label>
-        <select name="" id="">
-          <option value=""></option>
-        </select>
+        <div class="summary-row">
+          <label>Advance</label>
+          <input type="text" formControlName="advance" />
+        </div>
+
+        <div class="summary-row">
+          <label>Grand Total</label>
+          <input type="text" formControlName="grandTotal" />
+        </div>
+
+        <div class="summary-row grand-total-highlight">
+          <label>Payment</label>
+          <select>
+            <option value=""></option>
+          </select>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="action-bar">
-    <button class="btn btn-save">Book Order</button>
-    <button class="btn">Update</button>
-    <button class="btn">View Calendar</button>
-    <button class="btn btn-social">SMS Alert</button>
-    <button class="btn">Print Agreement</button>
-    <button class="btn btn-exit" (click)="close()">Exit</button>
+    <div class="action-bar">
+      <button type="button" class="btn btn-save" (click)="onSubmit()">
+        Book Order
+      </button>
+      <button type="button" class="btn">Update</button>
+      <button type="button" class="btn">View Calendar</button>
+      <button type="button" class="btn btn-social">SMS Alert</button>
+      <button type="button" class="btn">Print Agreement</button>
+      <button type="button" class="btn btn-exit" (click)="close()">Exit</button>
+    </div>
   </div>
-</div>
+</form>

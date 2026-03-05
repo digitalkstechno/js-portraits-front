@@ -237,7 +237,6 @@ tbody tr:hover {
   flex-direction: column;
   gap: 4px;
 }
-
 .entry-col label {
   font-size: 10px;
   font-weight: bold;
@@ -245,13 +244,7 @@ tbody tr:hover {
   text-transform: uppercase;
 }
 
-.entry-col input {
-  padding: 4px;
-  border: 1px solid #999;
-  font-size: 12px;
-}
-
-.btn-add {
+.btn-add, .btn-cancel {
   background: #38a169;
   color: white;
   border: none;
@@ -264,6 +257,10 @@ tbody tr:hover {
   align-items: center; /* Added */
   justify-content: center; /* Added */
   line-height: 1; /* Added */
+}
+
+.btn-cancel {
+  background: red;
 }
 
 /* Helper classes for table inputs */
@@ -371,4 +368,32 @@ select {
   text-align: left; /* Text in dropdown stays left-aligned */
   cursor: pointer;
   background-color: #fff;
+}
+
+/* Make inputs look like plain text labels */
+.table-section table input, 
+.table-section table select {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    width: 100%;
+    padding: 5px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #333;
+    appearance: none; /* Removes the arrow from select dropdowns */
+    -webkit-appearance: none;
+}
+
+/* Center text in specific columns like Qty, Rate, Total */
+.table-section td {
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Optional: Add a slight hover effect to know which row you are on */
+.table-section tr:hover {
+    background-color: #f9f9f9;
 }
