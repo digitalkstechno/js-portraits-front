@@ -48,6 +48,13 @@ export const routes: Routes = [
             (m) => m.OutdoorbillComponent,
           ),
       },
+      {
+        path: 'staff',
+        loadComponent: () =>
+          import('./pages/admin/components/staff-management/staffentry/staffentry.component').then(
+            (m) => m.StaffentryComponent,
+          ),
+      },
     ],
   },
 
