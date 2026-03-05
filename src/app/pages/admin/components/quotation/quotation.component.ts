@@ -76,42 +76,6 @@ export class QuotationComponent {
     return this.quotationForm.get('items') as FormArray;
   }
 
-  // ITEM SEARCH & SELECT
-  onItemSearch(event: any) {
-    const selectedName = event.target.value;
-    const item = this.itemsList.find((x) => x.item_name === selectedName);
-
-    if (item) {
-      this.entryForm.patchValue({ itemId: item._id });
-
-      // Load products for this item
-      this.productService.getProductByItem(item._id).subscribe((res: any) => {
-        this.productsList = res.data || res;
-      });
-    } else {
-      this.entryForm.patchValue({ itemId: '' });
-      this.productsList = [];
-    }
-  }
-
-  // PRODUCT SEARCH & SELECT
-  onProductSearch(event: any) {
-    const selectedProductName = event.target.value;
-    const product = this.productsList.find(
-      (x) => x.product_name === selectedProductName,
-    );
-
-    if (product) {
-      this.entryForm.patchValue({
-        productId: product._id,
-        rate: Number(product.bill_rate),
-      });
-      this.calculateAmount();
-    } else {
-      this.entryForm.patchValue({ productId: '', rate: 0 });
-    }
-  }
-
   filteredItems: any[] = [];
   filteredProducts: any[] = [];
 
@@ -204,12 +168,6 @@ export class QuotationComponent {
     this.items.push(itemGroup);
     this.calculateGrandTotal();
     this.clearItem();
-  }
-
-  // REMOVE ITEM
-  removeItem(index: number) {
-    this.items.removeAt(index);
-    this.calculateGrandTotal();
   }
 
   // GRAND TOTAL
