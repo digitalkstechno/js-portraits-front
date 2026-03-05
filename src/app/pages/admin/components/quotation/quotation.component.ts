@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-quotation',
@@ -8,6 +9,7 @@ import { SHARED_MODULES } from '../../../../constants/sharedModule';
   styleUrl: './quotation.component.css',
 })
 export class QuotationComponent {
+  router = inject(Router);
   items = [
     { date: 'ALBUM', hsn: '0' },
     { name: 'ALBUM', hsn: '0' },
@@ -17,4 +19,12 @@ export class QuotationComponent {
     { rate: 'PHOTOGRAPHY', hsn: '0' },
     { amount: 'VIDEO SHOOT', hsn: '0' },
   ];
+
+  ngOnInit(){}
+
+  onSubmit(){}
+
+  close() {
+    this.router.navigateByUrl('/admin');
+  }
 }
