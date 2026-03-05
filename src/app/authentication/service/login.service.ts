@@ -11,35 +11,21 @@ export class LoginService {
   private TOKEN_KEY = 'token';
 
   // 🔐 Login
-  login(payload: { email: string; password: string }): Observable<any> {
+  login(payload: { name: string; password: string }): Observable<any> {
     return this.http.post<any>(Endpoints.LOGIN, payload).pipe(
       tap((res) => {
         if (res?.token) {
           localStorage.setItem(this.TOKEN_KEY, res.token);
-          localStorage.setItem('refreshToken', res.refreshToken);
           localStorage.setItem('user', JSON.stringify(res.user));
         }
       }),
     );
   }
 
-  refreshToken() {
-    const refreshToken = localStorage.getItem('refreshToken');
-
-    return this.http
-      .post<any>(Endpoints.REFRESH_TOKEN, {
-        refreshToken,
-      })
-      .pipe(
-        tap((res) => {
-          localStorage.setItem(this.TOKEN_KEY, res.token);
-        }),
-      );
-  }
-
   // 🚪 Logout
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem('user');
   }
 
   // ✅ Check login status

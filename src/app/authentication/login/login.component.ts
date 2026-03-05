@@ -22,8 +22,8 @@ export class LoginComponent {
     private authService: LoginService,
   ) {
     this.loginForm = this.fb.group({
-      company: [''],
-      email: ['', [Validators.required, Validators.email]],
+      company: ['The JS Portraits'],
+      name: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
   }
@@ -53,8 +53,8 @@ export class LoginComponent {
     this.authService.login(payload).subscribe({
       next: (res) => {
         const user = res.user;
-        // console.log('Response', res);
-        this.router.navigate(['/dashboard']);
+        console.log('Response', res);
+        this.router.navigate(['/admin']);
         this.loading = false;
       },
       error: () => {
