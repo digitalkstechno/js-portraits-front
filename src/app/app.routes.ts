@@ -55,6 +55,13 @@ export const routes: Routes = [
             (m) => m.StaffentryComponent,
           ),
       },
+      {
+        path: 'staff/salary',
+        loadComponent: () =>
+          import('./pages/admin/components/staff-management/staffsalary/staffsalary.component').then(
+            (m) => m.StaffsalaryComponent,
+          ),
+      },
     ],
   },
 
