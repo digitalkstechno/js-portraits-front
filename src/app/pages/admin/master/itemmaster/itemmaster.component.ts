@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { AdminService } from '../../components/service/admin.service';
 import { ItemsService } from '../service/items.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-itemmaster',
@@ -21,6 +22,7 @@ export class ItemmasterComponent {
   constructor(
     private fb: FormBuilder,
     private service: ItemsService,
+    private router: Router
   ) {
     this.itemForm = fb.group({
       item_name: [''],
@@ -90,5 +92,9 @@ export class ItemmasterComponent {
         console.error('Create user failed', err);
       },
     });
+  }
+
+  close() {
+    this.router.navigateByUrl('/admin');
   }
 }

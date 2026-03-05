@@ -28,6 +28,17 @@
   font-size: 16px;
 }
 
+.close-btn {
+  background: #ff4d4d;
+  color: white;
+  border: 1px solid #b30000;
+  border-radius: 3px;
+  padding: 2px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
 /* Master Form Area (Top Sections) */
 .form-container {
   padding: 15px;

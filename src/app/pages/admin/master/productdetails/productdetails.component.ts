@@ -3,6 +3,7 @@ import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { AdminService } from '../../components/service/admin.service';
 import { ItemsService } from '../service/items.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-productdetails',
@@ -24,6 +25,7 @@ export class ProductdetailsComponent {
   constructor(
     private service: ItemsService,
     private fb: FormBuilder,
+    private router: Router
   ) {
     this.productForm = fb.group({
       item_name: [''],
@@ -152,5 +154,9 @@ export class ProductdetailsComponent {
         console.error('Create products failed', err);
       },
     });
+  }
+
+  close(){
+    this.router.navigateByUrl('/admin');
   }
 }

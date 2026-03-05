@@ -2,7 +2,7 @@
   <!-- Title Bar -->
   <div class="title-bar">
     <span>Product Detail</span>
-    <button class="close-btn">✖</button>
+    <button class="close-btn" (click)="close()">✖</button>
   </div>
 
   <!-- Top Form Section -->
@@ -78,7 +78,7 @@
         <button class="btn">Delete</button>
         <button class="btn">Edit</button>
         <button class="btn">Cancel</button>
-        <button class="btn exit">Exit</button>
+        <button class="btn exit" (click)="close()">Exit</button>
       </div>
     </form>
   </div>
