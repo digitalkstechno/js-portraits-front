@@ -23,10 +23,12 @@ export class QuotationComponent {
   // ENTRY FORM (Item Entry Strip)
   entryForm: FormGroup = this.fb.group({
     date: [''],
-    itemId: ['', Validators.required],
-    productId: ['', Validators.required],
+    itemName: ['', Validators.required], // Name for searching
+    itemId: [''], // Hidden ID
+    productName: ['', Validators.required],
+    productId: [''],
     event: [''],
-    qty: [0, Validators.required],
+    qty: [1, [Validators.required, Validators.min(1)]],
     rate: [0, Validators.required],
     amount: [0],
   });
@@ -74,6 +76,78 @@ export class QuotationComponent {
     return this.quotationForm.get('items') as FormArray;
   }
 
+  // ITEM SEARCH & SELECT
+  onItemSearch(event: any) {
+    const selectedName = event.target.value;
+    const item = this.itemsList.find((x) => x.item_name === selectedName);
+
+    if (item) {
+      this.entryForm.patchValue({ itemId: item._id });
+
+      // Load products for this item
+      this.productService.getProductByItem(item._id).subscribe((res: any) => {
+        this.productsList = res.data || res;
+      });
+    } else {
+      this.entryForm.patchValue({ itemId: '' });
+      this.productsList = [];
+    }
+  }
+
+  // PRODUCT SEARCH & SELECT
+  onProductSearch(event: any) {
+    const selectedProductName = event.target.value;
+    const product = this.productsList.find(
+      (x) => x.product_name === selectedProductName,
+    );
+
+    if (product) {
+      this.entryForm.patchValue({
+        productId: product._id,
+        rate: Number(product.bill_rate),
+      });
+      this.calculateAmount();
+    } else {
+      this.entryForm.patchValue({ productId: '', rate: 0 });
+    }
+  }
+
+  filteredItems: any[] = [];
+  filteredProducts: any[] = [];
+
+  // Item search logic
+  onItemType(event: any) {
+    const val = event.target.value.toLowerCase();
+    this.filteredItems = val
+      ? this.itemsList.filter((i) => i.item_name.toLowerCase().includes(val))
+      : [];
+  }
+
+  selectItem(item: any) {
+    this.entryForm.patchValue({ itemName: item.item_name, itemId: item._id });
+    this.filteredItems = []; // Close dropdown
+    this.onItemSelect(item._id); // Load products
+  }
+
+  // Product search logic
+  onProductType(event: any) {
+    const val = event.target.value.toLowerCase();
+    this.filteredProducts = val
+      ? this.productsList.filter((p) =>
+          p.product_name.toLowerCase().includes(val),
+        )
+      : [];
+  }
+
+  selectProduct(product: any) {
+    this.entryForm.patchValue({
+      productName: product.product_name,
+      productId: product._id,
+    });
+    this.filteredProducts = []; // Close dropdown
+    this.onProductSelect(product._id); // Auto-fill rate
+  }
+
   // ITEM SELECT
   onItemSelect(itemId: string) {
     const item = this.itemsList.find((x) => x._id === itemId);
@@ -116,15 +190,10 @@ export class QuotationComponent {
 
     const value = this.entryForm.value;
 
-    const itemData = this.itemsList.find((x) => x._id === value.itemId);
-    const productData = this.productsList.find(
-      (x) => x._id === value.productId,
-    );
-
-    const item = this.fb.group({
+    const itemGroup = this.fb.group({
       date: [value.date],
-      itemName: [itemData?.item_name],
-      productName: [productData?.product_name],
+      itemName: [value.itemName],
+      productName: [value.productName],
       productId: [value.productId],
       event: [value.event],
       qty: [value.qty],
@@ -132,11 +201,8 @@ export class QuotationComponent {
       total: [value.amount],
     });
 
-    this.items.push(item);
-    // console.log("items", this.items.value);
-
+    this.items.push(itemGroup);
     this.calculateGrandTotal();
-
     this.clearItem();
   }
 

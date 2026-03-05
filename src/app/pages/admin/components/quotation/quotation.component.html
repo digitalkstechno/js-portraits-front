@@ -102,41 +102,58 @@
       <input type="date" style="width: 100px" formControlName="date" />
     </div>
 
-    <div class="entry-col" style="flex: 2">
+    <div class="entry-col search-wrapper">
       <label>Item Name</label>
-
-      <select
-        style="width: 100%"
-        formControlName="itemId"
-        (change)="onItemSelect($any($event.target).value)"
-      >
-        <option value="">Select Item</option>
-
-        <option *ngFor="let item of itemsList" [value]="item._id">
-          {{ item.item_name }}
-        </option>
-      </select>
+      <div class="custom-dropdown">
+        <input
+          type="text"
+          style="width: 100%"
+          formControlName="itemName"
+          placeholder="Type to search item..."
+          (input)="onItemType($event)"
+          class="professional-input"
+          autocomplete="off"
+        />
+        <div class="dropdown-results" *ngIf="filteredItems.length > 0">
+          <div
+            class="result-row"
+            *ngFor="let item of filteredItems"
+            (click)="selectItem(item)"
+          >
+            <i class="bi bi-search"></i> {{ item.item_name }}
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="entry-col" style="flex: 1">
+    <div class="entry-col search-wrapper" style="flex: 1;">
       <label>Product</label>
-
-      <select
-        style="width: 100%"
-        formControlName="productId"
-        (change)="onProductSelect($any($event.target).value)"
-      >
-        <option value="">Select Product</option>
-
-        <option *ngFor="let product of productsList" [value]="product._id">
-          {{ product.product_name }}
-        </option>
-      </select>
+      <div class="custom-dropdown" >
+        <input
+          type="text"
+          style="width: 100%"
+          formControlName="productName"
+          placeholder="Search Product..."
+          (input)="onProductType($event)"
+          class="professional-input"
+          autocomplete="off"
+          [readonly]="!productsList.length"
+        />
+        <div class="dropdown-results" *ngIf="filteredProducts.length > 0">
+          <div
+            class="result-row"
+            *ngFor="let p of filteredProducts"
+            (click)="selectProduct(p)"
+          >
+            <i class="bi bi-box-seam"></i> {{ p.product_name }}
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="entry-col" style="flex: 1">
+    <div class="entry-col">
       <label>Event Name</label>
-      <input type="text" style="width: 100%" formControlName="event" />
+      <input type="text" style="width: 180px" formControlName="event" />
     </div>
 
     <div class="entry-col">

@@ -295,3 +295,78 @@ tbody tr:hover {
   padding-top: 8px;
   border-top: 2px dashed #6b8ea3;
 }
+
+/* Container for the search input */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+/* Modern Input Style */
+.professional-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+  background-color: #fff;
+}
+
+.professional-input:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+  outline: none;
+}
+
+/* Floating Results Menu */
+.dropdown-results {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  z-index: 999;
+  max-height: 250px;
+  overflow-y: auto;
+  animation: slideIn 0.2s ease-out;
+}
+
+/* Individual Result Row */
+.result-row {
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  border-bottom: 1px solid #f8f9fa;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.result-row:hover {
+  background-color: #f0f7ff;
+  color: #007bff;
+}
+
+.result-row:last-child {
+  border-bottom: none;
+}
+
+/* Subtle animation */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hide scrollbar for clean look */
+.dropdown-results::-webkit-scrollbar {
+  width: 6px;
+}
+.dropdown-results::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
