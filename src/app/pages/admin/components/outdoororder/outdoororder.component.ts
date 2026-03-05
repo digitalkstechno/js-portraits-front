@@ -25,7 +25,7 @@ export class OutdoororderComponent implements OnInit {
   ngOnInit() {
     this.orderForm = this.fb.group({
       orderNo: [''],
-      date: [''],
+      date: [new Date().toISOString().split('T')[0]],
       contactNo: [''],
       quotationNo: [''],
 

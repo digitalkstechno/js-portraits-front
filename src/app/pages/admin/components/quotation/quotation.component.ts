@@ -22,7 +22,7 @@ export class QuotationComponent {
 
   // ENTRY FORM (Item Entry Strip)
   entryForm: FormGroup = this.fb.group({
-    date: [''],
+    date: [new Date().toISOString().split('T')[0]],
     itemName: ['', Validators.required], // Name for searching
     itemId: [''], // Hidden ID
     productName: ['', Validators.required],
@@ -35,7 +35,7 @@ export class QuotationComponent {
 
   quotationForm: FormGroup = this.fb.group({
     quotationNo: [''],
-    date: [new Date()],
+    date: [new Date().toISOString().split('T')[0]],
 
     outdoorParty: [''],
     address: [''],
