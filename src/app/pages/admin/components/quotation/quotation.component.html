@@ -1,4 +1,4 @@
-<div class="window">
+<div class="window" [formGroup]="quotationForm">
   <div class="title-bar">
     <span>Quotation</span>
     <button class="close-btn" (click)="close()">✖</button>
@@ -9,51 +9,67 @@
       <div class="field-group">
         <div class="field-item">
           <label>Quotation No.</label>
-          <input type="text" style="width: 80px" />
+          <input
+            type="text"
+            style="width: 80px"
+            formControlName="quotationNo"
+          />
         </div>
+
         <div class="field-item">
           <label>Date</label>
-          <input type="text" style="width: 100px" />
+          <input type="date" style="width: 100px" formControlName="date" />
         </div>
+
         <div class="field-item">
           <label>Address</label>
-          <input type="text" style="width: 190px" />
+          <input type="text" style="width: 190px" formControlName="address" />
         </div>
       </div>
 
       <div class="field-group">
         <div class="field-item">
           <label>Outdoor Party</label>
-          <input type="text" style="width: 280px" />
+          <input
+            type="text"
+            style="width: 280px"
+            formControlName="outdoorParty"
+          />
         </div>
+
         <div class="field-item">
           <label>Contact No</label>
-          <input type="text" style="width: 190px" />
+          <input type="text" style="width: 190px" formControlName="contactNo" />
         </div>
       </div>
 
       <div class="field-group">
         <div class="field-item">
           <label>Couple Name</label>
-          <input type="text" style="width: 280px" />
+          <input
+            type="text"
+            style="width: 280px"
+            formControlName="functionName"
+          />
         </div>
+
         <div class="field-item">
           <label>Email</label>
-          <input type="text" style="width: 190px" />
+          <input type="text" style="width: 190px" formControlName="email" />
         </div>
       </div>
 
       <div class="field-group">
         <div class="field-item">
           <label>Ref By</label>
-          <input type="text" style="width: 280px" />
+          <input type="text" style="width: 280px" formControlName="refBy" />
         </div>
       </div>
 
       <div class="field-group">
         <div class="field-item">
           <label>Package</label>
-          <input type="text" style="width: 280px" />
+          <input type="text" style="width: 280px" formControlName="package" />
         </div>
       </div>
     </div>
@@ -76,42 +92,93 @@
     </div>
   </div>
 
-  <div class="item-entry-strip">
+  <!-- ITEM ENTRY STRIP -->
+
+  <!-- ITEM ENTRY STRIP -->
+
+  <div class="item-entry-strip" [formGroup]="entryForm">
     <div class="entry-col">
       <label>Date</label>
-      <input type="text" style="width: 100px" />
+      <input type="date" style="width: 100px" formControlName="date" />
     </div>
+
     <div class="entry-col" style="flex: 2">
       <label>Item Name</label>
-      <input type="text" style="width: 100%" />
+
+      <select
+        style="width: 100%"
+        formControlName="itemId"
+        (change)="onItemSelect($any($event.target).value)"
+      >
+        <option value="">Select Item</option>
+
+        <option *ngFor="let item of itemsList" [value]="item._id">
+          {{ item.item_name }}
+        </option>
+      </select>
     </div>
+
     <div class="entry-col" style="flex: 1">
       <label>Product</label>
-      <input type="text" style="width: 100%" />
+
+      <select
+        style="width: 100%"
+        formControlName="productId"
+        (change)="onProductSelect($any($event.target).value)"
+      >
+        <option value="">Select Product</option>
+
+        <option *ngFor="let product of productsList" [value]="product._id">
+          {{ product.product_name }}
+        </option>
+      </select>
     </div>
+
     <div class="entry-col" style="flex: 1">
       <label>Event Name</label>
-      <input type="text" style="width: 100%" />
+      <input type="text" style="width: 100%" formControlName="event" />
     </div>
+
     <div class="entry-col">
       <label>Qty</label>
-      <input type="text" style="width: 80px" />
+      <input
+        type="number"
+        style="width: 80px"
+        formControlName="qty"
+        (input)="calculateAmount()"
+      />
     </div>
+
     <div class="entry-col">
       <label>Rate</label>
-      <input type="text" style="width: 100px" />
+      <input
+        type="number"
+        style="width: 100px"
+        formControlName="rate"
+        (input)="calculateAmount()"
+      />
     </div>
+
     <div class="entry-col">
       <label>Amount</label>
-      <input type="text" style="width: 120px; text-align: right" readonly />
+      <input
+        type="text"
+        style="width: 120px; text-align: right"
+        formControlName="amount"
+        readonly
+      />
     </div>
+
     <div class="entry-col">
-      <button class="btn-add">+</button>
+      <button class="btn-add" (click)="addItem()">+</button>
     </div>
+
     <div class="entry-col">
-      <button class="btn-cancel">x</button>
+      <button class="btn-cancel" (click)="clearItem()">x</button>
     </div>
   </div>
+
+  <!-- ITEMS TABLE -->
 
   <div
     class="d-flex"
@@ -130,19 +197,25 @@
             <th width="100">Total</th>
           </tr>
         </thead>
-        <tbody>
-          <tr *ngFor="let item of items; let i = index">
+
+        <tbody formArrayName="items">
+          <tr
+            *ngFor="let item of items.value; let i = index"
+            [formGroupName]="i"
+          >
             <td>{{ item.date }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.size }}</td>
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.productName }}</td>
             <td>{{ item.event }}</td>
-            <td class="text-center">{{ item.qty }}</td>
-            <td class="text-right">{{ item.rate }}</td>
-            <td class="text-right">{{ item.amount }}</td>
+            <td>{{ item.qty }}</td>
+            <td>{{ item.rate }}</td>
+            <td>{{ item.total }}</td>
           </tr>
         </tbody>
       </table>
     </div>
+
+    <!-- TOTAL SECTION -->
 
     <div
       class="footer-summary"
@@ -151,17 +224,23 @@
       <div class="summary-box">
         <div class="summary-row">
           <label>Sub Total</label>
-          <input type="text" value="0.00" readonly />
+          <input type="text" formControlName="subTotal" readonly />
         </div>
+
         <div class="summary-row">
           <label>Discount</label>
-          <input type="text" value="0.00" />
+          <input
+            type="number"
+            formControlName="discount"
+            (input)="calculateGrandTotal()"
+          />
         </div>
+
         <div class="summary-row grand-total-highlight">
           <label>NET TOTAL</label>
           <input
             type="text"
-            value="0.00"
+            formControlName="grandTotal"
             style="font-weight: bold; color: #c53030"
             readonly
           />
@@ -171,12 +250,12 @@
   </div>
 
   <div class="action-bar">
-    <button class="btn btn-save">Save</button>
+    <button class="btn btn-save" (click)="onSubmit()">Save</button>
     <button class="btn">Delete</button>
     <button class="btn">Edit</button>
     <button class="btn">Print</button>
     <button class="btn btn-social">WhatsApp</button>
-    <button class="btn">Cancel</button>
+    <button class="btn" (click)="clearAll()">Cancel</button>
     <button class="btn btn-exit" (click)="close()">Exit</button>
   </div>
 </div>

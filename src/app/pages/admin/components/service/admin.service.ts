@@ -47,27 +47,23 @@ export class AdminService {
     this.userSearchSubject.next({ page, limit, search });
   }
 
-  getItems(): Observable<any> {
-    return this.http.get<any>(Endpoints.ITEMS);
+  getQuotation(): Observable<any> {
+    return this.http.get<any>(Endpoints.QUOTATION);
   }
 
-  // 🔹 Get role by ID
-  getItemById(id: string): Observable<any> {
-    return this.http.get<any>(`${Endpoints.ITEMS}/${id}`);
+  getQuotationById(id: string): Observable<any> {
+    return this.http.get<any>(`${Endpoints.QUOTATION}/${id}`);
   }
 
-  // 🔹 Create role
-  createItem(data: any): Observable<any> {
-    return this.http.post<any>(Endpoints.ITEMS, data);
+  createQuotation(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.QUOTATION, data);
   }
 
-  // 🔹 Update role
-  updateItem(id: string, data: { name: string }): Observable<any> {
+  updateQuotation(id: string, data: { name: string }): Observable<any> {
     return this.http.put<any>(`${Endpoints.ITEMS}/${id}`, data);
   }
 
-  // 🔹 Delete role
-  deleteItem(id: string): Observable<void> {
-    return this.http.delete<void>(`${Endpoints.ITEMS}/${id}`);
+  deleteQuotation(id: string): Observable<void> {
+    return this.http.delete<void>(`${Endpoints.QUOTATION}/${id}`);
   }
 }
