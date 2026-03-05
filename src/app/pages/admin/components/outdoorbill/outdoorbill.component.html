@@ -1,7 +1,7 @@
 <div class="window">
   <div class="title-bar">
     <span>Outdoor Bill</span>
-    <button class="close-btn">✖</button>
+    <button class="close-btn" (click)="close()">✖</button>
   </div>
 
   <div class="form-container">
@@ -228,6 +228,6 @@
     <button class="btn">Print</button>
     <button class="btn btn-social">WhatsApp</button>
     <button class="btn">Cancel</button>
-    <button class="btn btn-exit">Exit</button>
+    <button class="btn btn-exit" (click)="close()">Exit</button>
   </div>
 </div>
