@@ -26,13 +26,13 @@ export class OutdoororderComponent implements OnInit {
     this.orderForm = this.fb.group({
       orderNo: [''],
       date: [''],
-      mobNo: [''],
+      contactNo: [''],
       quotationNo: [''],
 
-      custName: [''],
+      outdoorParty: [''],
       couple: [''],
       address: [''],
-      remark: [''],
+      remarks: [''],
       notes: [''],
       package: [''],
 
@@ -133,17 +133,21 @@ export class OutdoororderComponent implements OnInit {
     this.outdoorService.getQuotationByNumber(qNo).subscribe((res: any) => {
       // Patch Main Form
       this.orderForm.patchValue({
-        custName: res.outdoorParty,
-        mobNo: res.contactNo,
+        date: this.formatDate(res.date),
+        outdoorParty: res.outdoorParty,
+        contactNo: res.contactNo,
+        couple: res.couple,
         address: res.address,
+        remarks: res.remarks,
         // ... other fields
       });
 
       // Clear and Fill Table
-      this.items.clear();
+      // this.items.clear();
       res.items.forEach((item: any) => {
         const row = this.createItem();
         row.patchValue({
+          date: item.date,
           itemName: item.itemName,
           productName: item.productId?.product_name || 'Product', // API se agar name aa raha ho
           productId: item.productId,
