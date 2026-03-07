@@ -84,6 +84,10 @@ export class AdminService {
     return this.http.get<any>(`${Endpoints.OUTDOOR_ORDER}/${num}`);
   }
 
+  getOrderCount(): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_ORDER}/count`);
+  }
+
   createOutdoorOrder(data: any): Observable<any> {
     return this.http.post<any>(Endpoints.OUTDOOR_ORDER, data);
   }

@@ -19,6 +19,7 @@ export class OutdoororderComponent implements OnInit {
   orderForm!: FormGroup;
   itemsList: any[] = [];
   productsList: any[] = [];
+  count: any;
 
   ngOnInit() {
     this.orderForm = this.fb.group({
@@ -40,6 +41,16 @@ export class OutdoororderComponent implements OnInit {
       discount: [0],
       advance: [0],
       grandTotal: [0],
+    });
+
+    this.outdoorService.getOrderCount().subscribe((res) => {
+      // console.log(res.count);
+      const count = res.count;
+      this.count = count + 1;
+      // console.log(this.count);
+      this.orderForm.patchValue({
+        orderNo: this.count,
+      });
     });
 
     // Listen for Discount or Advance changes
