@@ -62,6 +62,13 @@ export const routes: Routes = [
             (m) => m.StaffsalaryComponent,
           ),
       },
+      {
+        path: 'summary',
+        loadComponent: () =>
+          import('./pages/admin/report/summary/summary.component').then(
+            (m) => m.SummaryComponent,
+          ),
+      },
     ],
   },
 

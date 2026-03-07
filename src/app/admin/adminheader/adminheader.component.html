@@ -1,14 +1,14 @@
 <header class="header">
   <div class="menu-bar">
-    
+
     <!-- Master Dropdown -->
-    <div class="menu-item dropdown">
-      <span (click)="toggleMaster()">Master ▾</span>
+    <div class="menu-item dropdown" #masterMenu>
+      <span (click)="toggleMenu('master')">Master ▾</span>
 
       <div class="dropdown-menu" *ngIf="isMasterOpen">
-        <p routerLink="/admin/items" routerLinkActive="active" (click)="closeMaster()">Item Master</p>
-        <p routerLink="/admin/products" routerLinkActive="active" (click)="closeMaster()">Product Master</p>
-        <p routerLink="/package-master" routerLinkActive="active" (click)="closeMaster()">Package Master</p>
+        <p routerLink="/admin/items" routerLinkActive="active" (click)="closeAll()">Item Master</p>
+        <p routerLink="/admin/products" routerLinkActive="active" (click)="closeAll()">Product Master</p>
+        <p routerLink="/package-master" routerLinkActive="active" (click)="closeAll()">Package Master</p>
       </div>
     </div>
 
@@ -20,7 +20,16 @@
     <span>SMS</span>
     <span>Utility</span>
     <span>Facebook</span>
-    <span>Report</span>
+
+    <!-- Report Dropdown -->
+    <div class="menu-item dropdown" #reportMenu>
+      <span (click)="toggleMenu('report')">Report ▾</span>
+
+      <div class="dropdown-menu" *ngIf="isReportOpen">
+        <p routerLink="/summary" routerLinkActive="active" (click)="closeAll()">Summary</p>
+      </div>
+    </div>
+
     <span>Cheque</span>
     <span>Sheet</span>
     <span>Log Off</span>

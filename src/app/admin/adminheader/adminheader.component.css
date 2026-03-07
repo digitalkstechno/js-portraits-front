@@ -1,65 +1,129 @@
+/* Top Header */
 .header {
-  height: 60px; /* Taller for a modern feel */
-  background-color: #ffffff;
-  border-bottom: 1px solid #dee2e6;
+  height: 64px;
+  background: linear-gradient(90deg, #ffffff, #f7fbff);
+  border-bottom: 1px solid #dde3ea;
   display: flex;
   align-items: center;
-  padding: 0 25px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 0 28px;
+  box-shadow:
+    0 2px 6px rgba(15, 23, 42, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.7);
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
+/* Main menu bar */
 .menu-bar {
   display: flex;
-  gap: 25px;
+  align-items: center;
+  gap: 28px;
   font-size: 13px;
   font-weight: 500;
-  color: #6c757d;
+  color: #64748b;
+  width: 100%;
 }
 
+/* Menu item text */
 .menu-bar span {
   cursor: pointer;
-  transition: color 0.2s;
+  position: relative;
+  padding: 6px 0;
+  transition:
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+
+/* Hover underline + color */
+.menu-bar span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #007bff, #22c55e);
+  transition: width 0.2s ease;
 }
 
 .menu-bar span:hover {
-  color: #3498db;
-  text-decoration: none;
+  color: #0d6efd;
+  transform: translateY(-1px);
 }
 
-/* Specific style for Exit/Log Off to stand out */
+.menu-bar span:hover::after {
+  width: 100%;
+}
+
+/* Exit / Log Off aligned right and highlighted */
 .menu-bar span:last-child {
-  color: #e74c3c;
-  margin-left: auto; /* Pushes exit to the far right */
+  color: #e11d48;
+  margin-left: auto;
+  font-weight: 600;
 }
 
+.menu-bar span:last-child:hover {
+  color: #b91c1c;
+}
+
+/* Dropdown container */
 .menu-item {
   position: relative;
   cursor: pointer;
 }
 
+/* Dropdown panel */
 .dropdown-menu {
   position: absolute;
-  top: 35px;
+  top: 38px;
   left: 0;
-  background: white;
-  color: black;
+  background: #ffffff;
+  color: #0f172a;
   display: flex;
   flex-direction: column;
-  min-width: 170px;
-  border-radius: 4px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  min-width: 120px;
+  border-radius: 6px;
+  box-shadow:
+    0 10px 25px rgba(15, 23, 42, 0.18),
+    0 0 0 1px rgba(148, 163, 184, 0.4);
+  overflow: hidden;
+  z-index: 50;
 }
 
+/* Dropdown items (p or span) */
+.dropdown-menu p,
 .dropdown-menu span {
-  padding: 10px 14px;
+  padding: 5px;
   cursor: pointer;
+  font-size: 12px;
+  color: #475569;
+  white-space: nowrap;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    padding-left 0.15s ease;
 }
 
+.dropdown-menu p:hover,
 .dropdown-menu span:hover {
-  background: #f2f2f2;
+  background: #eff6ff;
+  color: #0f172a;
+  padding-left: 18px;
 }
 
+/* Active route */
 .active {
-  font-weight: bold;
-  color: #007bff;
+  font-weight: 600;
+  color: #0d6efd;
+}
+
+.active::before {
+  content: "•";
+  color: #22c55e;
+  margin-right: 6px;
+  font-size: 14px;
 }
