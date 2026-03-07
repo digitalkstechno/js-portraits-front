@@ -19,6 +19,7 @@ export class QuotationComponent {
 
   itemsList: any[] = [];
   productsList: any[] = [];
+  count: any;
 
   // ENTRY FORM (Item Entry Strip)
   entryForm: FormGroup = this.fb.group({
@@ -61,6 +62,16 @@ export class QuotationComponent {
   });
 
   ngOnInit() {
+    this.quotationService.getQuotationCount().subscribe((res) => {
+      // console.log(res.count);
+      const count = res.count;
+      this.count = count + 1;
+      // console.log(this.count);
+      this.quotationForm.patchValue({
+        quotationNo: this.count,
+      });
+    });
+
     this.loadItems();
   }
 

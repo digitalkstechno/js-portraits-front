@@ -59,6 +59,10 @@ export class AdminService {
     return this.http.get<any>(`${Endpoints.QUOTATION}/${num}`);
   }
 
+  getQuotationCount(): Observable<any> {
+    return this.http.get<any>(`${Endpoints.QUOTATION}/count`);
+  }
+
   createQuotation(data: any): Observable<any> {
     return this.http.post<any>(Endpoints.QUOTATION, data);
   }
