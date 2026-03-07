@@ -1,6 +1,13 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
+import { StaffService } from '../../components/staff-management/service/staff.service';
 Chart.register(...registerables);
 
 interface StaffSalary {
@@ -16,31 +23,17 @@ interface StaffSalary {
 
 @Component({
   selector: 'app-overallsalaryreport',
+  standalone: true,
   imports: [SHARED_MODULES],
   templateUrl: './overallsalaryreport.component.html',
   styleUrl: './overallsalaryreport.component.css',
 })
 export class OverallsalaryreportComponent implements AfterViewInit {
-  @ViewChild('employeeLineChart')
-  employeeLineChart!: ElementRef<HTMLCanvasElement>;
   @ViewChild('overallBarChart') overallBarChart!: ElementRef<HTMLCanvasElement>;
+  staffService = inject(StaffService);
 
-  // In real app, fetch this from a service
-  salaries: StaffSalary[] = [
-    {
-      _id: '69a96f7c628bafbb3cd658d3',
-      staffId: '69a57465cf86a334bdcd0ba4',
-      staffName: 'Priya',
-      date: '2026-03-05T00:00:00.000Z',
-      amount: 15000,
-      type: 'Salary',
-      paymentMode: 'Bank Transfer',
-      remarks: 'Salary for February 2026',
-    },
-    // add more records for multiple employees / months...
-  ];
+  salaries: StaffSalary[] = [];
 
-  // 2) Overall employee summary
   employeeTotals: {
     staffId: string;
     staffName: string;
@@ -48,12 +41,24 @@ export class OverallsalaryreportComponent implements AfterViewInit {
     lastPaidOn: string;
   }[] = [];
 
-  ngAfterViewInit(): void {
-    this.buildOverallSummary();
-    this.buildOverallChart();
+  ngOnInit() {
+    this.loadStaffSalary();
   }
 
-  // ------- OVERALL EMPLOYEE SUMMARY -------
+  ngAfterViewInit(): void {
+    // leave empty or only DOM‑related init;
+    // data-dependent logic runs after HTTP completes
+  }
+
+  loadStaffSalary() {
+    this.staffService.getStaffSalary().subscribe((res: any) => {
+      this.salaries = res.salary || [];
+      console.log('salary', this.salaries);
+
+      this.buildOverallSummary();
+      this.buildOverallChart();
+    });
+  }
 
   private buildOverallSummary() {
     const map = new Map<
@@ -92,6 +97,8 @@ export class OverallsalaryreportComponent implements AfterViewInit {
   }
 
   private buildOverallChart() {
+    if (!this.employeeTotals.length) return;
+
     const labels = this.employeeTotals.map((e) => e.staffName);
     const values = this.employeeTotals.map((e) => e.totalPaid);
 
@@ -135,6 +142,6 @@ export class OverallsalaryreportComponent implements AfterViewInit {
   }
 
   private toDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-GB'); // 05/03/2026
+    return new Date(iso).toLocaleDateString('en-GB');
   }
 }

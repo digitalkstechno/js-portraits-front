@@ -1,6 +1,7 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import { StaffService } from '../../components/staff-management/service/staff.service';
 Chart.register(...registerables);
 
 interface StaffSalary {
@@ -24,20 +25,9 @@ interface StaffSalary {
 export class StaffwisesalaryreportComponent implements AfterViewInit {
   @ViewChild('employeeLineChart')
   employeeLineChart!: ElementRef<HTMLCanvasElement>;
+  staffService = inject(StaffService);
 
-  salaries: StaffSalary[] = [
-    {
-      _id: '69a96f7c628bafbb3cd658d3',
-      staffId: '69a57465cf86a334bdcd0ba4',
-      staffName: 'Priya',
-      date: '2026-03-05T00:00:00.000Z',
-      amount: 15000,
-      type: 'Salary',
-      paymentMode: 'Bank Transfer',
-      remarks: 'Salary for February 2026',
-    },
-    // more rows...
-  ];
+  salaries: StaffSalary[] = [];
 
   selectedStaffId: string | null = null;
   selectedStaffName = '';
@@ -56,12 +46,25 @@ export class StaffwisesalaryreportComponent implements AfterViewInit {
     lastPaidOn: string;
   }[] = [];
 
-  ngAfterViewInit(): void {
-    this.buildEmployeeTotals();
-    this.initDefaultEmployee();
+  ngOnInit() {
+    this.loadStaffSalary();
   }
 
-  /** Build summary per employee (needed for dropdown and default select) */
+  ngAfterViewInit(): void {
+    // nothing here OR only logic that does not depend on data
+  }
+
+  loadStaffSalary() {
+    this.staffService.getStaffSalary().subscribe((res: any) => {
+      this.salaries = res.salary || [];
+      console.log('salary', this.salaries);
+
+      // now that data is here, build summary and default chart
+      this.buildEmployeeTotals();
+      this.initDefaultEmployee();
+    });
+  }
+
   private buildEmployeeTotals() {
     const map = new Map<
       string,
