@@ -76,6 +76,13 @@ export const routes: Routes = [
             (m) => m.OutdoororderbillreportComponent,
           ),
       },
+      {
+        path: 'salary/report',
+        loadComponent: () =>
+          import('./pages/admin/report/overallsalaryreport/overallsalaryreport.component').then(
+            (m) => m.OverallsalaryreportComponent,
+          ),
+      },
     ],
   },
 

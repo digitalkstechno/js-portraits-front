@@ -60,7 +60,7 @@ export class AdminheaderComponent {
             { label: 'Outdoor Order Revenue', link: '/admin/order/report' },
             { label: 'Outdoor Bill Revenue', link: '/reports/outdoor-bill' },
             { label: 'Individual Employee', link: '/reports/individual' },
-            { label: 'Overall Salary', link: '/reports/overall' },
+            { label: 'Overall Salary', link: '/admin/salary/report' },
           ],
         },
       ],
