@@ -25,7 +25,7 @@
             *ngFor="let staff of filteredStaff"
             (click)="selectStaff(staff)"
           >
-            {{ staff.name }} - {{ staff.designation }}
+            {{ staff.name }}
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@
     </form>
 
     <!-- Right summary card -->
-    <div class="totals-sidebar">
+    <!-- <div class="totals-sidebar">
       <div class="total-row">
         <label>Monthly Salary:</label>
         <span class="info-value">₹25,000</span>
@@ -86,7 +86,7 @@
         <label>Pending:</label>
         <span class="info-value" style="color: #c53030">₹10,000</span>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <!-- Table -->
