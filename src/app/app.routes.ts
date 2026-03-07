@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { AdminlayoutComponent } from './admin/adminlayout/adminlayout.component';
+import { guardGuard } from './authentication/guard/guard.guard';
 
 export const routes: Routes = [
   {
     path: 'admin',
     component: AdminlayoutComponent,
+    canActivate: [guardGuard],
     children: [
       {
         path: '',
