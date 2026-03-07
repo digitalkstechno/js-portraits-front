@@ -1,0 +1,70 @@
+.salary-report-window {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 16px 18px;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.salary-report-window h2 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  color: #111827;
+}
+
+.section {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #1f2933;
+}
+
+.section-header .hint {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* employee selector */
+.employee-select {
+  margin: 6px 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.employee-select label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.employee-select select {
+  padding: 4px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1.3fr;
+  gap: 14px;
+}
+
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

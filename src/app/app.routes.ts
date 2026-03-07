@@ -77,7 +77,14 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'salary/report',
+        path: 'salary/overall-report',
+        loadComponent: () =>
+          import('./pages/admin/report/overallsalaryreport/overallsalaryreport.component').then(
+            (m) => m.OverallsalaryreportComponent,
+          ),
+      },
+      {
+        path: 'salary/individual-report',
         loadComponent: () =>
           import('./pages/admin/report/overallsalaryreport/overallsalaryreport.component').then(
             (m) => m.OverallsalaryreportComponent,

@@ -59,8 +59,8 @@ export class AdminheaderComponent {
           children: [
             { label: 'Outdoor Order Revenue', link: '/admin/order/report' },
             { label: 'Outdoor Bill Revenue', link: '/reports/outdoor-bill' },
-            { label: 'Individual Employee', link: '/reports/individual' },
-            { label: 'Overall Salary', link: '/admin/salary/report' },
+            { label: 'Individual Employee', link: '/admin/salary/individual-report' },
+            { label: 'Overall Salary', link: '/admin/salary/overall-report' },
           ],
         },
       ],

@@ -40,17 +40,6 @@ export class OverallsalaryreportComponent implements AfterViewInit {
     // add more records for multiple employees / months...
   ];
 
-  // 1) Individual employee report
-  selectedStaffId: string | null = null;
-  selectedStaffName = '';
-  employeeHistory: {
-    date: string;
-    amount: number;
-    type: string;
-    paymentMode: string;
-    remarks: string;
-  }[] = [];
-
   // 2) Overall employee summary
   employeeTotals: {
     staffId: string;
@@ -62,7 +51,6 @@ export class OverallsalaryreportComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.buildOverallSummary();
     this.buildOverallChart();
-    this.initDefaultEmployee();
   }
 
   // ------- OVERALL EMPLOYEE SUMMARY -------
@@ -121,81 +109,6 @@ export class OverallsalaryreportComponent implements AfterViewInit {
             backgroundColor: '#0ea5e9',
             borderRadius: 6,
             maxBarThickness: 40,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: true },
-          tooltip: {
-            callbacks: {
-              label: (ctx) =>
-                ` ₹${ctx.parsed.y?.toLocaleString('en-IN') ?? '0'}`,
-            },
-          },
-        },
-        scales: {
-          x: { grid: { display: false } },
-          y: { beginAtZero: true, grid: { color: '#e5e7eb' } },
-        },
-      },
-    };
-
-    new Chart(ctx, config);
-  }
-
-  // ------- INDIVIDUAL EMPLOYEE REPORT -------
-
-  initDefaultEmployee() {
-    if (this.employeeTotals.length) {
-      this.onSelectEmployee(this.employeeTotals[0].staffId);
-    }
-  }
-
-  onSelectEmployee(staffId: string) {
-    this.selectedStaffId = staffId;
-    const staff = this.employeeTotals.find((e) => e.staffId === staffId);
-    this.selectedStaffName = staff?.staffName ?? '';
-
-    const history = this.salaries
-      .filter((s) => s.staffId === staffId)
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-    this.employeeHistory = history.map((s) => ({
-      date: this.toDate(s.date),
-      amount: s.amount,
-      type: s.type,
-      paymentMode: s.paymentMode,
-      remarks: s.remarks,
-    }));
-
-    this.buildEmployeeLineChart();
-  }
-
-  private buildEmployeeLineChart() {
-    const labels = this.employeeHistory.map((h) => h.date);
-    const values = this.employeeHistory.map((h) => h.amount);
-
-    const ctx = this.employeeLineChart.nativeElement.getContext('2d');
-    if (!ctx) return;
-
-    // destroy old chart if you store ref; here simple new chart for brevity
-    const config: ChartConfiguration<'line'> = {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          {
-            label: `${this.selectedStaffName} - Salary (₹)`,
-            data: values,
-            borderColor: '#22c55e',
-            backgroundColor: 'rgba(34,197,94,0.15)',
-            borderWidth: 2,
-            tension: 0.3,
-            fill: true,
-            pointRadius: 4,
           },
         ],
       },
