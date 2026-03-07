@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 Chart.register(...registerables);
@@ -16,16 +16,15 @@ interface StaffSalary {
 
 @Component({
   selector: 'app-staffwisesalaryreport',
+  standalone: true,
   imports: [SHARED_MODULES],
   templateUrl: './staffwisesalaryreport.component.html',
   styleUrl: './staffwisesalaryreport.component.css',
 })
-export class StaffwisesalaryreportComponent {
+export class StaffwisesalaryreportComponent implements AfterViewInit {
   @ViewChild('employeeLineChart')
   employeeLineChart!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('overallBarChart') overallBarChart!: ElementRef<HTMLCanvasElement>;
 
-  // In real app, fetch this from a service
   salaries: StaffSalary[] = [
     {
       _id: '69a96f7c628bafbb3cd658d3',
@@ -37,10 +36,9 @@ export class StaffwisesalaryreportComponent {
       paymentMode: 'Bank Transfer',
       remarks: 'Salary for February 2026',
     },
-    // add more records for multiple employees / months...
+    // more rows...
   ];
 
-  // 1) Individual employee report
   selectedStaffId: string | null = null;
   selectedStaffName = '';
   employeeHistory: {
@@ -51,7 +49,6 @@ export class StaffwisesalaryreportComponent {
     remarks: string;
   }[] = [];
 
-  // 2) Overall employee summary
   employeeTotals: {
     staffId: string;
     staffName: string;
@@ -60,10 +57,41 @@ export class StaffwisesalaryreportComponent {
   }[] = [];
 
   ngAfterViewInit(): void {
+    this.buildEmployeeTotals();
     this.initDefaultEmployee();
   }
 
-  // ------- INDIVIDUAL EMPLOYEE REPORT -------
+  /** Build summary per employee (needed for dropdown and default select) */
+  private buildEmployeeTotals() {
+    const map = new Map<
+      string,
+      {
+        staffId: string;
+        staffName: string;
+        totalPaid: number;
+        lastPaidOn: string;
+      }
+    >();
+
+    this.salaries.forEach((s) => {
+      const existing = map.get(s.staffId);
+      if (!existing) {
+        map.set(s.staffId, {
+          staffId: s.staffId,
+          staffName: s.staffName,
+          totalPaid: s.amount,
+          lastPaidOn: s.date,
+        });
+      } else {
+        existing.totalPaid += s.amount;
+        if (new Date(s.date) > new Date(existing.lastPaidOn)) {
+          existing.lastPaidOn = s.date;
+        }
+      }
+    });
+
+    this.employeeTotals = Array.from(map.values());
+  }
 
   initDefaultEmployee() {
     if (this.employeeTotals.length) {
@@ -92,13 +120,14 @@ export class StaffwisesalaryreportComponent {
   }
 
   private buildEmployeeLineChart() {
+    if (!this.employeeHistory.length) return;
+
     const labels = this.employeeHistory.map((h) => h.date);
     const values = this.employeeHistory.map((h) => h.amount);
 
     const ctx = this.employeeLineChart.nativeElement.getContext('2d');
     if (!ctx) return;
 
-    // destroy old chart if you store ref; here simple new chart for brevity
     const config: ChartConfiguration<'line'> = {
       type: 'line',
       data: {
@@ -139,6 +168,6 @@ export class StaffwisesalaryreportComponent {
   }
 
   private toDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-GB'); // 05/03/2026
+    return new Date(iso).toLocaleDateString('en-GB');
   }
 }

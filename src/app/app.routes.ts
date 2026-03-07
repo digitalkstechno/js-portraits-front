@@ -86,8 +86,8 @@ export const routes: Routes = [
       {
         path: 'salary/individual-report',
         loadComponent: () =>
-          import('./pages/admin/report/overallsalaryreport/overallsalaryreport.component').then(
-            (m) => m.OverallsalaryreportComponent,
+          import('./pages/admin/report/staffwisesalaryreport/staffwisesalaryreport.component').then(
+            (m) => m.StaffwisesalaryreportComponent,
           ),
       },
     ],
