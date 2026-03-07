@@ -21,6 +21,10 @@ export class StaffsalaryComponent {
   stats = { monthly: 0, paid: 0, pending: 0 };
   staff: any[] = [];
   staffSalary: any;
+  page = 1;
+  limit = 10;
+  searchText = '';
+  staffSalaryList$ = this.staffService.salary$;
 
   constructor(private fb: FormBuilder) {
     this.salaryForm = this.fb.group({
@@ -37,6 +41,7 @@ export class StaffsalaryComponent {
   ngOnInit(): void {
     this.loadStaff();
     this.loadStaffSalary();
+    this.staffService.searchStaffSalary(this.page, this.limit, this.searchText);
   }
 
   loadStaff() {
@@ -47,11 +52,16 @@ export class StaffsalaryComponent {
   }
 
   loadStaffSalary() {
-    this.staffService.getStaffSalary().subscribe((res: any) => {
+    this.staffService.salary$.subscribe((res: any) => {
       const salary = res.salary;
       this.staffSalary = salary;
-      console.log("saalry", this.staffSalary)
+      // console.log('saalry', this.staffSalary);
     });
+  }
+
+  onSearchChange(value: string) {
+    this.searchText = value;
+    this.staffService.searchStaffSalary(this.page, this.limit, this.searchText);
   }
 
   // 1. Search Staff Logic
@@ -107,6 +117,11 @@ export class StaffsalaryComponent {
         alert('Record saved successfully');
         alert(`${payload.type.toUpperCase()} recorded successfully!`);
         this.resetForm();
+        this.staffService.searchStaffSalary(
+          this.page,
+          this.limit,
+          this.searchText,
+        );
       },
       error: (err) => {
         console.error(err);

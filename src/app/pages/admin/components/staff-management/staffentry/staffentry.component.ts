@@ -24,6 +24,10 @@ export class StaffentryComponent {
   staff: any;
   roles: string[] = [];
   filteredRoles: string[] = [...this.roles];
+  page = 1;
+  limit = 10;
+  searchText = '';
+  staffList$ = this.staffService.staff$;
 
   ngOnInit() {
     this.initForm();
@@ -37,6 +41,7 @@ export class StaffentryComponent {
     });
     this.loadRoles();
     this.loadStaff();
+    this.staffService.searchStaff(this.page, this.limit, this.searchText);
   }
 
   initForm() {
@@ -64,15 +69,19 @@ export class StaffentryComponent {
   }
 
   loadStaff() {
-    this.staffService.getStaff().subscribe((res) => {
+    this.staffService.staff$.subscribe((res) => {
       const staff = res;
       this.staff = staff.filter((s: any) => s.isAdmin === false);
     });
   }
 
+  onSearchChange(value: string) {
+    this.searchText = value;
+    this.staffService.searchStaff(this.page, this.limit, this.searchText);
+  }
+
   filterRoles(event: any) {
     const value = event.target.value.toLowerCase();
-
     this.filteredRoles = this.roles.filter((role) =>
       role.toLowerCase().includes(value),
     );
@@ -87,12 +96,13 @@ export class StaffentryComponent {
     if (this.staffForm.invalid) return;
 
     const staffData = this.staffForm.value;
-    console.log('Staff Data:', staffData);
+    // console.log('Staff Data:', staffData);
 
     this.staffService.createStaff(staffData).subscribe({
       next: () => {
         console.log('Staff created successfully');
         this.staffForm.reset();
+        this.staffService.searchStaff(this.page, this.limit, this.searchText);
       },
       error: (err) => {
         console.error(err);
