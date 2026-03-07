@@ -9,6 +9,50 @@
       <span class="hint">Total salary paid per employee</span>
     </div>
 
+    <!-- overallsalaryreport.component.html -->
+
+    <div class="salary-report-window">
+      <!-- Stats cards -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="label">Total Paid</div>
+          <div class="value">₹{{ totalPaid | number: "1.0-0" }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">No. of Employees</div>
+          <div class="value">{{ employeeTotals.length }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="label">Avg Salary Per Employee</div>
+          <div class="value">₹{{ avgSalary | number: "1.0-0" }}</div>
+        </div>
+      </div>
+
+      <!-- Bar + Pie + Donut -->
+      <div class="grid-three">
+        <div class="chart-card">
+          <h4>Total Salary by Employee (Bar)</h4>
+          <div class="chart-container">
+            <canvas #overallBarChart></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <h4>Salary Share by Employee (Pie)</h4>
+          <div class="chart-container">
+            <canvas #pieChart></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <h4>Salary Type Split (Donut)</h4>
+          <div class="chart-container">
+            <canvas #donutChart></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="grid">
       <!-- Summary table -->
       <div class="table-wrapper">

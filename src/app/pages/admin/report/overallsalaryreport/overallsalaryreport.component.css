@@ -132,3 +132,62 @@ tbody tr:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.salary-report-window {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 16px 18px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  padding: 8px 10px;
+}
+
+.stat-card .label {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.stat-card .value {
+  font-size: 17px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.grid-three {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.chart-card {
+  background: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card h4 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: #111827;
+}
+
+.chart-container {
+  position: relative;
+  height: 260px;
+}
