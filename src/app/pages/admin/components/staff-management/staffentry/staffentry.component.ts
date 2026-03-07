@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { StaffService } from '../service/staff.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SHARED_MODULES } from '../../../../../constants/sharedModule';
+import { AdminService } from '../../service/admin.service';
 
 @Component({
   selector: 'app-staffentry',
@@ -13,22 +14,29 @@ import { SHARED_MODULES } from '../../../../../constants/sharedModule';
 export class StaffentryComponent {
   router = inject(Router);
   staffService = inject(StaffService);
+  roleService = inject(AdminService);
   fb = inject(FormBuilder);
   staffForm!: FormGroup;
   totalStaff = 0;
   activeStaff = 0;
   onLeaveStaff = 0;
   count: any;
+  staff: any;
+  roles: string[] = [];
+  filteredRoles: string[] = [...this.roles];
 
   ngOnInit() {
     this.initForm();
     this.staffService.getStaffCount().subscribe((res) => {
       const count = res.count?.count;
+      this.totalStaff = count;
       this.count = count + 1;
       this.staffForm.patchValue({
         staffId: this.count,
       });
     });
+    this.loadRoles();
+    this.loadStaff();
   }
 
   initForm() {
@@ -45,8 +53,34 @@ export class StaffentryComponent {
       salary: [''],
       address: [''],
       remarks: [''],
-      status: ['Active'],
     });
+  }
+
+  loadRoles() {
+    this.roleService.getroles().subscribe((res) => {
+      const roles = res.data;
+      this.roles = roles.map((r: any) => r.name);
+    });
+  }
+
+  loadStaff() {
+    this.staffService.getStaff().subscribe((res) => {
+      const staff = res;
+      this.staff = staff.filter((s: any) => s.isAdmin === false);
+    });
+  }
+
+  filterRoles(event: any) {
+    const value = event.target.value.toLowerCase();
+
+    this.filteredRoles = this.roles.filter((role) =>
+      role.toLowerCase().includes(value),
+    );
+  }
+
+  selectRole(role: string) {
+    this.staffForm.patchValue({ role: role });
+    this.filteredRoles = [];
   }
 
   onSubmit() {
@@ -58,6 +92,7 @@ export class StaffentryComponent {
     this.staffService.createStaff(staffData).subscribe({
       next: () => {
         console.log('Staff created successfully');
+        this.staffForm.reset();
       },
       error: (err) => {
         console.error(err);

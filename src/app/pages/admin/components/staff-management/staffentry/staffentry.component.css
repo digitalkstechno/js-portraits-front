@@ -244,3 +244,38 @@ input[type="date"] {
   text-align: left; /* Names should be left aligned */
   padding-left: 10px;
 }
+
+.field-item {
+  position: relative;
+}
+
+.field-item input {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.dropdown-list {
+  position: absolute;
+  top: 100%;   /* show just below input */
+  left: 0;
+  width: 100%;
+  border: 1px solid #999;
+  background: #fff;
+  max-height: 150px;
+  overflow-y: auto;
+  border-radius: 2px;
+  z-index: 1000;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.dropdown-item {
+  padding: 6px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #e2eff7;
+}

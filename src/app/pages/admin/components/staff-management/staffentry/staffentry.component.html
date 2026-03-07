@@ -5,7 +5,7 @@
   </div>
 
   <div class="form-container">
-    <form [formGroup]="staffForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="staffForm">
       <div class="main-fields">
         <div class="field-group">
           <div class="field-item">
@@ -59,11 +59,21 @@
           <div class="field-item">
             <label>Role</label>
             <input
-              type="number"
-              style="width: 150px"
-              placeholder="Photographer"
+              type="text"
+              placeholder="Search role..."
+              (input)="filterRoles($event)"
               formControlName="role"
             />
+
+            <div class="dropdown-list" *ngIf="filteredRoles.length">
+              <div
+                class="dropdown-item"
+                *ngFor="let r of filteredRoles"
+                (click)="selectRole(r)"
+              >
+                {{ r }}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -113,15 +123,15 @@
     <div class="totals-sidebar">
       <div class="total-row">
         <label>Total Staff:</label>
-        <span class="info-value">12</span>
+        <span class="info-value">{{ totalStaff }}</span>
       </div>
       <div class="total-row">
         <label>Active:</label>
-        <span class="info-value" style="color: green">10</span>
+        <span class="info-value" style="color: green">{{ totalStaff }}</span>
       </div>
       <div class="total-row">
         <label>On Leave:</label>
-        <span class="info-value" style="color: orange">02</span>
+        <span class="info-value" style="color: orange">0</span>
       </div>
     </div>
   </div>
@@ -151,25 +161,25 @@
           <th>Role</th>
           <th>Salary</th>
           <th>Joining Date</th>
-          <th width="100">Status</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>S-001</td>
-          <td>John Doe</td>
-          <td>9876543210</td>
-          <td>Senior Editor</td>
-          <td>25,000</td>
-          <td>01/01/2024</td>
-          <td><span class="status-badge">Active</span></td>
+        <tr *ngFor="let s of staff">
+          <td>{{ s.staffId }}</td>
+          <td>{{ s.name }}</td>
+          <td>{{ s.contact_no }}</td>
+          <td>{{ s.role }}</td>
+          <td>{{ s.salary }}</td>
+          <td>{{ s.joining_date | date }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="action-bar">
-    <button type="submit" class="btn btn-save">Save</button>
+    <button type="submit" class="btn btn-save" (click)="onSubmit()">
+      Save
+    </button>
     <button class="btn" (click)="updateStaff()">Update</button>
     <button class="btn" (click)="clearForm()">Clear</button>
     <button class="btn btn-exit" (click)="deleteStaff()">Delete</button>

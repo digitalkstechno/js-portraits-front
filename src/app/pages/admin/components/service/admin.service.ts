@@ -116,4 +116,9 @@ export class AdminService {
   createOutdoorBill(data: any): Observable<any> {
     return this.http.post<any>(Endpoints.OUTDOOR_BILL, data);
   }
+
+  // role
+  getroles(): Observable<any> {
+    return this.http.get<any>(Endpoints.ROLE);
+  }
 }
