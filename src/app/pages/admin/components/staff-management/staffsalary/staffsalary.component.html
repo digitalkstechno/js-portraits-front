@@ -63,9 +63,9 @@
       </div>
 
       <!-- Remarks -->
-      <div class="field-item" style="flex: 1 1 100%;">
+      <div class="field-item" style="flex: 1 1 100%">
         <label>Remarks</label>
-        <input type="text" formControlName="remarks" style="width: 100%;" />
+        <input type="text" formControlName="remarks" style="width: 100%" />
       </div>
     </form>
 
@@ -77,11 +77,14 @@
       </div>
       <div class="total-row">
         <label>Paid Till Now:</label>
-        <span class="info-value" style="color:#2f855a;">₹15,000</span>
+        <span class="info-value" style="color: #2f855a">₹15,000</span>
       </div>
-      <div class="total-row" style="border-top:1px dashed #cc8f8f; padding-top:6px;">
+      <div
+        class="total-row"
+        style="border-top: 1px dashed #cc8f8f; padding-top: 6px"
+      >
         <label>Pending:</label>
-        <span class="info-value" style="color:#c53030;">₹10,000</span>
+        <span class="info-value" style="color: #c53030">₹10,000</span>
       </div>
     </div>
   </div>
@@ -91,30 +94,24 @@
     <table>
       <thead>
         <tr>
-          <th width="100">Date</th>
+          <th>Date</th>
           <th>Staff Name</th>
-          <th width="120">Type</th>
-          <th width="120">Amount (₹)</th>
+          <th>Type</th>
+          <th>Amount (₹)</th>
           <th>Remarks</th>
-          <th width="100">Mode</th>
+          <th>Mode</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td class="text-center">05/11/2023</td>
-          <td>John Doe</td>
-          <td><span class="type-badge exposure">Exposure</span></td>
-          <td class="text-right">500.00</td>
-          <td>Travel Allowance - Surat Trip</td>
-          <td class="text-center">UPI</td>
-        </tr>
-        <tr>
-          <td class="text-center">01/11/2023</td>
-          <td>John Doe</td>
-          <td><span class="type-badge salary">Salary</span></td>
-          <td class="text-right">15,000.00</td>
-          <td>Part salary for Oct</td>
-          <td class="text-center">Cash</td>
+        <tr *ngFor="let salary of staffSalary">
+          <td>{{ salary.date | date }}</td>
+          <td>{{ salary.staffName }}</td>
+          <td>
+            <span class="type-badge exposure">{{ salary.type }}</span>
+          </td>
+          <td>{{ salary.amount }}</td>
+          <td>{{ salary.remarks }}</td>
+          <td>{{ salary.paymentMode }}</td>
         </tr>
       </tbody>
     </table>

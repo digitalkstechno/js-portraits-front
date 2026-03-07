@@ -20,6 +20,7 @@ export class StaffsalaryComponent {
   selectedStaff: any = null;
   stats = { monthly: 0, paid: 0, pending: 0 };
   staff: any[] = [];
+  staffSalary: any;
 
   constructor(private fb: FormBuilder) {
     this.salaryForm = this.fb.group({
@@ -35,12 +36,21 @@ export class StaffsalaryComponent {
 
   ngOnInit(): void {
     this.loadStaff();
+    this.loadStaffSalary();
   }
 
   loadStaff() {
     this.staffService.getStaff().subscribe((res: any) => {
       const staff = res;
       this.staff = staff.filter((s: any) => s.isAdmin === false);
+    });
+  }
+
+  loadStaffSalary() {
+    this.staffService.getStaffSalary().subscribe((res: any) => {
+      const salary = res.salary;
+      this.staffSalary = salary;
+      console.log("saalry", this.staffSalary)
     });
   }
 
@@ -92,18 +102,16 @@ export class StaffsalaryComponent {
 
     console.log('Submitting Salary Transaction:', payload);
 
-    // API call example
-    // this.salaryService.saveSalary(payload).subscribe({
-    //   next: () => {
-    //     alert("Record saved successfully");
-    //     this.resetForm();
-    //   },
-    //   error: (err) => console.error(err)
-    // });
-
-    alert(`${payload.type.toUpperCase()} recorded successfully!`);
-
-    this.resetForm();
+    this.staffService.createStaff(payload).subscribe({
+      next: () => {
+        alert('Record saved successfully');
+        alert(`${payload.type.toUpperCase()} recorded successfully!`);
+        this.salaryForm.reset();
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
   }
 
   resetForm() {
