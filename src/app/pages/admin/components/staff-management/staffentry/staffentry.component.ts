@@ -18,15 +18,31 @@ export class StaffentryComponent {
   totalStaff = 0;
   activeStaff = 0;
   onLeaveStaff = 0;
+  count: any;
 
   ngOnInit() {
+    this.initForm();
+    this.staffService.getStaffCount().subscribe((res) => {
+      const count = res.count?.count;
+      this.count = count + 1;
+      this.staffForm.patchValue({
+        staffId: this.count,
+      });
+    });
+  }
+
+  initForm() {
     this.staffForm = this.fb.group({
       staffId: [''],
-      fullName: [''],
-      joiningDate: [new Date().toISOString().split('T')[0]],
-      contactNo: [''],
-      salary: [''],
+      name: [''],
+      email: [''],
       role: [''],
+      isAdmin: [false],
+      contact_no: [''],
+      joining_date: [new Date().toISOString().split('T')[0]],
+      age: [''],
+      gender: [''],
+      salary: [''],
       address: [''],
       remarks: [''],
       status: ['Active'],

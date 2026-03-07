@@ -24,7 +24,7 @@
               type="text"
               style="width: 100%"
               placeholder="Enter staff name"
-              formControlName="fullName"
+              formControlName="name"
             />
           </div>
           <div class="field-item">
@@ -32,7 +32,7 @@
             <input
               type="date"
               style="width: 130px"
-              formControlName="joiningDate"
+              formControlName="joining_date"
             />
           </div>
         </div>
@@ -44,7 +44,7 @@
               type="text"
               style="width: 150px"
               placeholder="10-digit mobile"
-              formControlName="contactNo"
+              formControlName="contact_no"
             />
           </div>
           <div class="field-item">
@@ -68,7 +68,24 @@
         </div>
 
         <div class="field-group">
-          <div class="field-item" style="flex: 1">
+          <div class="field-item">
+            <label>Age</label>
+            <input
+              type="number"
+              style="width: 150px"
+              placeholder="Enter age"
+              formControlName="age"
+            />
+          </div>
+          <div class="field-item">
+            <label>Gender</label>
+            <select style="width: 130px" formControlName="gender">
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="feale">Female</option>
+            </select>
+          </div>
+          <div class="field-item">
             <label>Address</label>
             <input
               type="text"
