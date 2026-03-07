@@ -24,4 +24,17 @@ export class StaffService {
   createStaff(data: any): Observable<any> {
     return this.http.post<any>(Endpoints.STAFF, data);
   }
+
+  // staff salary
+  getStaffSalary(): Observable<any> {
+    return this.http.get<any>(Endpoints.STAFF_SALARY);
+  }
+
+  getStaffSalaryById(id: string): Observable<any> {
+    return this.http.get<any>(`${Endpoints.STAFF_SALARY}/${id}`);
+  }
+
+  createStaffPayment(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.STAFF_SALARY, data);
+  }
 }

@@ -1,108 +1,93 @@
 <div class="window">
-  <div
-    class="title-bar"
-    style="
-      background: linear-gradient(#f3d8d8, #cc8f8f);
-      border-bottom-color: #a36b6b;
-    "
-  >
+  <!-- Header -->
+  <div class="title-bar">
     <span>Staff Salary & Expense Management</span>
-    <button class="close-btn">✖</button>
+    <button class="close-btn" (click)="onExit()">✖</button>
   </div>
 
+  <!-- Top form + summary -->
   <div class="form-container">
-    <div class="main-fields">
-      <div class="field-group">
-        <div class="field-item" style="flex: 2; position: relative">
-          <label>Staff Name</label>
-          <input
-            type="text"
-            placeholder="Search staff name..."
-            style="width: 100%"
-            (input)="onStaffSearch($any($event.target).value)"
-          />
-          <div class="custom-dropdown" *ngIf="showDropdown">
-            <div
-              class="dropdown-item"
-              *ngFor="let staff of staffList"
-              (mousedown)="selectStaff(staff)"
-            >
-              {{ staff.name }} <small>({{ staff.designation }})</small>
-            </div>
+    <form [formGroup]="salaryForm">
+      <!-- Staff Search -->
+      <div class="field-item">
+        <label>Staff</label>
+        <input
+          type="text"
+          placeholder="Search staff..."
+          formControlName="staffName"
+          (input)="onStaffSearch($any($event.target).value)"
+          autocomplete="off"
+        />
+
+        <div class="dropdown-list" *ngIf="showDropdown">
+          <div
+            class="dropdown-item"
+            *ngFor="let staff of filteredStaff"
+            (click)="selectStaff(staff)"
+          >
+            {{ staff.name }} - {{ staff.designation }}
           </div>
         </div>
-        <div class="field-item">
-          <label>Date</label>
-          <input type="date" style="width: 140px" />
-        </div>
       </div>
 
-      <div class="field-group">
-        <div class="field-item">
-          <label>Entry Type</label>
-          <select style="width: 150px; font-weight: bold; color: #2c3e50">
-            <option value="salary">Salary Payment</option>
-            <option value="exposure">Exposure / Advance</option>
-          </select>
-        </div>
-        <div class="field-item">
-          <label>Amount (₹)</label>
-          <input
-            type="number"
-            style="
-              width: 120px;
-              text-align: right;
-              font-weight: bold;
-              color: #c53030;
-            "
-            placeholder="0.00"
-          />
-        </div>
-        <div class="field-item">
-          <label>Payment Mode</label>
-          <select style="width: 120px">
-            <option>Cash</option>
-            <option>UPI</option>
-            <option>Bank Transfer</option>
-          </select>
-        </div>
+      <!-- Date -->
+      <div class="field-item">
+        <label>Date</label>
+        <input type="date" formControlName="date" />
       </div>
 
-      <div class="field-group">
-        <div class="field-item" style="flex: 1">
-          <label>Remarks</label>
-          <input
-            type="text"
-            style="width: 100%"
-            placeholder="e.g. Salary for Oct 2023 or Conveyance for Wedding Shoot"
-          />
-        </div>
+      <!-- Type -->
+      <div class="field-item">
+        <label>Type</label>
+        <select formControlName="type">
+          <option value="Salary">Salary</option>
+          <option value="Exposure">Exposure</option>
+        </select>
       </div>
-    </div>
 
-    <div
-      class="totals-sidebar"
-      style="background: #fff5f5; border-color: #cc8f8f"
-    >
+      <!-- Amount -->
+      <div class="field-item">
+        <label>Amount</label>
+        <input type="number" formControlName="amount" />
+      </div>
+
+      <!-- Payment Mode -->
+      <div class="field-item">
+        <label>Payment</label>
+        <select formControlName="payMode">
+          <option>Cash</option>
+          <option>UPI</option>
+          <option>Bank Transfer</option>
+          <option>Cheque</option>
+        </select>
+      </div>
+
+      <!-- Remarks -->
+      <div class="field-item" style="flex: 1 1 100%;">
+        <label>Remarks</label>
+        <input type="text" formControlName="remarks" style="width: 100%;" />
+      </div>
+    </form>
+
+    <!-- Right summary card -->
+    <div class="totals-sidebar">
       <div class="total-row">
         <label>Monthly Salary:</label>
         <span class="info-value">₹25,000</span>
       </div>
       <div class="total-row">
         <label>Paid Till Now:</label>
-        <span class="info-value" style="color: #2f855a">₹15,000</span>
+        <span class="info-value" style="color:#2f855a;">₹15,000</span>
       </div>
-      <div
-        class="total-row"
-        style="border-top: 1px dashed #cc8f8f; padding-top: 5px"
-      >
+      <div class="total-row" style="border-top:1px dashed #cc8f8f; padding-top:6px;">
         <label>Pending:</label>
-        <span class="info-value" style="color: #c53030">₹10,000</span>
+        <span class="info-value" style="color:#c53030;">₹10,000</span>
       </div>
     </div>
   </div>
 
-  <div class="table-section" style="height: 200px">
+  <!-- Table -->
+  <div class="table-section">
     <table>
       <thead>
         <tr>
@@ -115,7 +100,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let trans of transactions">
+        <tr>
           <td class="text-center">05/11/2023</td>
           <td>John Doe</td>
           <td><span class="type-badge exposure">Exposure</span></td>
@@ -135,10 +120,11 @@
     </table>
   </div>
 
+  <!-- Bottom buttons -->
   <div class="action-bar">
-    <button class="btn btn-save">Record Payment</button>
+    <button class="btn btn-save" (click)="onSubmit()">Save</button>
     <button class="btn">Print Slip</button>
-    <button class="btn btn-exit">Clear</button>
-    <button class="btn btn-exit">Exit</button>
+    <button class="btn btn-exit" (click)="resetForm()">Clear</button>
+    <button class="btn btn-exit" (click)="onExit()">Exit</button>
   </div>
 </div>

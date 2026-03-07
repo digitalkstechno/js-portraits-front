@@ -8,6 +8,7 @@ export const Endpoints = {
   REFRESH_TOKEN: `${baseUrl}/refresh-token`,
 
   STAFF: `${baseUrl}/staff`,
+  STAFF_SALARY: `${baseUrl}/staffSalary`,
   ROLE: `${baseUrl}/role`,
   ITEMS: `${baseUrl}/items`,
   PRODUCTS: `${baseUrl}/products`,
