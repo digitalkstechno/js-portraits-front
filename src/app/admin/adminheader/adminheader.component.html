@@ -1,38 +1,44 @@
 <header class="header">
   <div class="menu-bar">
+    <ng-container *ngFor="let item of menuItems">
+      <!-- Dropdown item -->
+      <div
+        *ngIf="item.children?.length; else simpleItem"
+        class="menu-item dropdown"
+        #menuRef
+        [attr.data-key]="item.key"
+      >
+        <span (click)="toggleMenu(item.key)"> {{ item.label }} ▾ </span>
 
-    <!-- Master Dropdown -->
-    <div class="menu-item dropdown" #masterMenu>
-      <span (click)="toggleMenu('master')">Master ▾</span>
-
-      <div class="dropdown-menu" *ngIf="isMasterOpen">
-        <p routerLink="/admin/items" routerLinkActive="active" (click)="closeAll()">Item Master</p>
-        <p routerLink="/admin/products" routerLinkActive="active" (click)="closeAll()">Product Master</p>
-        <p routerLink="/package-master" routerLinkActive="active" (click)="closeAll()">Package Master</p>
+        <div class="dropdown-menu" *ngIf="openMenuKey === item.key">
+          <p
+            *ngFor="let child of item.children"
+            [routerLink]="child.link"
+            routerLinkActive="active"
+            (click)="closeAll()"
+          >
+            {{ child.label }}
+          </p>
+        </div>
       </div>
-    </div>
 
-    <span>Transaction</span>
-    <span>Officer</span>
-    <span>New Purchase</span>
-    <span>Discount</span>
-    <span>Booking Form</span>
-    <span>SMS</span>
-    <span>Utility</span>
-    <span>Facebook</span>
+      <!-- Simple (non-dropdown) item -->
+      <ng-template #simpleItem>
+        <span
+          *ngIf="!item.action; else actionItem"
+          [routerLink]="item.link"
+          routerLinkActive="active"
+        >
+          {{ item.label }}
+        </span>
+      </ng-template>
 
-    <!-- Report Dropdown -->
-    <div class="menu-item dropdown" #reportMenu>
-      <span (click)="toggleMenu('report')">Report ▾</span>
-
-      <div class="dropdown-menu" *ngIf="isReportOpen">
-        <p routerLink="/summary" routerLinkActive="active" (click)="closeAll()">Summary</p>
-      </div>
-    </div>
-
-    <span>Cheque</span>
-    <span>Sheet</span>
-    <span>Log Off</span>
-    <span (click)="logout()">Exit</span>
+      <!-- Action item like Exit -->
+      <ng-template #actionItem>
+        <span (click)="onAction(item.action!)">
+          {{ item.label }}
+        </span>
+      </ng-template>
+    </ng-container>
   </div>
 </header>
