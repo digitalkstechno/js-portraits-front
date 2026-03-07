@@ -5,76 +5,93 @@
   </div>
 
   <div class="form-container">
-    <div class="main-fields">
-      <div class="field-group">
-        <div class="field-item">
-          <label>Staff ID</label>
-          <input type="text" style="width: 80px" placeholder="Auto" readonly />
+    <form [formGroup]="staffForm" (ngSubmit)="onSubmit()">
+      <div class="main-fields">
+        <div class="field-group">
+          <div class="field-item">
+            <label>Staff ID</label>
+            <input
+              type="text"
+              style="width: 80px"
+              placeholder="Auto"
+              formControlName="staffId"
+              readonly
+            />
+          </div>
+          <div class="field-item" style="flex: 2">
+            <label>Full Name</label>
+            <input
+              type="text"
+              style="width: 100%"
+              placeholder="Enter staff name"
+              formControlName="fullName"
+            />
+          </div>
+          <div class="field-item">
+            <label>Joining Date</label>
+            <input
+              type="date"
+              style="width: 130px"
+              formControlName="joiningDate"
+            />
+          </div>
         </div>
-        <div class="field-item" style="flex: 2">
-          <label>Full Name</label>
-          <input
-            type="text"
-            style="width: 100%"
-            placeholder="Enter staff name"
-          />
-        </div>
-        <div class="field-item">
-          <label>Joining Date</label>
-          <input type="date" style="width: 130px" />
-        </div>
-      </div>
 
-      <div class="field-group">
-        <div class="field-item">
-          <label>Phone No</label>
-          <input
-            type="text"
-            style="width: 150px"
-            placeholder="10-digit mobile"
-          />
+        <div class="field-group">
+          <div class="field-item">
+            <label>Contact No</label>
+            <input
+              type="text"
+              style="width: 150px"
+              placeholder="10-digit mobile"
+              formControlName="contactNo"
+            />
+          </div>
+          <div class="field-item">
+            <label>Salary (Monthly)</label>
+            <input
+              type="number"
+              style="width: 120px; text-align: right"
+              placeholder="0.00"
+              formControlName="salary"
+            />
+          </div>
+          <div class="field-item">
+            <label>Role</label>
+            <input
+              type="number"
+              style="width: 150px"
+              placeholder="Photographer"
+              formControlName="role"
+            />
+          </div>
         </div>
-        <div class="field-item">
-          <label>Salary (Monthly)</label>
-          <input
-            type="number"
-            style="width: 120px; text-align: right"
-            placeholder="0.00"
-          />
-        </div>
-        <div class="field-item">
-          <label>Role</label>
-          <select style="width: 150px">
-            <option>Photographer</option>
-            <option>Editor</option>
-            <option>Assistant</option>
-            <option>Manager</option>
-          </select>
-        </div>
-      </div>
 
-      <div class="field-group">
-        <div class="field-item" style="flex: 1">
-          <label>Address</label>
-          <input
-            type="text"
-            style="width: 100%"
-            placeholder="Complete residential address"
-          />
+        <div class="field-group">
+          <div class="field-item" style="flex: 1">
+            <label>Address</label>
+            <input
+              type="text"
+              style="width: 100%"
+              placeholder="Complete residential address"
+              formControlName="address"
+            />
+          </div>
         </div>
-      </div>
 
-      <div class="field-group">
-        <div class="field-item" style="flex: 1">
-          <label>Remarks</label>
-          <input
-            type="text"
-            style="width: 100%"
-            placeholder="ID Proof details, etc."
-          />
+        <div class="field-group">
+          <div class="field-item" style="flex: 1">
+            <label>Remarks</label>
+            <input
+              type="text"
+              style="width: 100%"
+              placeholder="ID Proof details, etc."
+              formControlName="remarks"
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </form>
 
     <div class="totals-sidebar">
       <div class="total-row">
@@ -135,11 +152,10 @@
   </div>
 
   <div class="action-bar">
-    <button class="btn btn-save">Save Staff</button>
-    <button class="btn">Update</button>
-    <button class="btn">Clear</button>
-    <button class="btn">Print List</button>
-    <button class="btn btn-exit">Delete</button>
+    <button type="submit" class="btn btn-save">Save</button>
+    <button class="btn" (click)="updateStaff()">Update</button>
+    <button class="btn" (click)="clearForm()">Clear</button>
+    <button class="btn btn-exit" (click)="deleteStaff()">Delete</button>
     <button class="btn btn-exit" (click)="close()">Exit</button>
   </div>
 </div>
