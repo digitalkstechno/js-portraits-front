@@ -80,7 +80,32 @@ export class AdminService {
     return this.http.get<any>(`${Endpoints.OUTDOOR_ORDER}/${id}`);
   }
 
+  getOrderQuotationByNumber(num: string): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_ORDER}/${num}`);
+  }
+
   createOutdoorOrder(data: any): Observable<any> {
     return this.http.post<any>(Endpoints.OUTDOOR_ORDER, data);
+  }
+
+  // outdoor bill
+  getOutdoorBill(): Observable<any> {
+    return this.http.get<any>(Endpoints.OUTDOOR_BILL);
+  }
+
+  getOutdoorBillById(id: string): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_BILL}/${id}`);
+  }
+
+  getBillQuotationByNumber(num: string): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_BILL}/${num}`);
+  }
+
+  getOutdoorBillCount(): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_BILL}/count`);
+  }
+
+  createOutdoorBill(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.OUTDOOR_BILL, data);
   }
 }

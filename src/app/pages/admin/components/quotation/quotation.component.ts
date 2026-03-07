@@ -28,7 +28,7 @@ export class QuotationComponent {
     productName: ['', Validators.required],
     productId: [''],
     event: [''],
-    qty: [1, [Validators.required, Validators.min(1)]],
+    qty: [, [Validators.required, Validators.min(1)]],
     rate: [0, Validators.required],
     amount: [0],
   });

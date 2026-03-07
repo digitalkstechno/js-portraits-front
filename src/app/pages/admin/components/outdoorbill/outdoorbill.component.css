@@ -365,7 +365,7 @@ tbody tr:hover {
 
 /* Percentage input (Small) */
 .tax-perc {
-  width: 40px !important;
+  width: 60px !important;
   text-align: center !important;
   color: #3182ce;
   font-weight: bold;

@@ -19,6 +19,7 @@ export class OutdoorbillComponent {
 
   billForm!: FormGroup;
   entryForm!: FormGroup;
+  count: any;
 
   itemsList: any[] = [];
   productsList: any[] = [];
@@ -27,6 +28,15 @@ export class OutdoorbillComponent {
 
   ngOnInit() {
     this.initForms();
+    this.billService.getOutdoorBillCount().subscribe((res) => {
+      // console.log(res.count);
+      const count = res.count;
+      this.count = count + 1;
+      // console.log(this.count);
+      this.billForm.patchValue({
+        billNo: this.count,
+      });
+    });
     this.loadItems();
 
     // Jab bhi discount, tax ya advance badle, calculation refresh ho
@@ -38,7 +48,7 @@ export class OutdoorbillComponent {
   initForms() {
     this.billForm = this.fb.group({
       book: [''],
-      billNo: [''],
+      billNo: [this.count],
       date: [new Date().toISOString().split('T')[0]],
       outdoorParty: [''],
       address: [''],
@@ -74,6 +84,45 @@ export class OutdoorbillComponent {
       amount: [0],
       place: [''],
       time: [''],
+    });
+  }
+
+  searchQuotation() {
+    const qNo = this.billForm.get('orderNo')?.value;
+
+    this.billService.getQuotationByNumber(qNo).subscribe((res: any) => {
+      // Patch Main Form
+      this.billForm.patchValue({
+        date: this.formatDate(res.date),
+        outdoorParty: res.outdoorParty,
+        contactNo: res.contactNo,
+        couple: res.couple,
+        address: res.address,
+        remarks: res.remarks,
+      });
+
+      // Clear existing items
+      this.itemsFormArray.clear();
+
+      // Add quotation items
+      res.items.forEach((item: any) => {
+        const itemGroup = this.fb.group({
+          date: [item.date],
+          itemName: [item.itemName],
+          productName: [item.productId?.product_name || 'Product'],
+          productId: [item.productId?._id],
+          event: [item.event],
+          qty: [item.qty],
+          rate: [item.rate],
+          total: [item.total],
+          place: [item.place],
+          time: [item.time],
+        });
+
+        this.itemsFormArray.push(itemGroup);
+      });
+
+      this.calculateGrandTotal();
     });
   }
 
@@ -228,7 +277,65 @@ export class OutdoorbillComponent {
     });
   }
 
-  onSubmit() {}
+  formatDate(dateStr: string) {
+    if (!dateStr) return '';
+
+    const d = new Date(dateStr);
+
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  onSubmit() {
+    if (this.billForm.invalid) {
+      this.billForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.billForm.value;
+
+    const payload = {
+      book: formValue.book,
+      billNo: formValue.billNo,
+      date: formValue.date,
+      outdoorParty: formValue.outdoorParty,
+      address: formValue.address,
+      orderNo: formValue.orderNo,
+      gstType: formValue.gstType,
+      govt: formValue.govt,
+      coupleName: formValue.coupleName,
+      gst: formValue.gst,
+      package: formValue.package,
+
+      subTotal: formValue.subTotal,
+      discount: formValue.discount,
+      cgstPerc: formValue.cgstPerc,
+      cgstAmt: formValue.cgstAmt,
+      sgstPerc: formValue.sgstPerc,
+      sgstAmt: formValue.sgstAmt,
+      igstPerc: formValue.igstPerc,
+      igstAmt: formValue.igstAmt,
+      netTotal: formValue.netTotal,
+      advance: formValue.advance,
+      balanceDue: formValue.balanceDue,
+
+      items: this.itemsFormArray.value,
+    };
+
+    this.billService.createOutdoorBill(payload).subscribe({
+      next: (res: any) => {
+        alert('Outdoor Bill Created Successfully');
+        this.clearAll();
+      },
+      error: (err: any) => {
+        console.error('Error creating bill', err);
+        alert('Something went wrong while saving bill');
+      },
+    });
+  }
 
   close() {
     this.router.navigate(['/admin']);

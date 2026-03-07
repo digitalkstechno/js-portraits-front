@@ -16,9 +16,7 @@ export class OutdoororderComponent implements OnInit {
   outdoorService = inject(AdminService);
   itemService = inject(ItemsService);
   fb = inject(FormBuilder);
-
   orderForm!: FormGroup;
-
   itemsList: any[] = [];
   productsList: any[] = [];
 
@@ -164,8 +162,14 @@ export class OutdoororderComponent implements OnInit {
   // Helper to format date if your input expects DD/MM/YYYY
   formatDate(dateStr: string) {
     if (!dateStr) return '';
+
     const d = new Date(dateStr);
-    return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
   selectItemByRow(event: any, index: number) {
@@ -279,13 +283,53 @@ export class OutdoororderComponent implements OnInit {
   }
 
   onSubmit() {
-    const data = this.orderForm.value;
+    if (this.orderForm.invalid) {
+      this.orderForm.markAllAsTouched();
+      return;
+    }
 
-    this.outdoorService.createOutdoorOrder(data).subscribe((res: any) => {
-      alert('Order Created Successfully');
+    const formValue = this.orderForm.value;
 
-      this.orderForm.reset();
-      this.items.clear();
+    const payload = {
+      orderNo: formValue.orderNo,
+      quotationNo: formValue.quotationNo,
+      date: formValue.date,
+      contactNo: formValue.contactNo,
+
+      outdoorParty: formValue.outdoorParty,
+      couple: formValue.couple,
+      address: formValue.address,
+      remarks: formValue.remarks,
+      notes: formValue.notes,
+      package: formValue.package,
+
+      subTotal: formValue.subTotal,
+      discount: formValue.discount,
+      advance: formValue.advance,
+      grandTotal: formValue.grandTotal,
+
+      items: this.items.value,
+    };
+
+    this.outdoorService.createOutdoorOrder(payload).subscribe({
+      next: (res: any) => {
+        alert('Outdoor Order Created Successfully');
+
+        this.orderForm.reset({
+          date: new Date().toISOString().split('T')[0],
+          subTotal: 0,
+          discount: 0,
+          advance: 0,
+          grandTotal: 0,
+        });
+
+        this.items.clear();
+      },
+
+      error: (err: any) => {
+        console.error('Order creation failed', err);
+        alert('Failed to create order');
+      },
     });
   }
 
