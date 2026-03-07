@@ -102,11 +102,11 @@ export class StaffsalaryComponent {
 
     console.log('Submitting Salary Transaction:', payload);
 
-    this.staffService.createStaff(payload).subscribe({
+    this.staffService.createStaffPayment(payload).subscribe({
       next: () => {
         alert('Record saved successfully');
         alert(`${payload.type.toUpperCase()} recorded successfully!`);
-        this.salaryForm.reset();
+        this.resetForm();
       },
       error: (err) => {
         console.error(err);
