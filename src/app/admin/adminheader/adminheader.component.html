@@ -1,41 +1,62 @@
 <header class="header">
   <div class="menu-bar">
     <ng-container *ngFor="let item of menuItems">
-      <!-- Dropdown item -->
       <div
         *ngIf="item.children?.length; else simpleItem"
         class="menu-item dropdown"
         #menuRef
         [attr.data-key]="item.key"
       >
-        <span (click)="toggleMenu(item.key)"> {{ item.label }} ▾ </span>
+        <span (click)="toggleMenu(item.key)" class="cursor-pointer">
+          {{ item.label }} ▾
+        </span>
 
         <div class="dropdown-menu" *ngIf="openMenuKey === item.key">
-          <p
-            *ngFor="let child of item.children"
-            [routerLink]="child.link"
-            routerLinkActive="active"
-            (click)="closeAll()"
-          >
-            {{ child.label }}
-          </p>
+          <ng-container *ngFor="let child of item.children">
+            <div
+              *ngIf="child.children?.length; else normalChild"
+              class="nested-group"
+            >
+              <p class="nested-header">{{ child.label }}</p>
+              <div class="nested-items">
+                <p
+                  *ngFor="let subChild of child.children"
+                  [routerLink]="subChild.link"
+                  routerLinkActive="active"
+                  (click)="closeAll()"
+                  class="sub-link"
+                >
+                  {{ subChild.label }}
+                </p>
+              </div>
+            </div>
+
+            <ng-template #normalChild>
+              <p
+                [routerLink]="child.link"
+                routerLinkActive="active"
+                (click)="closeAll()"
+              >
+                {{ child.label }}
+              </p>
+            </ng-template>
+          </ng-container>
         </div>
       </div>
 
-      <!-- Simple (non-dropdown) item -->
       <ng-template #simpleItem>
         <span
           *ngIf="!item.action; else actionItem"
           [routerLink]="item.link"
           routerLinkActive="active"
+          class="menu-link"
         >
           {{ item.label }}
         </span>
       </ng-template>
 
-      <!-- Action item like Exit -->
       <ng-template #actionItem>
-        <span (click)="onAction(item.action!)">
+        <span (click)="onAction(item.action!)" class="cursor-pointer">
           {{ item.label }}
         </span>
       </ng-template>

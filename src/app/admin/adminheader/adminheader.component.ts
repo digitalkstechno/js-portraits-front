@@ -5,14 +5,16 @@ import { LoginService } from '../../authentication/service/login.service';
 
 interface MenuChild {
   label: string;
-  link: string;
+  link?: string; // Made optional because parent nodes (like Summary) might not have a link
+  key?: string;
+  children?: MenuChild[]; // Recursive definition
 }
 
 interface MenuItem {
-  key: string; // unique for dropdowns
+  key: string;
   label: string;
-  link?: string; // for simple nav items
-  children?: MenuChild[]; // for dropdowns
+  link?: string;
+  children?: MenuChild[];
   action?: 'logout' | 'exit';
 }
 @Component({
@@ -50,7 +52,18 @@ export class AdminheaderComponent {
     {
       key: 'report',
       label: 'Report',
-      children: [{ label: 'Summary', link: '/admin/summary' }],
+      children: [
+        {
+          label: 'Summary',
+          key: 'summary', // Nested key
+          children: [
+            { label: 'Outdoor Order Revenue', link: '/admin/order/report' },
+            { label: 'Outdoor Bill Revenue', link: '/reports/outdoor-bill' },
+            { label: 'Individual Employee', link: '/reports/individual' },
+            { label: 'Overall Salary', link: '/reports/overall' },
+          ],
+        },
+      ],
     },
     { key: 'cheque', label: 'Cheque', link: '/cheque' },
     { key: 'sheet', label: 'Sheet', link: '/sheet' },
@@ -80,13 +93,13 @@ export class AdminheaderComponent {
     this.router.navigateByUrl('/login');
   }
 
-  // close any open dropdown when clicking outside
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.openMenuKey) return;
-
     const target = event.target as HTMLElement;
-    const clickedInside = this.menuRefs.some((ref: any) =>
+
+    // Check if the click was inside any of the dropdown containers
+    const clickedInside = this.menuRefs.some((ref) =>
       ref.nativeElement.contains(target),
     );
 

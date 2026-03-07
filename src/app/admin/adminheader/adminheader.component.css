@@ -127,3 +127,39 @@
   margin-right: 6px;
   font-size: 14px;
 }
+
+.dropdown-menu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  min-width: 220px;
+  z-index: 50;
+}
+
+.nested-header {
+  background-color: #f3f4f6;
+  padding: 8px 12px;
+  margin: 0;
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: #374151;
+  text-transform: uppercase;
+}
+
+.sub-link {
+  padding: 8px 20px !important; /* Extra padding to indent from 'Summary' */
+  font-size: 0.9rem;
+  color: #4b5563;
+  cursor: pointer;
+  margin: 0;
+}
+
+.sub-link:hover {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

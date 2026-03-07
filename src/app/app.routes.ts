@@ -69,6 +69,13 @@ export const routes: Routes = [
             (m) => m.SummaryComponent,
           ),
       },
+      {
+        path: 'order/report',
+        loadComponent: () =>
+          import('./pages/admin/report/outdoororderbillreport/outdoororderbillreport.component').then(
+            (m) => m.OutdoororderbillreportComponent,
+          ),
+      },
     ],
   },
 

@@ -1,1 +1,65 @@
-<p>summary works!</p>
+<div class="dashboard-wrapper">
+  <div class="flex-container mb-8">
+    <div class="card card-blue flex-item">
+      <h3 class="card-title">Outdoor Order Revenue</h3>
+      <p class="card-value">$45,200</p>
+    </div>
+
+    <div class="card card-green flex-item">
+      <h3 class="card-title">Outdoor Bill Revenue</h3>
+      <p class="card-value">$38,000</p>
+    </div>
+
+    <div class="card card-yellow flex-item">
+      <h3 class="card-title">Pending Payments</h3>
+      <p class="card-value">$7,200</p>
+    </div>
+
+    <div class="card card-purple flex-item">
+      <h3 class="card-title">Total Salary Cost</h3>
+      <p class="card-value">$12,400</p>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <h2 class="section-title">Revenue Trend</h2>
+    <div class="chart-wrapper">
+      <canvas #revenueChart></canvas>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <h2 class="section-title p-4 bg-gray-50 border-b">Employee Performance</h2>
+    <div class="overflow-x-auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Salary</th>
+            <th>Revenue Gen.</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of reportData">
+            <td class="font-semibold">{{ emp.name }}</td>
+            <td class="text-muted">{{ emp.role }}</td>
+            <td>{{ emp.salary | currency }}</td>
+            <td class="text-green font-bold">{{ emp.revenue | currency }}</td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="
+                  emp.status === 'Paid' ? 'badge-paid' : 'badge-pending'
+                "
+              >
+                {{ emp.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

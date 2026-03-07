@@ -1,0 +1,158 @@
+.report-window {
+  background: #f4f7fb;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 16px 18px;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.report-header h2 {
+  font-size: 18px;
+  margin: 0;
+  color: #1e293b;
+}
+
+.report-header .sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* summary cards */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.summary-cards .card {
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.summary-cards .label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.summary-cards .value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.text-green {
+  color: #16a34a;
+}
+
+.text-red {
+  color: #dc2626;
+}
+
+/* grid: table + chart */
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 14px;
+}
+
+/* table */
+.table-wrapper {
+  background: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  overflow: hidden;
+  max-height: 360px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+thead {
+  background: #e5edf7;
+}
+
+th,
+td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+th {
+  text-align: left;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+tbody tr:nth-child(even) {
+  background: #f9fafb;
+}
+
+tbody tr:hover {
+  background: #e5f3ff;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* status badge */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge.paid {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* chart card */
+.chart-card {
+  background: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card h3 {
+  font-size: 14px;
+  margin: 0 0 8px;
+  color: #111827;
+}
+
+.chart-container {
+  position: relative;
+  height: 280px;
+}
+
+/* responsive */
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

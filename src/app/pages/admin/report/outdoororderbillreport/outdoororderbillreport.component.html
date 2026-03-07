@@ -1,0 +1,82 @@
+<!-- outdoor-revenue-report.component.html -->
+<div class="report-window">
+  <div class="report-header">
+    <h2>Outdoor Revenue Report</h2>
+    <span class="sub">Orders vs Bills (₹)</span>
+  </div>
+
+  <!-- Summary cards -->
+  <div class="summary-cards">
+    <div class="card">
+      <div class="label">Total Order Amount</div>
+      <div class="value">₹{{ totalOrderAmount | number: "1.0-0" }}</div>
+    </div>
+    <div class="card">
+      <div class="label">Total Billed Amount</div>
+      <div class="value text-green">
+        ₹{{ totalBilledAmount | number: "1.0-0" }}
+      </div>
+    </div>
+    <div class="card">
+      <div class="label">Total Pending</div>
+      <div class="value text-red">₹{{ totalPending | number: "1.0-0" }}</div>
+    </div>
+  </div>
+
+  <!-- Table + Chart layout -->
+  <div class="grid">
+    <!-- Table -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Party</th>
+            <th>Order No</th>
+            <th>Bill No</th>
+            <th class="text-right">Order Amount (₹)</th>
+            <th class="text-right">Billed Amount (₹)</th>
+            <th class="text-right">Pending (₹)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of revenueRows">
+            <td>{{ row.date }}</td>
+            <td>{{ row.party }}</td>
+            <td>{{ row.orderNo }}</td>
+            <td>{{ row.billNo }}</td>
+            <td class="text-right">
+              {{ row.orderAmount | number: "1.2-2" }}
+            </td>
+            <td class="text-right">
+              {{ row.billedAmount | number: "1.2-2" }}
+            </td>
+            <td class="text-right">
+              {{ row.pending | number: "1.2-2" }}
+            </td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  paid: row.paymentStatus === 'Paid',
+                  pending: row.paymentStatus === 'Pending',
+                }"
+              >
+                {{ row.paymentStatus }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-card">
+      <h3>Revenue by Date</h3>
+      <div class="chart-container">
+        <canvas #revenueChartCanvas></canvas>
+      </div>
+    </div>
+  </div>
+</div>
