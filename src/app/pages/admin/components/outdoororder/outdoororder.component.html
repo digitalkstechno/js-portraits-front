@@ -52,8 +52,18 @@
             <input
               type="text"
               style="width: 100%"
+              (input)="filterParty($event)"
               formControlName="outdoorParty"
             />
+            <div class="dropdown-list" *ngIf="filteredCustomers.length">
+              <div
+                class="dropdown-item"
+                *ngFor="let r of filteredCustomers"
+                (click)="selectParty(r)"
+              >
+                {{ r.name }}
+              </div>
+            </div>
           </div>
           <div class="field-item" style="flex: 1">
             <label>Couple</label>

@@ -63,6 +63,7 @@
 }
 
 .field-item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -397,6 +398,30 @@ select {
 /* Optional: Add a slight hover effect to know which row you are on */
 .table-section tr:hover {
   background-color: #f9f9f9;
+}
+
+.dropdown-list {
+  position: absolute;
+  top: 100%;   /* show just below input */
+  left: 90px;
+  width: 82%;
+  border: 1px solid #999;
+  background: #fff;
+  max-height: 150px;
+  overflow-y: auto;
+  border-radius: 2px;
+  z-index: 1000;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+.dropdown-item {
+  padding: 6px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #e2eff7;
 }
 
 .toast-overlay {

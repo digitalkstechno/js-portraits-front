@@ -17,8 +17,10 @@ export class OutdoororderComponent implements OnInit {
   itemService = inject(ItemsService);
   fb = inject(FormBuilder);
   orderForm!: FormGroup;
-  itemsList: any[] = [];
+  filteredCustomers: any[] = [];
   productsList: any[] = [];
+  itemsList: any[] = [];
+  parties: any[] = [];
   count: any;
   isError = false;
   showPopup = false;
@@ -62,12 +64,41 @@ export class OutdoororderComponent implements OnInit {
     });
 
     this.loadItems();
+    this.loadCustomers();
   }
 
   loadItems() {
     this.itemService.getItems().subscribe((res: any) => {
       this.itemsList = res.data;
     });
+  }
+
+  loadCustomers() {
+    this.outdoorService.getCustomers().subscribe((res: any) => {
+      this.parties = res.data || res;
+    });
+  }
+
+  filterParty(event: any) {
+    const value = event.target.value.toLowerCase();
+    if (!value) {
+      this.filteredCustomers = [];
+      return;
+    }
+
+    this.filteredCustomers = this.parties.filter(
+      (party: any) =>
+        party.name && party.name.toString().toLowerCase().includes(value),
+    );
+  }
+
+  selectParty(party: any) {
+    this.orderForm.patchValue({
+      outdoorParty: party.name,
+      contactNo: party.contact,
+    });
+
+    this.filteredCustomers = [];
   }
 
   get items(): FormArray {
