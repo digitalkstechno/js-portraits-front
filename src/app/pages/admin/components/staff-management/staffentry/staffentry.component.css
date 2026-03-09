@@ -259,8 +259,8 @@ input[type="date"] {
 .dropdown-list {
   position: absolute;
   top: 100%;   /* show just below input */
-  left: 0;
-  width: 100%;
+  left: 90px;
+  width: 65%;
   border: 1px solid #999;
   background: #fff;
   max-height: 150px;
