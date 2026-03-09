@@ -46,7 +46,7 @@ export class AdminheaderComponent {
       children: [
         { label: 'Item Master', link: '/admin/items' },
         { label: 'Product Master', link: '/admin/products' },
-        { label: 'Package Master', link: '/package-master' },
+        // { label: 'Package Master', link: '/package-master' },
         { label: 'Outdoor Book Master', link: '/admin/outdoor/book-master' },
       ],
     },
