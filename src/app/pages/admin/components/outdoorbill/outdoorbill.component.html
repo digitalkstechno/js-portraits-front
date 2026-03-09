@@ -31,8 +31,9 @@
           <label>Outdoor Party</label>
           <input
             type="text"
-            formControlName="outdoorParty"
             style="width: 280px"
+            formControlName="outdoorParty"
+            placeholder="Search Outdoor party"
             (input)="filterParty($event)"
           />
           <div class="dropdown-list" *ngIf="filteredCustomers.length">
