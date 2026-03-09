@@ -3,7 +3,7 @@
     <div class="flex-grow-1 text-center fw-bold">
       Terms & Conditions Settings
     </div>
-    <button class="btn-close-custom">×</button>
+    <button class="btn-close-custom" (click)="onExit()">×</button>
   </div>
 
   <div class="window-body p-3">
@@ -54,7 +54,7 @@
       </button>
       <div class="d-flex gap-2">
         <button class="btn-action" (click)="onSave()">Save Settings</button>
-        <button class="btn-action" (click)="onSave()">Exit</button>
+        <button class="btn-action" (click)="onExit()">Exit</button>
       </div>
     </div>
   </div>

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-termsandconditions',
@@ -10,6 +11,7 @@ import { SHARED_MODULES } from '../../../../constants/sharedModule';
 })
 export class TermsandconditionsComponent {
   termsForm!: FormGroup;
+  router = inject(Router);
 
   constructor(private fb: FormBuilder) {}
 
@@ -45,5 +47,9 @@ export class TermsandconditionsComponent {
   onSave() {
     console.log('Saving T&C:', this.termsForm.value);
     alert('Terms & Conditions Updated!');
+  }
+
+  onExit() {
+    this.router.navigateByUrl('/admin');
   }
 }
