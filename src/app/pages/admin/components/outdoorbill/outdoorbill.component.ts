@@ -22,7 +22,9 @@ export class OutdoorbillComponent {
   count: any;
 
   filteredCustomers: any[] = [];
+  filteredBooks: any[] = [];
   parties: any[] = [];
+  books: any[] = [];
   itemsList: any[] = [];
   productsList: any[] = [];
   filteredItems: any[] = [];
@@ -45,6 +47,7 @@ export class OutdoorbillComponent {
     });
     this.loadItems();
     this.loadCustomers();
+    this.loadBooks();
 
     // Jab bhi discount, tax ya advance badle, calculation refresh ho
     this.billForm.valueChanges.subscribe(() => {
@@ -100,6 +103,13 @@ export class OutdoorbillComponent {
     });
   }
 
+  loadBooks() {
+    this.billService.getOutdoorBooks().subscribe((res: any) => {
+      this.books = res.books;
+      console.log(this.books);
+    });
+  }
+
   filterParty(event: any) {
     const value = event.target.value.toLowerCase();
     if (!value) {
@@ -111,6 +121,11 @@ export class OutdoorbillComponent {
       (party: any) =>
         party.name && party.name.toString().toLowerCase().includes(value),
     );
+
+    this.filteredBooks = this.books.filter(
+      (book: any) =>
+        book.bookName && book.bookName.toString().toLowerCase().includes(value),
+    );
   }
 
   selectParty(party: any) {
@@ -119,6 +134,26 @@ export class OutdoorbillComponent {
     });
 
     this.filteredCustomers = [];
+  }
+
+  filterBooks(event: any) {
+    const value = event.target.value.toLowerCase();
+    if (!value) {
+      this.filteredBooks = [];
+      return;
+    }
+
+    this.filteredBooks = this.books.filter(
+      (book: any) =>
+        book.bookName && book.bookName.toString().toLowerCase().includes(value),
+    );
+  }
+
+  selectBook(book: any) {
+    this.billForm.patchValue({
+      book: book.bookName,
+    });
+    this.filteredBooks = [];
   }
 
   searchQuotation() {

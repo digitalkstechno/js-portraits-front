@@ -9,7 +9,16 @@
       <div class="field-group">
         <div class="field-item">
           <label>Book</label>
-          <input type="text" formControlName="book" style="width: 80px" />
+          <input type="text" formControlName="book" style="width: 80px" (input)="filterBooks($event)"/>
+          <div class="dropdown-list" *ngIf="filteredBooks.length">
+            <div
+              class="dropdown-item"
+              *ngFor="let r of filteredBooks"
+              (click)="selectBook(r)"
+            >
+              {{ r.bookName }}
+            </div>
+          </div>
         </div>
         <div class="field-item">
           <label>Bill No.</label>
