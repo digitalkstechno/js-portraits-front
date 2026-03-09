@@ -25,6 +25,9 @@ export class StaffsalaryComponent {
   limit = 10;
   searchText = '';
   staffSalaryList$ = this.staffService.salary$;
+  isError = false;
+  showPopup = false;
+  popupMessage = '';
 
   constructor(private fb: FormBuilder) {
     this.salaryForm = this.fb.group({
@@ -46,7 +49,8 @@ export class StaffsalaryComponent {
 
   loadStaff() {
     this.staffService.getStaff().subscribe((res: any) => {
-      const staff = res;
+      const staff = res.data;
+      // console.log(staff)
       this.staff = staff.filter((s: any) => s.isAdmin === false);
     });
   }
@@ -109,13 +113,11 @@ export class StaffsalaryComponent {
     }
 
     const payload = this.salaryForm.value;
-
     console.log('Submitting Salary Transaction:', payload);
 
     this.staffService.createStaffPayment(payload).subscribe({
       next: () => {
-        alert('Record saved successfully');
-        alert(`${payload.type.toUpperCase()} recorded successfully!`);
+        this.triggerPopup('Staff payment recorded Successfully!', false);
         this.resetForm();
         this.staffService.searchStaffSalary(
           this.page,
@@ -125,8 +127,21 @@ export class StaffsalaryComponent {
       },
       error: (err) => {
         console.error(err);
+        this.triggerPopup('Something went wrong while saving!', true);
       },
     });
+  }
+
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   resetForm() {
