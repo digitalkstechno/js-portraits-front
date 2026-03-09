@@ -46,7 +46,6 @@ export class NotesettingsComponent {
     });
   }
 
-  // Component ke andar properties add karein
   showPopup = false;
   popupMessage = '';
   isError = false;

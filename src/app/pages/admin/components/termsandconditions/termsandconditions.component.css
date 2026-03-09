@@ -45,3 +45,43 @@
   height: 22px;
   font-weight: bold;
 }
+
+.toast-overlay {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #d6eaf8; /* Light Blue to match your UI */
+  border: 2px solid #2e86c1;
+  padding: 12px 25px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-toast {
+  background-color: #fadbd8; /* Light Red */
+  border-color: #e74c3c;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  color: #21618c;
+}
+
+.error-toast .toast-content {
+  color: #943126;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { Router } from '@angular/router';
+import { AdminService } from '../service/admin.service';
 
 @Component({
   selector: 'app-termsandconditions',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 export class TermsandconditionsComponent {
   termsForm!: FormGroup;
   router = inject(Router);
+  service = inject(AdminService);
 
   constructor(private fb: FormBuilder) {}
 
@@ -23,6 +25,13 @@ export class TermsandconditionsComponent {
 
     // Default ek empty row add karne ke liye
     this.addCondition();
+    this.loadTerms();
+  }
+
+  loadTerms(){
+    this.service.getTermsAndConditions().subscribe((res) => {
+      console.log(res);
+    })
   }
 
   // Helper to get conditions array
@@ -44,9 +53,40 @@ export class TermsandconditionsComponent {
     this.conditions.removeAt(index);
   }
 
-  onSave() {
-    console.log('Saving T&C:', this.termsForm.value);
-    alert('Terms & Conditions Updated!');
+  showPopup = false;
+  popupMessage = '';
+  isError = false;
+
+  onSubmit() {
+    if (this.termsForm.invalid) {
+      this.termsForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.termsForm.value;
+
+    this.service.createTermsAndConditions(formValue).subscribe({
+      next: (res: any) => {
+        this.triggerPopup('Terms and conditions Saved Successfully!', false);
+        this.loadTerms();
+      },
+      error: (err: any) => {
+        console.error('Error saving notes', err);
+        this.triggerPopup('Something went wrong while saving!', true);
+      },
+    });
+  }
+
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   onExit() {

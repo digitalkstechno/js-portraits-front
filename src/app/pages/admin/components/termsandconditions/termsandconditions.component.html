@@ -53,9 +53,15 @@
         + Add New Term
       </button>
       <div class="d-flex gap-2">
-        <button class="btn-action" (click)="onSave()">Save Settings</button>
+        <button class="btn-action" (click)="onSubmit()">Save Settings</button>
         <button class="btn-action" (click)="onExit()">Exit</button>
       </div>
     </div>
+  </div>
+</div>
+<div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
+  <div class="toast-content">
+    <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
+    <span class="message">{{ popupMessage }}</span>
   </div>
 </div>
