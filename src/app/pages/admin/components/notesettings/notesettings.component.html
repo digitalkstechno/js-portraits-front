@@ -1,0 +1,45 @@
+<div class="window-container" [formGroup]="settingsForm">
+  <div class="title-bar">
+    <span class="title-text">OutDoor Notes Settings</span>
+    <button type="button" class="close-btn" (click)="onExit()">×</button>
+  </div>
+
+  <div class="window-body">
+    <div class="field-row">
+      <label>Out. Quotation :</label>
+      <textarea formControlName="quotation"></textarea>
+    </div>
+
+    <div class="field-row">
+      <label>Out. Order :</label>
+      <textarea formControlName="order"></textarea>
+    </div>
+
+    <div class="field-row">
+      <label>Out. Bill :</label>
+      <textarea formControlName="bill"></textarea>
+    </div>
+
+    <div class="footer-controls">
+      <div class="control-item">
+        <label>Entry By :</label>
+        <select formControlName="entryBy">
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div class="control-item">
+        <label>Update By :</label>
+        <select formControlName="updateBy">
+          <option value="jsp">jsp</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="window-footer">
+    <button type="button" class="action-btn" (click)="onSave()">
+      Save Settings
+    </button>
+    <button type="button" class="action-btn" (click)="onExit()">Exit</button>
+  </div>
+</div>

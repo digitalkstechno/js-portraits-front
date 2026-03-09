@@ -1,4 +1,12 @@
-import { Component, ElementRef, HostListener, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { SHARED_MODULES } from '../../constants/sharedModule';
 import { Router } from '@angular/router';
 import { LoginService } from '../../authentication/service/login.service';
@@ -42,13 +50,22 @@ export class AdminheaderComponent {
       ],
     },
     { key: 'transaction', label: 'Transaction' },
-    { key: 'officer', label: 'Officer' },
+    {
+      key: 'outdoor',
+      label: 'Outdoor',
+      children: [
+        { label: 'Quotation', link: '/admin/quotation' },
+        { label: 'Outdoor order', link: '/admin/outdoor-order' },
+        { label: 'Outdoor bill', link: '/admin/outdoor-bill' },
+        { label: 'Note settings', link: '/admin/note-settings' },
+      ],
+    },
     { key: 'purchase', label: 'New Purchase' },
     { key: 'discount', label: 'Discount' },
     { key: 'booking', label: 'Booking Form' },
     { key: 'sms', label: 'SMS' },
     { key: 'utility', label: 'Utility' },
-    { key: 'facebook', label: 'Facebook' },
+    { key: 'phonebook', label: 'Phonebook' },
     {
       key: 'report',
       label: 'Report',
@@ -59,7 +76,10 @@ export class AdminheaderComponent {
           children: [
             { label: 'Outdoor Order Revenue', link: '/admin/order/report' },
             { label: 'Outdoor Bill Revenue', link: '/reports/outdoor-bill' },
-            { label: 'Individual Employee', link: '/admin/salary/individual-report' },
+            {
+              label: 'Individual Employee',
+              link: '/admin/salary/individual-report',
+            },
             { label: 'Overall Salary', link: '/admin/salary/overall-report' },
           ],
         },

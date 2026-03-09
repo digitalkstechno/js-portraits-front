@@ -1,0 +1,89 @@
+.window-container {
+  width: 650px;
+  background-color: #d6eaf8; /* Soft blue */
+  border: 1px solid #2e86c1;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.title-bar {
+  background-color: #85c1e9;
+  padding: 4px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2e86c1;
+}
+
+.title-text {
+  font-weight: bold;
+  font-size: 14px;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.close-btn {
+  background: #e74c3c;
+  color: white;
+  border: 1px solid #7b241c;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.window-body {
+  padding: 15px;
+}
+
+.field-row {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.field-row label {
+  width: 120px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+textarea {
+  flex-grow: 1;
+  height: 90px;
+  border: 1px solid #7fb3d5;
+  font-family: "Courier New", monospace; /* Best for bank details */
+  font-size: 12px;
+  padding: 5px;
+  resize: none;
+}
+
+.footer-controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.control-item select {
+  width: 180px;
+  border: 1px solid #7fb3d5;
+  background: #fdfefe;
+}
+
+.window-footer {
+  background-color: #d6eaf8;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.action-btn {
+  min-width: 180px;
+  padding: 6px;
+  background: #aed6f1;
+  border: 1px solid #2e86c1;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.action-btn:hover {
+  background: #ebf5fb;
+}

@@ -92,6 +92,13 @@ export const routes: Routes = [
             (m) => m.StaffwisesalaryreportComponent,
           ),
       },
+      {
+        path: 'note-settings',
+        loadComponent: () =>
+          import('./pages/admin/components/notesettings/notesettings.component').then(
+            (m) => m.NotesettingsComponent,
+          ),
+      },
     ],
   },
 
