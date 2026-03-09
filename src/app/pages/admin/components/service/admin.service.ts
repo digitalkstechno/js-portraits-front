@@ -152,4 +152,13 @@ export class AdminService {
   getCustomers(): Observable<any> {
     return this.http.get<any>(Endpoints.CUSTOMERS);
   }
+
+  // terms & conditions
+  getTermsAndConditions(): Observable<any> {
+    return this.http.get<any>(Endpoints.TERMS_AND_CONDITIONS);
+  }
+
+  createTermsAndConditions(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.TERMS_AND_CONDITIONS, data);
+  }
 }
