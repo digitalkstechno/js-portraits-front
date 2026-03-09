@@ -76,12 +76,13 @@ export class AdminheaderComponent {
           key: 'summary', // Nested key
           children: [
             { label: 'Outdoor Order Revenue', link: '/admin/order/report' },
-            { label: 'Outdoor Bill Revenue', link: '/reports/outdoor-bill' },
+            // { label: 'Outdoor Bill Revenue', link: '/reports/outdoor-bill' },
             {
               label: 'Individual Employee',
               link: '/admin/salary/individual-report',
             },
             { label: 'Overall Salary', link: '/admin/salary/overall-report' },
+            { label: 'Summary', link: '/admin/summary' },
           ],
         },
       ],
