@@ -21,19 +21,24 @@ export class ProductdetailsComponent {
   items: any;
   showDropdown = false;
   selectedItemName = '';
+  isError = false;
+  showPopup = false;
+  popupMessage = '';
 
   constructor(
     private service: ItemsService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
   ) {
     this.productForm = fb.group({
+      sr_no: [],
       item_name: [''],
       product_name: [''],
-      bill_rate: [0],
-      per_rate: [0],
-      stock_rate: [0],
-      total: [0],
+      bill_rate: [],
+      per_rate: [],
+      stock_rate: [],
+      op_stock: [],
+      total: [],
       remark: [''],
     });
   }
@@ -42,7 +47,7 @@ export class ProductdetailsComponent {
     this.items = [];
     this.service.products$.subscribe({
       next: (res) => {
-        console.log('Products', res);
+        // console.log('Products', res);
         this.products = res.data;
         this.pagination = {
           page: res.page,
@@ -55,15 +60,20 @@ export class ProductdetailsComponent {
     });
 
     this.loadItems();
-
     this.service.searchProducts(this.page, this.limit);
+
+    this.service.getProductCount().subscribe((res) => {
+      const count = res.count|| 0;
+      // console.log(res)
+      this.productForm.patchValue({ sr_no: count + 1 });
+    });
   }
 
   masterItems: any;
   loadItems() {
     this.service.items$.subscribe({
       next: (res) => {
-        console.log('items', res);
+        // console.log('items', res);
         this.masterItems = res.data;
       },
       error: (err) => console.error('Fetch users failed', err),
@@ -145,18 +155,31 @@ export class ProductdetailsComponent {
 
     this.service.createProduct(payload).subscribe({
       next: (res) => {
-        console.log('Successfully created products', res);
+        this.triggerPopup('Product created Successfully!', false);
         this.service.searchProducts(this.page, this.limit, this.searchText);
         this.productForm.reset();
         this.selectedItemName = '';
       },
       error: (err: any) => {
         console.error('Create products failed', err);
+        this.triggerPopup('Something went wrong while saving!', true);
       },
     });
   }
 
-  close(){
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
+  }
+
+  close() {
     this.router.navigateByUrl('/admin');
   }
 }

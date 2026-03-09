@@ -11,7 +11,7 @@
       <div class="row">
         <div class="col">
           <label>Sr No.</label>
-          <input type="text" />
+          <input type="text" formControlName="sr_no" readonly/>
         </div>
 
         <div class="col custom-search-container">
@@ -58,7 +58,7 @@
 
         <div class="col">
           <label>Op Stock</label>
-          <input type="text" />
+          <input type="text" formControlName="op_stock" />
         </div>
 
         <div class="col">
@@ -132,5 +132,11 @@
   <div class="footer">
     <span>Grand Total :</span>
     <span class="total-value">0.00</span>
+  </div>
+</div>
+<div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
+  <div class="toast-content">
+    <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
+    <span class="message">{{ popupMessage }}</span>
   </div>
 </div>

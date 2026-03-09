@@ -98,6 +98,10 @@ export class ItemsService {
     return this.http.get<any>(`${Endpoints.PRODUCTS}/item/${id}`);
   }
 
+  getProductCount(): Observable<any> {
+    return this.http.get<any>(`${Endpoints.PRODUCTS}/count`);
+  }
+
   createProduct(data: any): Observable<any> {
     return this.http.post<any>(Endpoints.PRODUCTS, data);
   }
