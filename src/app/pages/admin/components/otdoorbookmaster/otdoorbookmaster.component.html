@@ -10,7 +10,7 @@
       <div class="col-sm-10">
         <input
           type="text"
-          formControlName="book"
+          formControlName="bookName"
           class="form-control form-control-sm border-dark"
         />
       </div>
@@ -48,7 +48,7 @@
             *ngFor="let item of bookList"
             [class.selected-row]="item.name === '23 - 24 ODER'"
           >
-            <td class="small">{{ item.name }}</td>
+            <td class="small">{{ item.bookName }}</td>
             <td class="text-center">
               <input type="checkbox" [checked]="item.notDisplay" />
             </td>
@@ -61,10 +61,17 @@
     </div>
 
     <div class="action-bar">
-      <button class="btn btn-save" (click)="onSave()">Save</button>
+      <button class="btn btn-save" (click)="onSubmit()">Save</button>
       <button class="btn" (click)="onDelete()">Delete</button>
       <button class="btn" (click)="onCancel()">Cancel</button>
       <button class="btn btn-exit" (click)="onExit()">Exit</button>
     </div>
+  </div>
+</div>
+
+<div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
+  <div class="toast-content">
+    <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
+    <span class="message">{{ popupMessage }}</span>
   </div>
 </div>

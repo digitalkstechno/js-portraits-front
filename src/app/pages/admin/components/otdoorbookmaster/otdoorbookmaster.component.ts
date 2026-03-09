@@ -12,29 +12,63 @@ import { SHARED_MODULES } from '../../../../constants/sharedModule';
 })
 export class OtdoorbookmasterComponent {
   bookForm!: FormGroup;
+  bookList: any;
+  isError = false;
+  showPopup = false;
+  popupMessage = '';
   router = inject(Router);
   bookService = inject(AdminService);
-
-  // Table ka mock data
-  bookList = [
-    { name: '23 - 24 ODER', notDisplay: true },
-    { name: 'OUTDOR', notDisplay: true },
-    { name: 'BM', notDisplay: false },
-  ];
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.bookForm = this.fb.group({
-      book: ['BNI-2'],
+      bookName: [''],
       entryBy: [''],
       updateBy: [''],
     });
+    this.loadBooks();
   }
 
-  onSave() {
-    console.log('Saving...', this.bookForm.value);
+  loadBooks() {
+    this.bookService.getOutdoorBooks().subscribe((res) => {
+      console.log(res);
+      this.bookList = res.books;
+    });
   }
+
+  onSubmit() {
+    if (this.bookForm.invalid) {
+      this.bookForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.bookForm.value;
+
+    this.bookService.createOutdoorBook(formValue).subscribe({
+      next: (res: any) => {
+        this.triggerPopup('Outdoor book created Successfully!', false);
+        this.loadBooks();
+      },
+      error: (err: any) => {
+        console.error('Error creating outdoor book', err);
+        this.triggerPopup('Something went wrong while saving!', true);
+      },
+    });
+  }
+
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
+  }
+
   onDelete() {
     console.log('Deleting...');
   }
