@@ -190,3 +190,9 @@
     <button class="btn btn-exit" (click)="close()">Exit</button>
   </div>
 </div>
+<div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
+  <div class="toast-content">
+    <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
+    <span class="message">{{ popupMessage }}</span>
+  </div>
+</div>

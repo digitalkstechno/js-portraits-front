@@ -28,6 +28,9 @@ export class StaffentryComponent {
   limit = 10;
   searchText = '';
   staffList$ = this.staffService.staff$;
+  isError = false;
+  showPopup = false;
+  popupMessage = '';
 
   ngOnInit() {
     this.initForm();
@@ -123,13 +126,27 @@ export class StaffentryComponent {
     this.staffService.createStaff(staffData).subscribe({
       next: () => {
         console.log('Staff created successfully');
+        this.triggerPopup('Staff Created Successfully!', false);
         this.staffForm.reset();
         this.staffService.searchStaff(this.page, this.limit, this.searchText);
       },
       error: (err) => {
         console.error(err);
+        this.triggerPopup('Something went wrong while saving!', true);
       },
     });
+  }
+
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   updateStaff() {
@@ -145,7 +162,7 @@ export class StaffentryComponent {
   }
 
   clearSearch() {
-    this.searchText = ''; 
+    this.searchText = '';
     this.page = 1; // Page reset kiya
     this.staffService.searchStaff(this.page, this.limit, '');
   }
