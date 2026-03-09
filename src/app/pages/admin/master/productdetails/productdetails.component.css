@@ -45,13 +45,6 @@
   border-bottom: 1px solid #6b8ea3;
 }
 
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 15px;
-}
-
 .col {
   display: flex;
   flex-direction: column;
@@ -84,10 +77,10 @@ input[type="text"]:focus {
 
 /* Specific widths based on content */
 .col:nth-child(1) input {
-  width: 50px;
+  width: 60px;
 } /* Sr No */
 .col:nth-child(2) input {
-  width: 180px;
+  width: 250px;
 } /* Item Name */
 .col:nth-child(3) input {
   width: 220px;
@@ -96,7 +89,7 @@ input[type="text"]:focus {
 .col:nth-child(5) input,
 .col:nth-child(6) input,
 .col:nth-child(7) input {
-  width: 90px;
+  width: 120px;
 } /* Rates & Stock */
 
 .form-row {
@@ -152,15 +145,6 @@ input[type="text"]:focus {
   align-items: center;
   gap: 10px;
   border-bottom: 1px solid #6b8ea3;
-}
-
-.search-btn {
-  padding: 5px 15px;
-  border: 1px solid #7a9bad;
-  background: #f2f2f2;
-  border-radius: 3px;
-  cursor: pointer;
-  font-weight: bold;
 }
 
 /* Table Section - Sticky Header & Alignment */
@@ -229,13 +213,6 @@ tbody tr:hover {
   border-radius: 2px;
 }
 
-.custom-search-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .search-wrapper {
   position: relative;
   width: 100%;
@@ -243,7 +220,7 @@ tbody tr:hover {
 
 .search-input {
   width: 100%;
-  padding: 6px 10px;
+  /* padding: 6px 10px; */
   border: 1px solid #999;
   border-radius: 2px;
   font-size: 13px;

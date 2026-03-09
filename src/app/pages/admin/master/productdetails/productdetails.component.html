@@ -8,13 +8,13 @@
   <!-- Top Form Section -->
   <div class="form-section">
     <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-      <div class="row">
+      <div class="d-flex gap-4 mb-2">
         <div class="col">
           <label>Sr No.</label>
           <input type="text" formControlName="sr_no" readonly/>
         </div>
 
-        <div class="col custom-search-container">
+        <div class="col">
           <label>Item Name</label>
           
           <div class="search-wrapper">
