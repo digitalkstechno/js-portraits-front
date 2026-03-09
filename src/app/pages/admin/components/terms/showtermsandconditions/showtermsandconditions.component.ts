@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { SHARED_MODULES } from '../../../../../constants/sharedModule';
 import { Router } from '@angular/router';
+import { AdminService } from '../../service/admin.service';
 
 @Component({
   selector: 'app-showtermsandconditions',
@@ -10,26 +11,65 @@ import { Router } from '@angular/router';
 })
 export class ShowtermsandconditionsComponent {
   router = inject(Router);
-  termsList: any[] = [
-    { header: 'Payment Terms', body: '50% Advance, 50% on delivery.' },
-    { header: 'Delivery', body: 'Within 7 working days.' },
-    { header: 'Cancellation', body: 'Amount is non-refundable.' },
-  ];
+  service = inject(AdminService);
 
+  termsList: any[] = [];
   selectedTerm: any = { header: '', body: '' };
 
   ngOnInit() {
     if (this.termsList.length > 0) {
       this.selectTerm(this.termsList[0]); // Default pehla select karein
     }
+    this.loadTerms();
+  }
+
+  loadTerms() {
+    this.service.getTermsAndConditions().subscribe((res) => {
+      this.termsList = res.data?.conditions;
+      console.log(this.termsList);
+    });
   }
 
   selectTerm(term: any) {
     this.selectedTerm = { ...term };
+    console.log(this.selectedTerm);
   }
 
-  onSave() {
-    console.log('Saving...', this.selectedTerm);
+  showPopup = false;
+  popupMessage = '';
+  isError = false;
+
+  onSubmit() {
+    const payload = {
+      conditions: [
+        {
+          header: this.selectedTerm.header,
+          body: this.selectedTerm.body,
+        },
+      ],
+    };
+    this.service.createTermsAndConditions(payload).subscribe({
+      next: (res: any) => {
+        this.triggerPopup('Terms and conditions updated Successfully!', false);
+        this.loadTerms();
+      },
+      error: (err: any) => {
+        console.error('Error saving notes', err);
+        this.triggerPopup('Something went wrong while updating!', true);
+      },
+    });
+  }
+
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   onDelete() {

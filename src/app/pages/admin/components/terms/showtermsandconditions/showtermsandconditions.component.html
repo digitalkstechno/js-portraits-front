@@ -44,10 +44,16 @@
       </div>
 
       <div class="button-group d-flex justify-content-end gap-2 mt-4">
-        <button class="btn-win" (click)="onSave()">Save</button>
+        <button class="btn-win" (click)="onSubmit()">Save</button>
         <button class="btn-win" (click)="onDelete()">Delete</button>
         <button class="btn-win" (click)="onExit()">Exit</button>
       </div>
     </div>
+  </div>
+</div>
+<div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
+  <div class="toast-content">
+    <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
+    <span class="message">{{ popupMessage }}</span>
   </div>
 </div>
