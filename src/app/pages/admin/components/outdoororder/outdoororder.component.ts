@@ -20,6 +20,9 @@ export class OutdoororderComponent implements OnInit {
   itemsList: any[] = [];
   productsList: any[] = [];
   count: any;
+  isError = false;
+  showPopup = false;
+  popupMessage = '';
 
   ngOnInit() {
     this.orderForm = this.fb.group({
@@ -324,7 +327,7 @@ export class OutdoororderComponent implements OnInit {
 
     this.outdoorService.createOutdoorOrder(payload).subscribe({
       next: (res: any) => {
-        alert('Outdoor Order Created Successfully');
+        this.triggerPopup('Outdoor Orde Created Successfully!', false);
 
         this.orderForm.reset({
           date: new Date().toISOString().split('T')[0],
@@ -339,9 +342,21 @@ export class OutdoororderComponent implements OnInit {
 
       error: (err: any) => {
         console.error('Order creation failed', err);
-        alert('Failed to create order');
+        this.triggerPopup('Something went wrong while saving!', true);
       },
     });
+  }
+
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   close() {

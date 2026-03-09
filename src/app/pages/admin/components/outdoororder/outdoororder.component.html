@@ -28,7 +28,11 @@
           </div>
           <div class="field-item">
             <label>Mob No</label>
-            <input type="text" style="width: 135px" formControlName="contactNo" />
+            <input
+              type="text"
+              style="width: 135px"
+              formControlName="contactNo"
+            />
           </div>
           <div class="field-item">
             <label>Quotation No</label>
@@ -45,7 +49,11 @@
         <div class="field-group">
           <div class="field-item" style="flex: 1">
             <label>Outdoor Party</label>
-            <input type="text" style="width: 100%" formControlName="outdoorParty" />
+            <input
+              type="text"
+              style="width: 100%"
+              formControlName="outdoorParty"
+            />
           </div>
           <div class="field-item" style="flex: 1">
             <label>Couple</label>
@@ -111,7 +119,10 @@
 
       <div class="entry-col">
         <label>Item Name</label>
-        <select style="width: 100%" (change)="selectItem($any($event.target).value)">
+        <select
+          style="width: 100%"
+          (change)="selectItem($any($event.target).value)"
+        >
           <option value="">Select Item</option>
           <option *ngFor="let item of itemsList" [value]="item._id">
             {{ item.item_name }}
@@ -316,3 +327,10 @@
     </div>
   </div>
 </form>
+
+<div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
+  <div class="toast-content">
+    <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
+    <span class="message">{{ popupMessage }}</span>
+  </div>
+</div>

@@ -244,7 +244,8 @@ tbody tr:hover {
   text-transform: uppercase;
 }
 
-.btn-add, .btn-cancel {
+.btn-add,
+.btn-cancel {
   background: #38a169;
   color: white;
   border: none;
@@ -371,29 +372,69 @@ select {
 }
 
 /* Make inputs look like plain text labels */
-.table-section table input, 
+.table-section table input,
 .table-section table select {
-    border: none !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    outline: none !important;
-    width: 100%;
-    padding: 5px;
-    font-family: inherit;
-    font-size: 14px;
-    color: #333;
-    appearance: none; /* Removes the arrow from select dropdowns */
-    -webkit-appearance: none;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  width: 100%;
+  padding: 5px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #333;
+  appearance: none; /* Removes the arrow from select dropdowns */
+  -webkit-appearance: none;
 }
 
 /* Center text in specific columns like Qty, Rate, Total */
 .table-section td {
-    border: 1px solid #ddd;
-    text-align: center;
-    vertical-align: middle;
+  border: 1px solid #ddd;
+  text-align: center;
+  vertical-align: middle;
 }
 
 /* Optional: Add a slight hover effect to know which row you are on */
 .table-section tr:hover {
-    background-color: #f9f9f9;
+  background-color: #f9f9f9;
+}
+
+.toast-overlay {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #d6eaf8; /* Light Blue to match your UI */
+  border: 2px solid #2e86c1;
+  padding: 12px 25px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-toast {
+  background-color: #fadbd8; /* Light Red */
+  border-color: #e74c3c;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  color: #21618c;
+}
+
+.error-toast .toast-content {
+  color: #943126;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
