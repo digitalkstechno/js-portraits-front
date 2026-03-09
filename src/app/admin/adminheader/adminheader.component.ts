@@ -56,8 +56,8 @@ export class AdminheaderComponent {
       label: 'Outdoor',
       children: [
         { label: 'Quotation', link: '/admin/quotation' },
-        { label: 'Outdoor order', link: '/admin/outdoor-order' },
-        { label: 'Outdoor bill', link: '/admin/outdoor-bill' },
+        { label: 'Outdoor order', link: '/admin/outdoor/order' },
+        { label: 'Outdoor bill', link: '/admin/outdoor/bill' },
         { label: 'Note settings', link: '/admin/note-settings' },
       ],
     },

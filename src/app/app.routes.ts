@@ -37,14 +37,14 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'outdoor-order',
+        path: 'outdoor/order',
         loadComponent: () =>
           import('./pages/admin/components/outdoororder/outdoororder.component').then(
             (m) => m.OutdoororderComponent,
           ),
       },
       {
-        path: 'outdoor-bill',
+        path: 'outdoor/bill',
         loadComponent: () =>
           import('./pages/admin/components/outdoorbill/outdoorbill.component').then(
             (m) => m.OutdoorbillComponent,
