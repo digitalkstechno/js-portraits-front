@@ -21,6 +21,8 @@ export class OutdoorbillComponent {
   entryForm!: FormGroup;
   count: any;
 
+  filteredCustomers: any[] = [];
+  parties: any[] = [];
   itemsList: any[] = [];
   productsList: any[] = [];
   filteredItems: any[] = [];
@@ -42,6 +44,7 @@ export class OutdoorbillComponent {
       });
     });
     this.loadItems();
+    this.loadCustomers();
 
     // Jab bhi discount, tax ya advance badle, calculation refresh ho
     this.billForm.valueChanges.subscribe(() => {
@@ -89,6 +92,33 @@ export class OutdoorbillComponent {
       place: [''],
       time: [''],
     });
+  }
+
+  loadCustomers() {
+    this.billService.getCustomers().subscribe((res: any) => {
+      this.parties = res.data || res;
+    });
+  }
+
+  filterParty(event: any) {
+    const value = event.target.value.toLowerCase();
+    if (!value) {
+      this.filteredCustomers = [];
+      return;
+    }
+
+    this.filteredCustomers = this.parties.filter(
+      (party: any) =>
+        party.name && party.name.toString().toLowerCase().includes(value),
+    );
+  }
+
+  selectParty(party: any) {
+    this.billForm.patchValue({
+      outdoorParty: party.name,
+    });
+
+    this.filteredCustomers = [];
   }
 
   searchQuotation() {
