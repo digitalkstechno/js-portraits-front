@@ -130,4 +130,21 @@ export class AdminService {
   getNotes(): Observable<any> {
     return this.http.get<any>(Endpoints.NOTE_SETTINGS);
   }
+
+  // outdoor book master
+  getOutdoorBooks(): Observable<any> {
+    return this.http.get<any>(Endpoints.OUTDOOR_BOOKS);
+  }
+
+  getOutdoorBookById(id: string): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_BOOKS}/${id}`);
+  }
+
+  getBookByNumber(num: string): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_BOOKS}/${num}`);
+  }
+
+  createOutdoorBook(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.OUTDOOR_BOOKS, data);
+  }
 }

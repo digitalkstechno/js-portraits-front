@@ -15,6 +15,7 @@ export const Endpoints = {
   QUOTATION: `${baseUrl}/quotation`,
   OUTDOOR_ORDER: `${baseUrl}/order`,
   OUTDOOR_BILL: `${baseUrl}/outdoorbill`,
+  OUTDOOR_BOOKS: `${baseUrl}/outdoorBookMaster`,
 
   NOTE_SETTINGS: `${baseUrl}/noteSettings`,
 };
