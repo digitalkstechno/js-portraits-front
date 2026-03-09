@@ -7,17 +7,17 @@
   <div class="window-body">
     <div class="field-row">
       <label>Out. Quotation :</label>
-      <textarea formControlName="quotation"></textarea>
+      <textarea formControlName="quotationNote"></textarea>
     </div>
 
     <div class="field-row">
       <label>Out. Order :</label>
-      <textarea formControlName="order"></textarea>
+      <textarea formControlName="orderNote"></textarea>
     </div>
 
     <div class="field-row">
       <label>Out. Bill :</label>
-      <textarea formControlName="bill"></textarea>
+      <textarea formControlName="billNote"></textarea>
     </div>
 
     <div class="footer-controls">
@@ -37,7 +37,7 @@
   </div>
 
   <div class="window-footer">
-    <button type="button" class="action-btn" (click)="onSave()">
+    <button type="button" class="action-btn" (click)="onSubmit()">
       Save Settings
     </button>
     <button type="button" class="action-btn" (click)="onExit()">Exit</button>

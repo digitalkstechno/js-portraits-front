@@ -1,4 +1,4 @@
-import environment from "../../../environment/env";
+import environment from '../../../environment/env';
 
 const baseUrl = `${environment.baseurl}`;
 
@@ -15,4 +15,6 @@ export const Endpoints = {
   QUOTATION: `${baseUrl}/quotation`,
   OUTDOOR_ORDER: `${baseUrl}/order`,
   OUTDOOR_BILL: `${baseUrl}/outdoorbill`,
+
+  NOTE_SETTINGS: `${baseUrl}/noteSettings`,
 };

@@ -121,4 +121,13 @@ export class AdminService {
   getroles(): Observable<any> {
     return this.http.get<any>(Endpoints.ROLE);
   }
+
+  // note setting
+  createNoteSettings(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.NOTE_SETTINGS, data);
+  }
+
+  getNotes(): Observable<any> {
+    return this.http.get<any>(Endpoints.NOTE_SETTINGS);
+  }
 }
