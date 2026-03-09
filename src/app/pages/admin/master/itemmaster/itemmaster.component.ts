@@ -18,11 +18,14 @@ export class ItemmasterComponent {
   searchText = '';
   pagination: any = { page: 1, limit: 10, total: 0, pages: 1 };
   items: any;
+  isError = false;
+  showPopup = false;
+  popupMessage = '';
 
   constructor(
     private fb: FormBuilder,
     private service: ItemsService,
-    private router: Router
+    private router: Router,
   ) {
     this.itemForm = fb.group({
       item_name: [''],
@@ -84,14 +87,27 @@ export class ItemmasterComponent {
 
     this.service.createItem(payload).subscribe({
       next: (res) => {
-        console.log('Successfully created item', res);
+        this.triggerPopup('Item created Successfully!', false);
         this.service.searchItems(this.page, this.limit, this.searchText);
         this.itemForm.reset();
       },
       error: (err: any) => {
         console.error('Create user failed', err);
+        this.triggerPopup('Something went wrong while saving!', true);
       },
     });
+  }
+
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   close() {

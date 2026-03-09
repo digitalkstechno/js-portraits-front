@@ -75,3 +75,9 @@
     </div>
   </form>
 </div>
+<div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
+  <div class="toast-content">
+    <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
+    <span class="message">{{ popupMessage }}</span>
+  </div>
+</div>
