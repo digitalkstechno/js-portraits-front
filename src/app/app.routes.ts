@@ -51,7 +51,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'staff',
+        path: 'staff/entry',
         loadComponent: () =>
           import('./pages/admin/components/staff-management/staffentry/staffentry.component').then(
             (m) => m.StaffentryComponent,
