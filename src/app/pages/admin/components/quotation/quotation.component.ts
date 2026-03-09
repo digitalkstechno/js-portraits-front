@@ -17,13 +17,16 @@ export class QuotationComponent {
   productService = inject(ItemsService);
   quotationService = inject(AdminService);
 
-  itemsList: any[] = [];
+  filteredCustomers: any[] = [];
+  filteredProducts: any[] = [];
+  filteredItems: any[] = [];
   productsList: any[] = [];
+  itemsList: any[] = [];
+  parties = [];
   count: any;
   isError = false;
   showPopup = false;
   popupMessage = '';
-  parties = [];
 
   // ENTRY FORM (Item Entry Strip)
   entryForm: FormGroup = this.fb.group({
@@ -41,27 +44,20 @@ export class QuotationComponent {
   quotationForm: FormGroup = this.fb.group({
     quotationNo: [''],
     date: [new Date().toISOString().split('T')[0]],
-
     outdoorParty: [''],
     address: [''],
     contactNo: [''],
     email: [''],
     refBy: [''],
-
     package: [''],
-
     functionDate: [''],
     functionName: [''],
-
     items: this.fb.array([]),
-
     subTotal: [0],
     discount: [0],
     grandTotal: [0],
-
     notes: [''],
     remarks: [''],
-
     status: ['Draft'],
   });
 
@@ -93,38 +89,32 @@ export class QuotationComponent {
   }
 
   loadCustomers() {
-    this.quotationService.getCustomers().subscribe((res) => {
-      const parties = res;
-      this.parties = parties.map((r: any) => r.name);
-      console.log('party', this.parties);
+    this.quotationService.getCustomers().subscribe((res: any) => {
+      this.parties = res.data || res;
     });
   }
 
-  filteredCustomers = [];
   filterParty(event: any) {
     const value = event.target.value.toLowerCase();
-    console.log('Searching for:', value);
-    console.log('Available Parties:', this.parties); // Check kijiye yahan data hai ya nahi
-
     if (!value) {
       this.filteredCustomers = [];
       return;
     }
 
     this.filteredCustomers = this.parties.filter(
-      (party: any) => party && party.toString().toLowerCase().includes(value),
+      (party: any) =>
+        party.name && party.name.toString().toLowerCase().includes(value),
     );
-
-    console.log('Filtered Results:', this.filteredCustomers); // Agar ye empty hai toh filter logic check karna hoga
   }
 
   selectParty(party: any) {
-    this.quotationForm.patchValue({ outdoorParty: party });
+    this.quotationForm.patchValue({
+      outdoorParty: party.name,
+      contactNo: party.contact,
+    });
+
     this.filteredCustomers = [];
   }
-
-  filteredItems: any[] = [];
-  filteredProducts: any[] = [];
 
   // Item search logic
   onItemType(event: any) {
@@ -159,7 +149,6 @@ export class QuotationComponent {
     this.onProductSelect(product._id); // Auto-fill rate
   }
 
-  // ITEM SELECT
   onItemSelect(itemId: string) {
     const item = this.itemsList.find((x) => x._id === itemId);
 
@@ -170,7 +159,6 @@ export class QuotationComponent {
     });
   }
 
-  // PRODUCT SELECT
   onProductSelect(productId: string) {
     const product = this.productsList.find((x) => x._id === productId);
 
@@ -183,7 +171,6 @@ export class QuotationComponent {
     this.calculateAmount();
   }
 
-  // AMOUNT CALCULATION
   calculateAmount() {
     const qty = Number(this.entryForm.get('qty')?.value || 0);
     const rate = Number(this.entryForm.get('rate')?.value || 0);
@@ -195,7 +182,6 @@ export class QuotationComponent {
     });
   }
 
-  // ADD ITEM
   addItem() {
     if (this.entryForm.invalid) return;
 
@@ -217,7 +203,6 @@ export class QuotationComponent {
     this.clearItem();
   }
 
-  // GRAND TOTAL
   calculateGrandTotal() {
     let subTotal = 0;
 
@@ -235,7 +220,6 @@ export class QuotationComponent {
     });
   }
 
-  // CLEAR ENTRY STRIP
   clearItem() {
     this.entryForm.reset({
       qty: 0,
@@ -273,7 +257,6 @@ export class QuotationComponent {
     });
   }
 
-  // SAVE
   onSubmit() {
     if (this.quotationForm.invalid) return;
 
@@ -297,13 +280,11 @@ export class QuotationComponent {
     });
   }
 
-  // Pop-up handle karne ka function
   triggerPopup(message: string, error: boolean) {
     this.popupMessage = message;
     this.isError = error;
     this.showPopup = true;
 
-    // 3 second baad apne aap gayab ho jayega
     setTimeout(() => {
       this.showPopup = false;
     }, 3000);
