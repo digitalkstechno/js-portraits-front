@@ -330,11 +330,14 @@
       <button type="button" class="btn btn-save" (click)="onSubmit()">
         Save
       </button>
-      <button type="button" class="btn">Update</button>
-      <button type="button" class="btn">View Calendar</button>
-      <button type="button" class="btn btn-social">SMS Alert</button>
-      <button type="button" class="btn">Print Agreement</button>
+      <button class="btn btn-exit">Delete</button>
+      <button class="btn">Print with Rate</button>
+      <button class="btn">Print without Rate</button>
+      <button class="btn" (click)="clear()">Cancel</button>
       <button type="button" class="btn btn-exit" (click)="close()">Exit</button>
+      <button class="btn btn-social">Send SMS</button>
+      <button class="btn btn-social">Send WhatsApp</button>
+      <button class="btn btn-social">Send Email</button>
     </div>
   </div>
 </form>

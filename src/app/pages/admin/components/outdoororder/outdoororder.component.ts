@@ -253,7 +253,7 @@ export class OutdoororderComponent implements OnInit {
   }
 
   // Variables for Entry Strip
-  entryDate: string = '';
+  entryDate = new Date().toISOString().split('T')[0];
   entryEventName: string = '';
   entryQty: number = 0;
   entryRate: number = 0;
@@ -299,6 +299,15 @@ export class OutdoororderComponent implements OnInit {
 
     this.items.push(newItem);
     this.resetEntryFields();
+  }
+
+  clear() {
+    this.orderForm.reset();
+    this.entryDate = new Date().toISOString().split('T')[0];
+    this.orderForm.patchValue({
+      date: new Date().toISOString().split('T')[0],
+      orderNo: this.count,
+    });
   }
 
   resetEntryFields() {
