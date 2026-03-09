@@ -23,6 +23,7 @@ export class QuotationComponent {
   isError = false;
   showPopup = false;
   popupMessage = '';
+  parties = [];
 
   // ENTRY FORM (Item Entry Strip)
   entryForm: FormGroup = this.fb.group({
@@ -76,6 +77,7 @@ export class QuotationComponent {
     });
 
     this.loadItems();
+    this.loadCustomers();
   }
 
   // LOAD ITEMS
@@ -88,6 +90,37 @@ export class QuotationComponent {
   // FORM ARRAY
   get items(): FormArray {
     return this.quotationForm.get('items') as FormArray;
+  }
+
+  loadCustomers() {
+    this.quotationService.getCustomers().subscribe((res) => {
+      const parties = res;
+      this.parties = parties.map((r: any) => r.name);
+      console.log('party', this.parties);
+    });
+  }
+
+  filteredCustomers = [];
+  filterParty(event: any) {
+    const value = event.target.value.toLowerCase();
+    console.log('Searching for:', value);
+    console.log('Available Parties:', this.parties); // Check kijiye yahan data hai ya nahi
+
+    if (!value) {
+      this.filteredCustomers = [];
+      return;
+    }
+
+    this.filteredCustomers = this.parties.filter(
+      (party: any) => party && party.toString().toLowerCase().includes(value),
+    );
+
+    console.log('Filtered Results:', this.filteredCustomers); // Agar ye empty hai toh filter logic check karna hoga
+  }
+
+  selectParty(party: any) {
+    this.quotationForm.patchValue({ outdoorParty: party });
+    this.filteredCustomers = [];
   }
 
   filteredItems: any[] = [];

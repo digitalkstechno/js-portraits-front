@@ -33,8 +33,19 @@
           <input
             type="text"
             style="width: 280px"
+            (input)="filterParty($event)"
             formControlName="outdoorParty"
           />
+
+          <div class="dropdown-list" *ngIf="filteredCustomers.length">
+            <div
+              class="dropdown-item"
+              *ngFor="let r of filteredCustomers"
+              (click)="selectParty(r)"
+            >
+              {{ r }}
+            </div>
+          </div>
         </div>
 
         <div class="field-item">

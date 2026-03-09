@@ -147,4 +147,9 @@ export class AdminService {
   createOutdoorBook(data: any): Observable<any> {
     return this.http.post<any>(Endpoints.OUTDOOR_BOOKS, data);
   }
+
+  // customers
+  getCustomers(): Observable<any> {
+    return this.http.get<any>(Endpoints.CUSTOMERS);
+  }
 }
