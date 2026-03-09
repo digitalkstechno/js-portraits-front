@@ -34,15 +34,22 @@ export class NotesettingsComponent {
 
   loadNotes() {
     this.noteService.getNotes().subscribe((res) => {
-      console.log(res[0]);
       const notes = res[0];
+      // console.log(res[0]);
       this.settingsForm.patchValue({
         quotationNote: notes.quotationNote,
         orderNote: notes.orderNote,
         billNote: notes.billNote,
+        entryBy: notes.entryBy,
+        updateBy: notes.updateBy,
       });
     });
   }
+
+  // Component ke andar properties add karein
+  showPopup = false;
+  popupMessage = '';
+  isError = false;
 
   onSubmit() {
     if (this.settingsForm.invalid) {
@@ -54,13 +61,26 @@ export class NotesettingsComponent {
 
     this.noteService.createNoteSettings(formValue).subscribe({
       next: (res: any) => {
-        alert('Notes Created Successfully');
+        this.triggerPopup('Settings Saved Successfully!', false);
+        this.loadNotes();
       },
       error: (err: any) => {
-        console.error('Error creating notes', err);
-        alert('Something went wrong while saving bill');
+        console.error('Error saving notes', err);
+        this.triggerPopup('Something went wrong while saving!', true);
       },
     });
+  }
+
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   onExit() {
