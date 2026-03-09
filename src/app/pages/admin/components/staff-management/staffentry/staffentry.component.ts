@@ -31,19 +31,40 @@ export class StaffentryComponent {
 
   ngOnInit() {
     this.initForm();
-    this.staffService.getStaffCount().subscribe((res) => {
-      const count = res.count?.count;
-      this.totalStaff = count;
-      this.count = count + 1;
-      this.staffForm.patchValue({
-        staffId: this.count,
-      });
-    });
     this.loadRoles();
-    this.loadStaff();
-    this.staffService.searchStaff(this.page, this.limit, this.searchText);
+
+    // 1. Pehle subscribe karein taaki jab bhi search badle, list update ho
+    this.listenToStaffChanges();
+
+    // 2. Initial data fetch karein
+    this.staffService.getStaffCount().subscribe((res) => {
+      const count = res.count?.count || 0;
+      this.totalStaff = count;
+      this.staffForm.patchValue({ staffId: count + 1 });
+    });
+
+    // 3. Trigger initial search
+    this.onSearchChange('');
   }
 
+  listenToStaffChanges() {
+    // Service ke staff$ observable ko subscribe karein
+    this.staffService.staff$.subscribe({
+      next: (res: any) => {
+        // Backend agar { data: [...] } bhej raha hai
+        const allStaff = res.data || res;
+
+        // Yahan filter lagayein aur UI update karein
+        this.staff = allStaff.filter((s: any) => s.isAdmin === false);
+
+        // Total active staff update karein
+        this.activeStaff = this.staff.length;
+      },
+      error: (err) => console.error('Error loading staff', err),
+    });
+  }
+
+  // loadStaff() ko hata dein ya sirf listenToStaffChanges() use karein
   initForm() {
     this.staffForm = this.fb.group({
       staffId: [''],
@@ -70,7 +91,8 @@ export class StaffentryComponent {
 
   loadStaff() {
     this.staffService.staff$.subscribe((res) => {
-      const staff = res;
+      const staff = res.data;
+      console.log(staff);
       this.staff = staff.filter((s: any) => s.isAdmin === false);
     });
   }
@@ -122,8 +144,10 @@ export class StaffentryComponent {
     console.log('Delete staff');
   }
 
-  searchStaff(value: string) {
-    console.log('Searching:', value);
+  clearSearch() {
+    this.searchText = ''; 
+    this.page = 1; // Page reset kiya
+    this.staffService.searchStaff(this.page, this.limit, '');
   }
 
   close() {

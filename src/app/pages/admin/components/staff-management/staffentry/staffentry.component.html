@@ -143,11 +143,15 @@
         type="text"
         placeholder="Search by name or phone..."
         style="width: 100%"
+        [value]="searchText"
+        (input)="onSearchChange($any($event.target).value)"
       />
     </div>
     <div class="entry-col">
       <label>&nbsp;</label>
-      <button class="btn" style="min-width: 100px">Search</button>
+      <button class="btn" style="min-width: 100px" (click)="clearSearch()">
+        Clear
+      </button>
     </div>
   </div>
 
