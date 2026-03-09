@@ -59,6 +59,7 @@ export class AdminheaderComponent {
         { label: 'Outdoor order', link: '/admin/outdoor/order' },
         { label: 'Outdoor bill', link: '/admin/outdoor/bill' },
         { label: 'Note settings', link: '/admin/note-settings' },
+        { label: 'Terms & Conditions', link: '/admin/terms&conditions' },
       ],
     },
     { key: 'purchase', label: 'New Purchase' },

@@ -106,6 +106,13 @@ export const routes: Routes = [
             (m) => m.OtdoorbookmasterComponent,
           ),
       },
+      {
+        path: 'terms&conditions',
+        loadComponent: () =>
+          import('./pages/admin/components/termsandconditions/termsandconditions.component').then(
+            (m) => m.TermsandconditionsComponent,
+          ),
+      },
     ],
   },
 

@@ -1,0 +1,47 @@
+.window-container {
+  width: 700px;
+  background-color: #d6eaf8; /* ERP Blue Theme */
+  border: 2px solid #2e86c1;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+}
+
+.title-bar {
+  background-color: #85c1e9;
+  padding: 5px 10px;
+  border-bottom: 1px solid #2e86c1;
+}
+
+.terms-block {
+  background-color: #ebf5fb;
+  border-radius: 4px;
+}
+
+.custom-textarea {
+  height: 80px;
+  font-size: 13px;
+  border: 1px solid #2e86c1;
+  resize: vertical;
+}
+
+.btn-action {
+  background-color: #aed6f1;
+  border: 1px solid #2e86c1;
+  padding: 4px 15px;
+  font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-action:hover {
+  background-color: #85c1e9;
+}
+
+.btn-close-custom {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  width: 22px;
+  height: 22px;
+  font-weight: bold;
+}
