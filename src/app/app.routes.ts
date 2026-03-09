@@ -109,9 +109,18 @@ export const routes: Routes = [
       {
         path: 'terms&conditions',
         loadComponent: () =>
-          import('./pages/admin/components/termsandconditions/termsandconditions.component').then(
+          import('./pages/admin/components/terms/termsandconditions/termsandconditions.component').then(
             (m) => m.TermsandconditionsComponent,
           ),
+        children: [
+          {
+            path: 'show',
+            loadComponent: () =>
+              import('./pages/admin/components/terms/showtermsandconditions/showtermsandconditions.component').then(
+                (m) => m.ShowtermsandconditionsComponent,
+              ),
+          },
+        ],
       },
     ],
   },

@@ -1,0 +1,53 @@
+<div class="master-window">
+  <div class="title-bar d-flex justify-content-between">
+    <span>Terms & Conditions Master</span>
+    <button class="close-x" (click)="onExit()">×</button>
+  </div>
+
+  <div class="content-body p-2 d-flex">
+    <div class="list-section border border-dark bg-white">
+      <div class="list-header bg-light border-bottom p-1 fw-bold small">
+        Heading List
+      </div>
+      <div class="list-items">
+        <div
+          *ngFor="let t of termsList"
+          (click)="selectTerm(t)"
+          [class.active-item]="selectedTerm.header === t.header"
+          class="list-item p-1 small border-bottom"
+        >
+          {{ t.header }}
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-section ms-2 flex-grow-1">
+      <div class="row mb-2 align-items-center">
+        <label class="col-sm-3 fw-bold small">Heading :</label>
+        <div class="col-sm-9">
+          <input
+            type="text"
+            [(ngModel)]="selectedTerm.header"
+            class="form-control form-control-sm border-dark"
+          />
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <label class="col-sm-3 fw-bold small">Body Content :</label>
+        <div class="col-sm-9">
+          <textarea
+            [(ngModel)]="selectedTerm.body"
+            class="form-control custom-textarea border-dark"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="button-group d-flex justify-content-end gap-2 mt-4">
+        <button class="btn-win" (click)="onSave()">Save</button>
+        <button class="btn-win" (click)="onDelete()">Delete</button>
+        <button class="btn-win" (click)="onExit()">Exit</button>
+      </div>
+    </div>
+  </div>
+</div>

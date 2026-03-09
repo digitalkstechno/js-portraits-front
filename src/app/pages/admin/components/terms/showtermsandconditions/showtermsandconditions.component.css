@@ -1,0 +1,54 @@
+.master-window {
+  width: 750px;
+  background-color: #d6eaf8; /* ERP Light Blue */
+  border: 2px solid #2e86c1;
+  font-family: Arial, sans-serif;
+  margin: 20px auto;
+}
+
+.title-bar {
+  background-color: #85c1e9;
+  padding: 3px 10px;
+  font-weight: bold;
+  border-bottom: 1px solid #2e86c1;
+}
+
+.list-section {
+  width: 200px;
+  height: 250px;
+  overflow-y: auto;
+}
+
+.list-item {
+  cursor: pointer;
+}
+
+.list-item:hover {
+  background-color: #f0f7ff;
+}
+
+.active-item {
+  background-color: #2e86c1 !important;
+  color: white;
+}
+
+.custom-textarea {
+  height: 150px;
+  resize: none;
+  font-size: 13px;
+}
+
+.btn-win {
+  background-color: #aed6f1;
+  border: 1px solid #2e86c1;
+  padding: 2px 20px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.close-x {
+  background: #e74c3c;
+  border: none;
+  color: white;
+  padding: 0 8px;
+}

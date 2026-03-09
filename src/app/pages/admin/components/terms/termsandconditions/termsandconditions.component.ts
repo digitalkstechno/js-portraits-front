@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { SHARED_MODULES } from '../../../../constants/sharedModule';
+import { SHARED_MODULES } from '../../../../../constants/sharedModule';
 import { Router } from '@angular/router';
-import { AdminService } from '../service/admin.service';
+import { AdminService } from '../../service/admin.service';
 
 @Component({
   selector: 'app-termsandconditions',
@@ -28,10 +28,10 @@ export class TermsandconditionsComponent {
     this.loadTerms();
   }
 
-  loadTerms(){
+  loadTerms() {
     this.service.getTermsAndConditions().subscribe((res) => {
       console.log(res);
-    })
+    });
   }
 
   // Helper to get conditions array
@@ -91,5 +91,9 @@ export class TermsandconditionsComponent {
 
   onExit() {
     this.router.navigateByUrl('/admin');
+  }
+
+  onView() {
+    this.router.navigateByUrl('/admin/terms&conditions/show');
   }
 }

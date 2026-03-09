@@ -55,6 +55,7 @@
       <div class="d-flex gap-2">
         <button class="btn-action" (click)="onSubmit()">Save Settings</button>
         <button class="btn-action" (click)="onExit()">Exit</button>
+        <button class="btn-action" (click)="onView()">View</button>
       </div>
     </div>
   </div>
@@ -65,3 +66,4 @@
     <span class="message">{{ popupMessage }}</span>
   </div>
 </div>
+<router-outlet></router-outlet>
