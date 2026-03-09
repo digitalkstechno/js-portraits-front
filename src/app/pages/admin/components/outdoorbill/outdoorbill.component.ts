@@ -26,6 +26,10 @@ export class OutdoorbillComponent {
   filteredItems: any[] = [];
   filteredProducts: any[] = [];
 
+  isError = false;
+  showPopup = false;
+  popupMessage = '';
+
   ngOnInit() {
     this.initForms();
     this.billService.getOutdoorBillCount().subscribe((res) => {
@@ -327,14 +331,26 @@ export class OutdoorbillComponent {
 
     this.billService.createOutdoorBill(payload).subscribe({
       next: (res: any) => {
-        alert('Outdoor Bill Created Successfully');
+        this.triggerPopup('Outdoor Bill Created Successfully!', false);
         this.clearAll();
       },
       error: (err: any) => {
         console.error('Error creating bill', err);
-        alert('Something went wrong while saving bill');
+        this.triggerPopup('Something went wrong while saving!', true);
       },
     });
+  }
+
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   close() {

@@ -266,7 +266,7 @@ tbody tr:hover {
   padding: 12px;
   border-radius: 4px;
   min-width: 280px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .summary-row {
@@ -283,7 +283,7 @@ tbody tr:hover {
   min-width: 100px;
 }
 
-.summary-row input, 
+.summary-row input,
 .summary-row select {
   width: 120px;
   padding: 4px 8px;
@@ -291,7 +291,7 @@ tbody tr:hover {
   border-radius: 3px;
   text-align: right;
   font-size: 13px;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 /* Specific Field Styling */
@@ -390,7 +390,9 @@ tbody tr:hover {
   font-weight: bold;
 }
 
-.search-container { position: relative; }
+.search-container {
+  position: relative;
+}
 .dropdown-results {
   position: absolute;
   top: 100%;
@@ -401,7 +403,53 @@ tbody tr:hover {
   z-index: 100;
   max-height: 150px;
   overflow-y: auto;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.result-row { padding: 5px 10px; cursor: pointer; border-bottom: 1px solid #eee; }
-.result-row:hover { background: #f0f0f0; }
+.result-row {
+  padding: 5px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+.result-row:hover {
+  background: #f0f0f0;
+}
+
+.toast-overlay {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #d6eaf8; /* Light Blue to match your UI */
+  border: 2px solid #2e86c1;
+  padding: 12px 25px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-toast {
+  background-color: #fadbd8; /* Light Red */
+  border-color: #e74c3c;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  color: #21618c;
+}
+
+.error-toast .toast-content {
+  color: #943126;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
