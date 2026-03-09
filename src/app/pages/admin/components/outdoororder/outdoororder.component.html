@@ -109,8 +109,8 @@
           </thead>
           <tbody>
             <tr>
-              <td>1</td>
-              <td>03/03/2026</td>
+              <td>{{ orderForm.value.orderNo }}</td>
+              <td>{{ orderForm.value.date | date: "dd/MM/yyyy" }}</td>
             </tr>
           </tbody>
         </table>
