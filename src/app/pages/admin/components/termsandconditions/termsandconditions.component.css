@@ -1,15 +1,15 @@
 .window-container {
   width: 700px;
-  background-color: #d6eaf8; /* ERP Blue Theme */
-  border: 2px solid #2e86c1;
+  border: 2px solid #6b8ea3;
+  background: #e9f2f7;
   margin: 20px auto;
   font-family: Arial, sans-serif;
 }
 
 .title-bar {
-  background-color: #85c1e9;
+  background: linear-gradient(#b5d3e3, #8fb8cc);
   padding: 5px 10px;
-  border-bottom: 1px solid #2e86c1;
+  border-bottom: 2px solid #6b8ea3;
 }
 
 .terms-block {
