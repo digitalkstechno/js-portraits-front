@@ -76,6 +76,6 @@ export class OtdoorbookmasterComponent {
     this.bookForm.reset();
   }
   onExit() {
-    /* Navigation logic */
+    this.router.navigateByUrl('/admin')
   }
 }
