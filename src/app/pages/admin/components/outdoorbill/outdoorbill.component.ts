@@ -89,7 +89,7 @@ export class OutdoorbillComponent {
       productName: ['', Validators.required],
       productId: [''],
       event: [''],
-      qty: [1],
+      qty: [],
       rate: [0],
       amount: [0],
       place: [''],

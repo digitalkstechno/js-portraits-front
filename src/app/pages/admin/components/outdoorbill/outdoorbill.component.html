@@ -9,7 +9,13 @@
       <div class="field-group">
         <div class="field-item">
           <label>Book</label>
-          <input type="text" formControlName="book" style="width: 80px" (input)="filterBooks($event)"/>
+          <input
+            type="text"
+            style="width: 80px"
+            formControlName="book"
+            placeholder="BNI"
+            (input)="filterBooks($event)"
+          />
           <div class="dropdown-list" *ngIf="filteredBooks.length">
             <div
               class="dropdown-item"
@@ -175,7 +181,7 @@
     </div>
     <div class="entry-col">
       <label>Qty</label
-      ><input type="number" formControlName="qty" style="width: 50px" />
+      ><input type="number" formControlName="qty" style="width: 80px" />
     </div>
     <div class="entry-col">
       <label>Rate</label
@@ -196,7 +202,7 @@
     </div>
     <div class="entry-col">
       <label>Time</label
-      ><input type="text" formControlName="time" style="width: 80px" />
+      ><input type="time" formControlName="time" style="width: 80px" />
     </div>
 
     <div class="entry-col">
