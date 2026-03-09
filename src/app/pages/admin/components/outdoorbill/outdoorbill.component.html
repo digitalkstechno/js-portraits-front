@@ -331,8 +331,14 @@
 
   <div class="action-bar">
     <button class="btn btn-save" (click)="onSubmit()">Save</button>
+    <button class="btn btn-exit">Delete</button>
+    <button class="btn">Print with Rate</button>
+    <button class="btn">Print without Rate</button>
     <button class="btn" (click)="clearAll()">Cancel</button>
     <button class="btn btn-exit" (click)="close()">Exit</button>
+    <button class="btn btn-social">Send SMS</button>
+    <button class="btn btn-social">Send WhatsApp</button>
+    <button class="btn btn-social">Send Email</button>
   </div>
 </div>
 <div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
