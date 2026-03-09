@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ItemsService } from '../../master/service/items.service';
 import { AdminService } from '../service/admin.service';
+import { PdfService } from '../service/pdf-service/pdf.service';
 
 @Component({
   selector: 'app-quotation',
@@ -16,6 +17,7 @@ export class QuotationComponent {
   fb = inject(FormBuilder);
   productService = inject(ItemsService);
   quotationService = inject(AdminService);
+  pdfService = inject(PdfService);
 
   filteredCustomers: any[] = [];
   filteredProducts: any[] = [];
@@ -292,5 +294,17 @@ export class QuotationComponent {
 
   close() {
     this.router.navigateByUrl('/admin');
+  }
+
+  // Print handler function
+  printQuotation(showRate: boolean, showDiscount: boolean) {
+    const quotationData = this.quotationForm.value;
+    // Items array ko fetch karein (maan lijiye items aapke form ya table mein hain)
+    const items = this.itemsList;
+
+    this.pdfService.generateDynamicPDF(quotationData, items, {
+      showRate: showRate,
+      showDiscount: showDiscount,
+    });
   }
 }
