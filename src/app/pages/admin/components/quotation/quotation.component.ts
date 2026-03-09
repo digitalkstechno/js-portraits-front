@@ -20,6 +20,9 @@ export class QuotationComponent {
   itemsList: any[] = [];
   productsList: any[] = [];
   count: any;
+  isError = false;
+  showPopup = false;
+  popupMessage = '';
 
   // ENTRY FORM (Item Entry Strip)
   entryForm: FormGroup = this.fb.group({
@@ -251,12 +254,26 @@ export class QuotationComponent {
     this.quotationService.createQuotation(payload).subscribe({
       next: (res) => {
         console.log('successfully created quotation', res);
+        this.triggerPopup('Quotation Created Successfully!', false);
         this.quotationForm.reset();
       },
       error: (err) => {
         console.error(err);
+        this.triggerPopup('Something went wrong while saving!', true);
       },
     });
+  }
+
+  // Pop-up handle karne ka function
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   close() {

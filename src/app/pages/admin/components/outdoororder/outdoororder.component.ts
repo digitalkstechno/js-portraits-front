@@ -327,7 +327,7 @@ export class OutdoororderComponent implements OnInit {
 
     this.outdoorService.createOutdoorOrder(payload).subscribe({
       next: (res: any) => {
-        this.triggerPopup('Outdoor Orde Created Successfully!', false);
+        this.triggerPopup('Outdoor Order Created Successfully!', false);
 
         this.orderForm.reset({
           date: new Date().toISOString().split('T')[0],

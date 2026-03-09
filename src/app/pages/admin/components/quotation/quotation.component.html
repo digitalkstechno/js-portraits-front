@@ -126,9 +126,9 @@
       </div>
     </div>
 
-    <div class="entry-col search-wrapper" style="flex: 1;">
+    <div class="entry-col search-wrapper" style="flex: 1">
       <label>Product</label>
-      <div class="custom-dropdown" >
+      <div class="custom-dropdown">
         <input
           type="text"
           style="width: 100%"
@@ -274,5 +274,12 @@
     <button class="btn btn-social">WhatsApp</button>
     <button class="btn" (click)="clearAll()">Cancel</button>
     <button class="btn btn-exit" (click)="close()">Exit</button>
+  </div>
+</div>
+
+<div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
+  <div class="toast-content">
+    <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
+    <span class="message">{{ popupMessage }}</span>
   </div>
 </div>
