@@ -1,19 +1,19 @@
 .window-container {
   width: 650px;
   margin: 10px auto;
-  background-color: #d6eaf8; /* Soft blue */
-  border: 1px solid #2e86c1;
+  border: 2px solid #6b8ea3;
+  background: #e9f2f7;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   font-family: "Segoe UI", Arial, sans-serif;
 }
 
 .title-bar {
-  background-color: #85c1e9;
+  background: linear-gradient(#b5d3e3, #8fb8cc);
   padding: 4px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #2e86c1;
+  border-bottom: 2px solid #6b8ea3;
 }
 
 .title-text {

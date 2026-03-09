@@ -1,0 +1,97 @@
+.master-window {
+  width: 550px;
+  margin: 10px auto;
+  border: 2px solid #6b8ea3;
+  background: #e9f2f7;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  font-family: Arial, sans-serif;
+}
+
+.title-bar {
+  background: linear-gradient(#b5d3e3, #8fb8cc);
+  color: black;
+  font-weight: bold;
+  padding: 3px 8px;
+  border-bottom: 2px solid #6b8ea3;
+}
+
+.close-x {
+  background: #e74c3c;
+  border: 1px solid #c0392b;
+  color: white;
+  padding: 0 5px;
+  line-height: 1;
+}
+
+.table-container {
+  height: 200px;
+  overflow-y: scroll;
+}
+
+.selected-row {
+  background-color: #aed6f1 !important;
+}
+
+.btn-win {
+  background-color: #aed6f1;
+  border: 1px solid #2e86c1;
+  color: black;
+  font-weight: bold;
+  padding: 2px 25px;
+  font-size: 13px;
+  box-shadow: inset -1px -1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.btn-win:active {
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+label {
+  color: #1b4f72;
+}
+
+/* Bottom Action Bar (The large row of buttons) */
+.action-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  background: #d8eaf3;
+  border-top: 2px solid #6b8ea3;
+}
+
+.btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #7a9bad;
+  background: #f2f2f2;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.1s;
+  min-width: 80px;
+}
+
+.btn:hover {
+  background: #fff;
+  border-color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Specialized Button Colors */
+.btn-save {
+  background: #e6fffa;
+  color: #006644;
+  border-color: #38a169;
+}
+.btn-exit {
+  background: #fff5f5;
+  color: #c53030;
+  border-color: #fc8181;
+}
+.btn-social {
+  background: #ebf8ff;
+  color: #2b6cb0;
+  border-color: #63b3ed;
+} /* For WhatsApp/SMS */

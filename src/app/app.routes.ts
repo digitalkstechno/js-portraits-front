@@ -99,6 +99,13 @@ export const routes: Routes = [
             (m) => m.NotesettingsComponent,
           ),
       },
+      {
+        path: 'outdoor/book-master',
+        loadComponent: () =>
+          import('./pages/admin/components//otdoorbookmaster/otdoorbookmaster.component').then(
+            (m) => m.OtdoorbookmasterComponent,
+          ),
+      },
     ],
   },
 

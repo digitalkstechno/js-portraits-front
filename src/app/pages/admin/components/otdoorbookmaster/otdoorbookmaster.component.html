@@ -1,0 +1,70 @@
+<div class="master-window" [formGroup]="bookForm">
+  <div class="title-bar d-flex justify-content-between">
+    <span>Outdoor Book Master</span>
+    <button class="close-x" (click)="onExit()">×</button>
+  </div>
+
+  <div class="content-body p-2">
+    <div class="row mb-2 align-items-center">
+      <label class="col-sm-2 fw-bold small">Book :</label>
+      <div class="col-sm-10">
+        <input
+          type="text"
+          formControlName="book"
+          class="form-control form-control-sm border-dark"
+        />
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-6 d-flex align-items-center">
+        <label class="small fw-bold me-2 text-muted">Entry By :</label>
+        <select
+          formControlName="entryBy"
+          class="form-select form-select-sm"
+        ></select>
+      </div>
+      <div class="col-6 d-flex align-items-center">
+        <label class="small fw-bold me-2 text-muted">Update By :</label>
+        <select
+          formControlName="updateBy"
+          class="form-select form-select-sm"
+        ></select>
+      </div>
+    </div>
+
+    <div class="table-container bg-white border border-dark mt-2">
+      <table class="table table-bordered table-sm mb-0">
+        <thead class="bg-light">
+          <tr>
+            <th class="small border-dark">Book Name</th>
+            <th class="small border-dark text-center" style="width: 100px">
+              Not Display In Out Bill
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of bookList"
+            [class.selected-row]="item.name === '23 - 24 ODER'"
+          >
+            <td class="small">{{ item.name }}</td>
+            <td class="text-center">
+              <input type="checkbox" [checked]="item.notDisplay" />
+            </td>
+          </tr>
+          <tr *ngFor="let i of [1, 2, 3, 4]">
+            <td colspan="2">&nbsp;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn btn-save" (click)="onSave()">Save</button>
+      <button class="btn" (click)="onDelete()">Delete</button>
+      <button class="btn" (click)="onCancel()">Cancel</button>
+      <button class="btn btn-exit" (click)="onExit()">Exit</button>
+    </div>
+  </div>
+</div>
