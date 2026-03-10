@@ -50,7 +50,11 @@ export class AdminheaderComponent {
         { label: 'Outdoor Book Master', link: '/admin/outdoor/book-master' },
       ],
     },
-    { key: 'transaction', label: 'Transaction' },
+    { key: 'transaction', label: 'Transaction',
+      children: [
+        { label: 'Product sell', link: '/admin/product/sell' },
+      ],
+     },
     {
       key: 'outdoor',
       label: 'Outdoor',

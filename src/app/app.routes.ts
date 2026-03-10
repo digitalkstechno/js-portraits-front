@@ -65,6 +65,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'product/sell',
+        loadComponent: () =>
+          import('./pages/admin/components/purchaseitems/purchaseitems.component').then(
+            (m) => m.PurchaseitemsComponent,
+          ),
+      },
+      {
         path: 'summary',
         loadComponent: () =>
           import('./pages/admin/report/summary/summary.component').then(
