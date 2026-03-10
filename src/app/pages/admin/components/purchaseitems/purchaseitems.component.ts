@@ -306,47 +306,47 @@ export class PurchaseitemsComponent {
   onSubmit() {
     if (this.productSellForm.invalid) {
       this.productSellForm.markAllAsTouched();
+      this.triggerPopup('Please fill all required fields!', true);
       return;
     }
 
-    const formValue = this.productSellForm.value;
+    const formValue = this.productSellForm.getRawValue(); // getRawValue use karein taaki disabled fields bhi mil jayein
 
     const payload = {
-      book: formValue.book,
+      bookName: formValue.bookName,
       billNo: formValue.billNo,
-      date: formValue.date,
-      outdoorParty: formValue.outdoorParty,
-      address: formValue.address,
-      orderNo: formValue.orderNo,
-      gstType: formValue.gstType,
-      govt: formValue.govt,
-      coupleName: formValue.coupleName,
-      gst: formValue.gst,
-      package: formValue.package,
+      sellDate: formValue.purchaseDate,
+      partyName: formValue.partyName,
+      contactNo: formValue.contactNo,
 
+      // Items array (Dynamic rows from Table)
+      items: this.itemsFormArray.value,
+
+      // Totals & GST
       subTotal: formValue.subTotal,
       discount: formValue.discount,
-      cgstPerc: formValue.cgstPerc,
-      cgstAmt: formValue.cgstAmt,
-      sgstPerc: formValue.sgstPerc,
-      sgstAmt: formValue.sgstAmt,
-      igstPerc: formValue.igstPerc,
-      igstAmt: formValue.igstAmt,
-      netTotal: formValue.netTotal,
-      advance: formValue.advance,
+      totalGst: formValue.totalGst,
+      grandTotal: formValue.grandTotal,
+
+      // Payment Section
+      paymentMode: formValue.paymentMode,
+      transactionId:
+        formValue.paymentMode !== 'Cash' ? formValue.transactionId : '',
+      amountPaid: formValue.amountPaid, // Frontend ka 'advance' backend ka 'amountPaid' hai
       balanceDue: formValue.balanceDue,
 
-      items: this.itemsFormArray.value,
+      // Status Logic
+      paymentStatus: formValue.balanceDue <= 0 ? 'Paid' : 'Partial',
     };
 
-    this.billService.createOutdoorBill(payload).subscribe({
+    this.billService.saveProductSell(payload).subscribe({
       next: (res: any) => {
-        this.triggerPopup('Outdoor Bill Created Successfully!', false);
+        this.triggerPopup('Product Sale Recorded Successfully!', false);
         this.clearAll();
       },
       error: (err: any) => {
-        console.error('Error creating bill', err);
-        this.triggerPopup('Something went wrong while saving!', true);
+        console.error('Error saving purchase:', err);
+        this.triggerPopup('Error: Could not save the transaction.', true);
       },
     });
   }

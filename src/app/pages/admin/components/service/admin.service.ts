@@ -175,6 +175,10 @@ export class AdminService {
     return this.http.get<any>(`${Endpoints.PRODUCT_SELL}/count`);
   }
 
+  getPendingPaymentsReport(): Observable<any> {
+    return this.http.get(`${Endpoints.PRODUCT_SELL}/pending-payments`);
+  }
+
   // gst
   getGstConfiguration(): Observable<any> {
     return this.http.get<any>(`${Endpoints.PRODUCT_SELL}/count`);
