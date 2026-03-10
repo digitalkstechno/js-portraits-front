@@ -25,6 +25,9 @@ export class OutdoororderComponent implements OnInit {
   isError = false;
   showPopup = false;
   popupMessage = '';
+  entryDate = new Date().toISOString().split('T')[0];
+  entryQty: number = 0;
+  entryRate: number = 0;
 
   ngOnInit() {
     this.orderForm = this.fb.group({
@@ -32,16 +35,13 @@ export class OutdoororderComponent implements OnInit {
       date: [new Date().toISOString().split('T')[0]],
       contactNo: [''],
       quotationNo: [''],
-
       outdoorParty: [''],
       couple: [''],
       address: [''],
       remarks: [''],
       notes: [''],
       package: [''],
-
       items: this.fb.array([]),
-
       subTotal: [0],
       discount: [0],
       advance: [0],
@@ -216,15 +216,6 @@ export class OutdoororderComponent implements OnInit {
 
     return `${year}-${month}-${day}`;
   }
-
-  // Variables for Entry Strip
-  entryDate = new Date().toISOString().split('T')[0];
-  entryEventName: string = '';
-  entryQty: number = 0;
-  entryRate: number = 0;
-  entryPlace: string = '';
-  entryTime: string = '';
-  selectedProductId: string = '';
 
   // Entry Strip ka Total calculate karne ke liye
   get entryTotal(): number {
