@@ -253,7 +253,7 @@
       <div class="summary-box">
         <div class="summary-row">
           <label>Sub Total</label>
-          <input type="text" formControlName="subTotal" readonly />
+          <input type="text" formControlName="subTotal" style="background-color: #eae6e6" readonly />
         </div>
 
         <div class="summary-row">
@@ -262,6 +262,39 @@
             type="number"
             formControlName="discount"
             (input)="calculateGrandTotal()"
+          />
+        </div>
+
+        <div class="summary-row">
+          <label>CGST</label>
+          <input
+            type="number"
+            formControlName="cgst"
+            (input)="calculateGrandTotal()"
+            style="background-color: #eae6e6"
+            readonly
+          />
+        </div>
+
+        <div class="summary-row">
+          <label>SGST</label>
+          <input
+            type="number"
+            formControlName="sgst"
+            (input)="calculateGrandTotal()"
+            style="background-color: #eae6e6"
+            readonly
+          />
+        </div>
+
+        <div class="summary-row">
+          <label>IGST</label>
+          <input
+            type="number"
+            formControlName="igst"
+            (input)="calculateGrandTotal()"
+            style="background-color: #eae6e6"
+            readonly
           />
         </div>
 
