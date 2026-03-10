@@ -47,6 +47,10 @@ export class OutdoororderComponent implements OnInit {
       discount: [0],
       advance: [0],
       grandTotal: [0],
+      // Payment Section
+      paymentMode: ['Cash'], // Added
+      transactionId: [''],   // Added          // Matches your "Amount Paid" logic
+      balanceDue: [0]        // Added
     });
 
     this.outdoorService.getOrderCount().subscribe((res) => {
@@ -257,6 +261,8 @@ export class OutdoororderComponent implements OnInit {
       discount: formValue.discount,
       advance: formValue.advance,
       grandTotal: formValue.grandTotal,
+      paymentMode: formValue.paymentMode,
+      transactionId: formValue.transactionId,
 
       items: this.items.value,
     };
@@ -267,6 +273,7 @@ export class OutdoororderComponent implements OnInit {
 
         this.orderForm.reset({
           date: new Date().toISOString().split('T')[0],
+          paymentMode: 'Cash',
           subTotal: 0,
           discount: 0,
           advance: 0,

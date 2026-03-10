@@ -213,12 +213,28 @@
           <input type="text" formControlName="grandTotal" />
         </div>
 
-        <div class="summary-row grand-total-highlight">
-          <label>Payment</label>
-          <select>
-            <option value=""></option>
-          </select>
-        </div>
+        <div class="summary-row">
+            <label>Payment Mode</label>
+            <select formControlName="paymentMode" class="editable-input">
+              <option value="Cash">Cash</option>
+              <option value="UPI">UPI</option>
+              <option value="Card">Card</option>
+              <option value="Net Banking">Net Banking</option>
+            </select>
+          </div>
+
+          <div
+            class="summary-row"
+            *ngIf="orderForm.get('paymentMode')?.value !== 'Cash'"
+          >
+            <label>Transaction ID</label>
+            <input
+              type="text"
+              formControlName="transactionId"
+              placeholder="UPI/UTR No."
+              class="editable-input"
+            />
+          </div>
       </div>
     </div>
 
