@@ -117,109 +117,6 @@
       </div>
     </div>
 
-    <!-- ITEM ENTRY -->
-    <div class="item-entry-strip">
-      <div class="entry-col">
-        <label>Date</label>
-        <input
-          type="date"
-          [(ngModel)]="entryDate"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </div>
-
-      <div class="entry-col">
-        <label>Item Name</label>
-        <select
-          style="width: 100%"
-          (change)="selectItem($any($event.target).value)"
-        >
-          <option value="">Select Item</option>
-          <option *ngFor="let item of itemsList" [value]="item._id">
-            {{ item.item_name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="entry-col">
-        <label>Product</label>
-        <select style="width: 100%" (change)="selectProduct($event)">
-          <option value="">Select Product</option>
-          <option *ngFor="let p of productsList" [value]="p._id">
-            {{ p.product_name }}
-          </option>
-        </select>
-      </div>
-
-      <div class="entry-col">
-        <label>Event Name</label>
-        <input
-          type="text"
-          style="width: 100%"
-          [(ngModel)]="entryEventName"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </div>
-
-      <div class="entry-col">
-        <label>Qty</label>
-        <input
-          type="number"
-          style="width: 80px"
-          [(ngModel)]="entryQty"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </div>
-
-      <div class="entry-col">
-        <label>Rate</label>
-        <input
-          type="number"
-          style="width: 120px"
-          [(ngModel)]="entryRate"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </div>
-
-      <div class="entry-col">
-        <label>Total</label>
-        <input
-          type="text"
-          style="width: 120px; background: #f0f0f0"
-          [value]="entryTotal"
-          readonly
-        />
-      </div>
-
-      <div class="entry-col">
-        <label>Place</label>
-        <input
-          type="text"
-          style="width: 100px"
-          [(ngModel)]="entryPlace"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </div>
-
-      <div class="entry-col">
-        <label>Time</label>
-        <input
-          type="time"
-          style="width: 120px"
-          [(ngModel)]="entryTime"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </div>
-
-      <div class="entry-col">
-        <!-- <label>&nbsp;</label> -->
-        <button type="button" class="btn-add" (click)="addItem()">+</button>
-      </div>
-      <div class="entry-col">
-        <button class="btn-cancel" (click)="resetEntryFields()">x</button>
-      </div>
-    </div>
-
     <!-- TABLE -->
     <div class="table-section">
       <table>
@@ -232,8 +129,7 @@
             <th>Qty</th>
             <th>Rate</th>
             <th>Total</th>
-            <th>Time</th>
-            <th>Action</th>
+            <!-- <th>Action</th> -->
           </tr>
         </thead>
 
@@ -284,11 +180,11 @@
               />
             </td>
 
-            <td style="width: 40px">
+            <!-- <td style="width: 40px">
               <button type="button" class="btn-remove" (click)="removeItem(i)">
                 ✖
               </button>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>

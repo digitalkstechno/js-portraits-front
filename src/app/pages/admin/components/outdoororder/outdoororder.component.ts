@@ -217,41 +217,6 @@ export class OutdoororderComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  selectItemByRow(event: any, index: number) {
-    const selectedName = event.target.value;
-
-    // Find the item object from your list based on the name typed/selected
-    const item = this.itemsList.find((i) => i.item_name === selectedName);
-
-    if (item) {
-      // 1. Fetch products specifically for this item
-      this.itemService.getProductByItem(item._id).subscribe((res: any) => {
-        // NOTE: If your productsList is shared, it will update for all rows.
-        // For a more advanced setup, you'd store products in an array per row index.
-        this.productsList = res.data || res;
-      });
-
-      // 2. Optionally clear the product and rate if the item changed
-      const row = this.items.at(index);
-      row.patchValue({
-        productId: '',
-        rate: 0,
-      });
-    }
-  }
-
-  // Logic for the Entry Strip (The inputs above the table)
-  selectedItemForEntry: any = null;
-
-  selectItem(itemId: any) {
-    const item = this.itemsList.find((i) => i._id === itemId);
-    this.selectedItemForEntry = item;
-
-    this.itemService.getProductByItem(itemId).subscribe((res: any) => {
-      this.productsList = res.data || res; // Adjust based on your API response structure
-    });
-  }
-
   // Variables for Entry Strip
   entryDate = new Date().toISOString().split('T')[0];
   entryEventName: string = '';
@@ -261,44 +226,9 @@ export class OutdoororderComponent implements OnInit {
   entryTime: string = '';
   selectedProductId: string = '';
 
-  // Jab Product select karein, rate auto-fill ho jaye
-  selectProduct(event: any) {
-    this.selectedProductId = event.target.value;
-    const product = this.productsList.find(
-      (p) => p._id === this.selectedProductId,
-    );
-    if (product) {
-      this.entryRate = product.bill_rate || 0;
-    }
-  }
-
   // Entry Strip ka Total calculate karne ke liye
   get entryTotal(): number {
     return this.entryQty * this.entryRate;
-  }
-
-  // addItem() mein dono values patch karein
-  addItem() {
-    const product = this.productsList.find(
-      (p) => p._id === this.selectedProductId,
-    );
-
-    const newItem = this.createItem();
-    newItem.patchValue({
-      date: this.entryDate,
-      itemName: this.selectedItemForEntry.item_name,
-      productName: product ? product.product_name : '', // Yahan Name jayega
-      productId: this.selectedProductId, // Yahan ID jayegi
-      eventName: this.entryEventName,
-      qty: this.entryQty,
-      rate: this.entryRate,
-      total: this.entryTotal,
-      place: this.entryPlace,
-      time: this.entryTime,
-    });
-
-    this.items.push(newItem);
-    this.resetEntryFields();
   }
 
   clear() {
@@ -308,32 +238,6 @@ export class OutdoororderComponent implements OnInit {
       date: new Date().toISOString().split('T')[0],
       orderNo: this.count,
     });
-  }
-
-  resetEntryFields() {
-    this.entryDate = '';
-    this.entryEventName = '';
-    this.entryQty = 0;
-    this.entryRate = 0;
-    this.entryPlace = '';
-    this.entryTime = '';
-    this.selectedProductId = '';
-
-    this.itemsList = [];
-    this.productsList = [];
-  }
-  // Update rate when product is selected in the table row
-  onProductChange(index: number) {
-    const row = this.items.at(index);
-    const productId = row.value.productId;
-    const product = this.productsList.find((p) => p._id === productId);
-
-    if (product) {
-      row.patchValue({
-        rate: product.bill_rate || 0,
-        // Total calculation is handled by the valueChanges subscription inside createItem()
-      });
-    }
   }
 
   onSubmit() {
