@@ -23,4 +23,9 @@ export class PendingpaymentsreportComponent {
   getTotalPending() {
     return this.pendingList.reduce((acc, curr) => acc + curr.balanceDue, 0);
   }
+
+  getAvgPending() {
+    if (this.pendingList.length === 0) return 0;
+    return this.getTotalPending() / this.pendingList.length;
+  }
 }
