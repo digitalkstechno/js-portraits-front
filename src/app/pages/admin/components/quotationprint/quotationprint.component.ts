@@ -12,5 +12,8 @@ export class QuotationprintComponent {
   @Input() showRate: boolean = true;
   @Input() showDiscount: boolean = true;
   @Input() terms: any[] = []; // Jo Master se humne banaye the
-  dummyRows = Array.from({ length: 8 }); // jitna space chahiye utne rows
+
+  ngOnInit(){
+    console.log("quotation data", this.data);
+  }
 }

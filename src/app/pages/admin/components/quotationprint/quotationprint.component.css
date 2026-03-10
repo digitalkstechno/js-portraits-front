@@ -326,21 +326,31 @@ body {
 }
 
 @media print {
-  @page {
-    size: A4;
-    margin: 0;
-  }
   body {
-    margin: 0;
-    padding: 0;
     background: white;
+    padding: 0;
   }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .print-wrapper,
+  .print-wrapper * {
+    visibility: visible;
+  }
+
   .print-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 210mm;
+    min-height: 297mm;
     box-shadow: none;
     margin: 0;
-    page-break-after: always;
   }
+
   .no-print {
-    display: none;
+    display: none !important;
   }
 }

@@ -46,8 +46,8 @@
         <th style="width: 35%" class="text-left">Detail Notes</th>
         <th style="width: 12%">Event Name</th>
         <th style="width: 8%">Qnty</th>
-        <th style="width: 10%">Rate</th>
-        <th style="width: 18%">Total</th>
+        <th style="width: 10%" *ngIf="showRate">Rate</th>
+        <th style="width: 18%" *ngIf="showRate">Total</th>
       </tr>
     </thead>
     <tbody id="itemsBody">
@@ -60,8 +60,8 @@
         </td>
         <td class="text-center">VIVEK CEREMONY JANELIET</td>
         <td class="text-center">1</td>
-        <td class="text-end">15,590</td>
-        <td class="text-end">13350.00</td>
+        <td class="text-end" *ngIf="showRate">15,590</td>
+        <td class="text-end" *ngIf="showRate">13350.00</td>
       </tr>
       <tr>
         <td class="text-center">2</td>
@@ -72,8 +72,8 @@
         </td>
         <td class="text-center">VIVEK CEREMONY JANELIET</td>
         <td class="text-center">1</td>
-        <td class="text-end">15,590</td>
-        <td class="text-end">13350.00</td>
+        <td class="text-end" *ngIf="showRate">15,590</td>
+        <td class="text-end" *ngIf="showRate">13350.00</td>
       </tr>
       <tr>
         <td class="text-center">3</td>
@@ -84,8 +84,8 @@
         </td>
         <td class="text-center">VIVEK CEREMONY JANELIET</td>
         <td class="text-center">1</td>
-        <td class="text-end">15,590</td>
-        <td class="text-end">13350.00</td>
+        <td class="text-end" *ngIf="showRate">15,590</td>
+        <td class="text-end" *ngIf="showRate">13350.00</td>
       </tr>
       <tr>
         <td class="text-center">4</td>
@@ -96,44 +96,8 @@
         </td>
         <td class="text-center">VIVEK CEREMONY JANELIET</td>
         <td class="text-center">1</td>
-        <td class="text-end">15,590</td>
-        <td class="text-end">13350.00</td>
-      </tr>
-      <tr class="empty-row">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr class="empty-row">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr class="empty-row">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr class="empty-row">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td class="text-end" *ngIf="showRate">15,590</td>
+        <td class="text-end" *ngIf="showRate">13350.00</td>
       </tr>
     </tbody>
   </table>
@@ -151,7 +115,7 @@
         </div>
       </div>
       <div class="total-section">
-        <div class="discount-row">
+        <div class="discount-row" *ngIf="showDiscount">
           <div class="discount-label">Discount:</div>
           <div class="discount-value">0.00</div>
         </div>
