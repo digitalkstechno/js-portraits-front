@@ -69,29 +69,27 @@ export class PurchaseitemsComponent {
 
   calculateGrandTotal() {
     let subTotal = 0;
-
-    // Summing up items in the table
     this.itemsFormArray.controls.forEach((c: any) => {
       subTotal += c.get('total')?.value || 0;
     });
 
-    const f = this.productSellForm.value;
+    const f = this.productSellForm.getRawValue();
     const taxable = subTotal - (f.discount || 0);
-
-    // AUTO-CALCULATION using the rate from the OTHER panel
     const totalGstAmt = (taxable * this.fixedGstRate) / 100;
     const netTotal = taxable + totalGstAmt;
+    const paid = f.amountPaid || 0;
 
     this.productSellForm.patchValue(
       {
         subTotal: subTotal.toFixed(2),
-        totalGst: totalGstAmt.toFixed(2), // This matches your Mongoose Schema
+        totalGst: totalGstAmt.toFixed(2),
         grandTotal: netTotal.toFixed(2),
-        balanceDue: (netTotal - (f.advance || 0)).toFixed(2),
+        balanceDue: (netTotal - paid).toFixed(2),
       },
       { emitEvent: false },
     );
   }
+
   initForms() {
     this.productSellForm = this.fb.group({
       bookName: [''],
@@ -109,7 +107,7 @@ export class PurchaseitemsComponent {
       // Naye Payment Fields
       paymentMode: ['Cash'],
       transactionId: [''],
-      advance: [0], // Isse hi hum Amount Paid maan rahe hain
+      amountPaid: [0],
       balanceDue: [0],
     });
 
@@ -237,12 +235,9 @@ export class PurchaseitemsComponent {
       date: [val.date],
       itemName: [val.itemName],
       productName: [val.productName],
-      event: [val.event],
       qty: [val.qty],
       rate: [val.rate],
       total: [val.qty * val.rate],
-      place: [val.place],
-      time: [val.time],
     });
     this.itemsFormArray.push(itemGroup);
     this.calculateGrandTotal();
@@ -282,27 +277,16 @@ export class PurchaseitemsComponent {
 
     // 4. Reset Main Bill Form
     this.productSellForm.reset({
-      book: '',
+      bookName: '',
       billNo: '',
-      date: new Date().toISOString().split('T')[0],
-      outdoorParty: '',
-      address: '',
-      orderNo: '',
-      gstType: '',
-      govt: '',
-      coupleName: '',
-      gst: '',
-      package: '',
+      sellDate: new Date().toISOString().split('T')[0],
+      partyName: '',
+      contactNo: '',
       subTotal: 0,
       discount: 0,
-      cgstPerc: 0,
-      cgstAmt: 0,
-      sgstPerc: 0,
-      sgstAmt: 0,
-      igstPerc: 0,
-      igstAmt: 0,
-      netTotal: 0,
-      advance: 0,
+      totalGst: 0,
+      grandTotal: 0,
+      amountPaid: 0,
       balanceDue: 0,
     });
   }
