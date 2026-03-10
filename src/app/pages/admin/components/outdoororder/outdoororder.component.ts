@@ -28,6 +28,7 @@ export class OutdoororderComponent implements OnInit {
   entryDate = new Date().toISOString().split('T')[0];
   entryQty: number = 0;
   entryRate: number = 0;
+  fixedGstRate: number = 0; // Config se aayega
 
   ngOnInit() {
     this.orderForm = this.fb.group({
@@ -140,24 +141,24 @@ export class OutdoororderComponent implements OnInit {
 
   calculateSubtotal() {
     let subtotal = 0;
-
-    // 1. Calculate sum of all item totals
     this.items.controls.forEach((row: any) => {
       subtotal += row.get('total')?.value || 0;
     });
 
-    // 2. Get Discount and Advance from form
-    const discount = this.orderForm.get('discount')?.value || 0;
-    const advance = this.orderForm.get('advance')?.value || 0;
+    const f = this.orderForm.getRawValue();
+    const taxable = subtotal - (f.discount || 0);
 
-    // 3. Grand Total logic
-    const grand = subtotal - discount - advance;
+    // GST Calculation
+    const totalGstAmt = (taxable * this.fixedGstRate) / 100;
+    const netTotal = taxable + totalGstAmt;
+    const paid = f.advance || 0;
 
-    // 4. Update the form without triggering another 'valueChanges' event
     this.orderForm.patchValue(
       {
-        subTotal: subtotal,
-        grandTotal: grand,
+        subTotal: subtotal.toFixed(2),
+        totalGst: totalGstAmt.toFixed(2),
+        grandTotal: netTotal.toFixed(2),
+        balanceDue: (netTotal - paid).toFixed(2),
       },
       { emitEvent: false },
     );
