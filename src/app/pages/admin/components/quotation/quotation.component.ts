@@ -5,10 +5,11 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ItemsService } from '../../master/service/items.service';
 import { AdminService } from '../service/admin.service';
 import { PdfService } from '../service/pdf-service/pdf.service';
+import { QuotationprintComponent } from "../quotationprint/quotationprint.component";
 
 @Component({
   selector: 'app-quotation',
-  imports: [SHARED_MODULES],
+  imports: [SHARED_MODULES, QuotationprintComponent],
   templateUrl: './quotation.component.html',
   styleUrl: './quotation.component.css',
 })
@@ -29,6 +30,7 @@ export class QuotationComponent {
   isError = false;
   showPopup = false;
   popupMessage = '';
+  savedTermsFromMaster: any[] = [];
 
   // ENTRY FORM (Item Entry Strip)
   entryForm: FormGroup = this.fb.group({
@@ -76,6 +78,7 @@ export class QuotationComponent {
 
     this.loadItems();
     this.loadCustomers();
+    this.loadTerms();
   }
 
   // LOAD ITEMS
@@ -93,6 +96,13 @@ export class QuotationComponent {
   loadCustomers() {
     this.quotationService.getCustomers().subscribe((res: any) => {
       this.parties = res.data || res;
+    });
+  }
+
+  loadTerms() {
+    this.quotationService.getTermsAndConditions().subscribe((res: any) => {
+      const existingConditions = res.data?.conditions || [];
+      this.savedTermsFromMaster = existingConditions;
     });
   }
 
@@ -296,15 +306,17 @@ export class QuotationComponent {
     this.router.navigateByUrl('/admin');
   }
 
-  // Print handler function
-  printQuotation(showRate: boolean, showDiscount: boolean) {
-    const quotationData = this.quotationForm.value;
-    // Items array ko fetch karein (maan lijiye items aapke form ya table mein hain)
-    const items = this.itemsList;
+  printConfig = { rate: true, disc: true };
+  quotationData: any; // API se aaya hua data
+  showRate: boolean = true;
+  showDiscount: boolean = true;
 
-    this.pdfService.generateDynamicPDF(quotationData, items, {
-      showRate: showRate,
-      showDiscount: showDiscount,
-    });
+  printQuotation(rate: boolean, discount: boolean) {
+    this.showRate = rate;
+    this.showDiscount = discount;
+
+    setTimeout(() => {
+      window.print();
+    }, 200);
   }
 }

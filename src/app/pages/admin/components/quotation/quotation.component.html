@@ -307,3 +307,11 @@
     <span class="message">{{ popupMessage }}</span>
   </div>
 </div>
+<div class="print-area">
+  <app-quotationprint
+    [data]="quotationData"
+    [showRate]="showRate"
+    [showDiscount]="showDiscount"
+    [terms]="savedTermsFromMaster">
+  </app-quotationprint>
+</div>
