@@ -118,102 +118,85 @@
     </div>
 
     <!-- TABLE -->
-    <div class="table-section">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Item Name</th>
-            <th>Product</th>
-            <th>Event</th>
-            <th>Qty</th>
-            <th>Rate</th>
-            <th>Total</th>
-            <!-- <th>Action</th> -->
-          </tr>
-        </thead>
+    <div class="content-body" style="display: flex; gap: 15px; padding: 10px">
+      <div class="table-section" style="flex: 1; overflow-x: auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Item Name</th>
+              <th>Product</th>
+              <th>Event</th>
+              <th>Qty</th>
+              <th>Rate</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="items">
+            <tr
+              *ngFor="let item of items.controls; let i = index"
+              [formGroupName]="i"
+            >
+              <td style="width: 120px">
+                <input type="text" formControlName="date" />
+              </td>
+              <td><input type="text" formControlName="itemName" readonly /></td>
+              <td>
+                <input type="text" formControlName="productName" readonly />
+              </td>
+              <td><input type="text" formControlName="eventName" /></td>
+              <td style="width: 60px">
+                <input
+                  type="number"
+                  formControlName="qty"
+                  class="text-center"
+                />
+              </td>
+              <td style="width: 90px">
+                <input
+                  type="number"
+                  formControlName="rate"
+                  class="text-center"
+                />
+              </td>
+              <td style="width: 100px; font-weight: bold">
+                <input
+                  type="number"
+                  formControlName="total"
+                  readonly
+                  class="text-center"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-        <tbody formArrayName="items">
-          <tr
-            *ngFor="let item of items.controls; let i = index"
-            [formGroupName]="i"
-          >
-            <td style="width: 120px">
-              <input type="text" formControlName="date" placeholder="---" />
-            </td>
+      <div class="footer-summary" style="width: 320px">
+        <div class="summary-box payment-sidebar">
+          <div class="summary-row">
+            <label>Subtotal</label>
+            <input type="text" formControlName="subTotal" readonly />
+          </div>
 
-            <td>
-              <input type="text" formControlName="itemName" readonly />
-            </td>
+          <div class="summary-row">
+            <label>Discount</label>
+            <input type="text" formControlName="discount" />
+          </div>
 
-            <td>
-              <input type="text" formControlName="productName" readonly />
+          <div class="summary-row">
+            <label>Grand Total</label>
+            <input
+              type="text"
+              formControlName="grandTotal"
+              readonly
+              class="highlight-total"
+            />
+          </div>
 
-              <input type="hidden" formControlName="productId" />
-            </td>
-            <td>
-              <input type="text" formControlName="eventName" />
-            </td>
+          <hr class="divider" />
 
-            <td style="width: 60px">
-              <input
-                type="number"
-                formControlName="qty"
-                style="text-align: center"
-              />
-            </td>
-
-            <td style="width: 90px">
-              <input
-                type="number"
-                formControlName="rate"
-                style="text-align: center"
-              />
-            </td>
-
-            <td style="width: 100px; font-weight: bold">
-              <input
-                type="number"
-                formControlName="total"
-                readonly
-                style="text-align: center"
-              />
-            </td>
-
-            <!-- <td style="width: 40px">
-              <button type="button" class="btn-remove" (click)="removeItem(i)">
-                ✖
-              </button>
-            </td> -->
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="footer-summary">
-      <div class="summary-box">
-        <div class="summary-row">
-          <label>Subtotal</label>
-          <input type="text" formControlName="subTotal" />
-        </div>
-
-        <div class="summary-row">
-          <label>Discount</label>
-          <input type="text" formControlName="discount" />
-        </div>
-
-        <div class="summary-row">
-          <label>Advance</label>
-          <input type="text" formControlName="advance" />
-        </div>
-
-        <div class="summary-row">
-          <label>Grand Total</label>
-          <input type="text" formControlName="grandTotal" />
-        </div>
-
-        <div class="summary-row">
+          <div class="summary-row">
             <label>Payment Mode</label>
             <select formControlName="paymentMode" class="editable-input">
               <option value="Cash">Cash</option>
@@ -232,9 +215,26 @@
               type="text"
               formControlName="transactionId"
               placeholder="UPI/UTR No."
-              class="editable-input"
             />
           </div>
+
+          <div class="summary-row">
+            <label style="color: #2f855a; font-weight: bold">Amount Paid</label>
+            <input type="text" formControlName="advance" class="paid-input" />
+          </div>
+
+          <div class="summary-row balance-row">
+            <label>Balance Due</label>
+            <input
+              type="text"
+              [value]="
+                orderForm.get('grandTotal')?.value -
+                orderForm.get('advance')?.value
+              "
+              readonly
+            />
+          </div>
+        </div>
       </div>
     </div>
 
