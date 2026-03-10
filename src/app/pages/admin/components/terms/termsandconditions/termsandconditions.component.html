@@ -58,6 +58,7 @@
               <button
                 class="btn btn-sm btn-danger py-0"
                 (click)="removeCondition(i)"
+                *ngIf="!isOldTerm(i)"
               >
                 Remove Term
               </button>
