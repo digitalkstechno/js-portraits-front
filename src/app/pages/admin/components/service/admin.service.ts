@@ -161,4 +161,17 @@ export class AdminService {
   createTermsAndConditions(data: any): Observable<any> {
     return this.http.post<any>(Endpoints.TERMS_AND_CONDITIONS, data);
   }
+
+  // product sell
+  getProductSell(): Observable<any> {
+    return this.http.get<any>(Endpoints.PRODUCT_SELL);
+  }
+
+  saveProductSell(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.PRODUCT_SELL, data);
+  }
+
+  getProductSellCount(): Observable<any> {
+    return this.http.get<any>(`${Endpoints.PRODUCT_SELL}/count`);
+  }
 }

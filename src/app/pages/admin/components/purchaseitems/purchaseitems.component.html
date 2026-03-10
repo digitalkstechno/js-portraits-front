@@ -1,4 +1,4 @@
-<div class="window" [formGroup]="billForm">
+<div class="window" [formGroup]="productSellForm">
   <div class="title-bar">
     <span>Product Sell</span>
     <button class="close-btn" (click)="close()">✖</button>
@@ -12,7 +12,7 @@
           <input
             type="text"
             style="width: 80px"
-            formControlName="book"
+            formControlName="bookName"
             placeholder="BNI"
             (input)="filterBooks($event)"
           />
@@ -37,7 +37,7 @@
         </div>
         <div class="field-item">
           <label>Date</label>
-          <input type="date" formControlName="date" style="width: 190px" />
+          <input type="date" formControlName="purchaseDate" style="width: 260px" />
         </div>
       </div>
 
@@ -47,7 +47,7 @@
           <input
             type="text"
             style="width: 280px"
-            formControlName="outdoorParty"
+            formControlName="partyName"
             placeholder="Search Outdoor party"
             (input)="filterParty($event)"
           />
@@ -62,41 +62,23 @@
           </div>
         </div>
         <div class="field-item">
-          <label>Add</label>
-          <input type="text" formControlName="address" style="width: 190px" />
+          <label>Contact No</label>
+          <input type="text" formControlName="contactNo" style="width: 260px" />
         </div>
       </div>
 
       <div class="field-group">
         <div class="field-item">
-          <label>Quotation No.</label>
-          <input
-            type="text"
-            style="width: 92px"
-            formControlName="orderNo"
-            (keydown.enter)="$event.preventDefault(); searchQuotation()"
-            placeholder="Press Enter"
-          />
-        </div>
-        <div class="field-item">
           <label>GST Type</label
-          ><input type="text" formControlName="gstType" style="width: 92px" />
+          ><input type="text" formControlName="gstType" style="width: 280px" />
         </div>
         <div class="field-item">
           <label>Govt</label
-          ><input type="text" formControlName="govt" style="width: 280px" />
+          ><input type="text" formControlName="govt" style="width: 260px" />
         </div>
       </div>
 
       <div class="field-group">
-        <div class="field-item">
-          <label>Couple Name</label
-          ><input
-            type="text"
-            formControlName="coupleName"
-            style="width: 280px"
-          />
-        </div>
         <div class="field-item">
           <label>GST</label
           ><input type="text" formControlName="gst" style="width: 280px" />
@@ -104,10 +86,6 @@
       </div>
 
       <div class="field-group">
-        <div class="field-item">
-          <label>Package</label
-          ><input type="text" formControlName="package" style="width: 280px" />
-        </div>
       </div>
     </div>
 
@@ -121,8 +99,8 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ billForm.value.billNo }}</td>
-            <td>{{ billForm.value.date | date: "dd/MM/yyyy" }}</td>
+            <td>{{ productSellForm.value.billNo }}</td>
+            <td>{{ productSellForm.value.purchaseDate | date: "dd/MM/yyyy" }}</td>
           </tr>
         </tbody>
       </table>
@@ -175,10 +153,6 @@
       </div>
     </div>
 
-    <div class="entry-col" style="flex: 1">
-      <label>Event Name</label
-      ><input type="text" formControlName="event" style="width: 100%" />
-    </div>
     <div class="entry-col">
       <label>Qty</label
       ><input type="number" formControlName="qty" style="width: 80px" />
@@ -194,15 +168,8 @@
         [value]="entryForm.value.qty * entryForm.value.rate"
         readonly
         style="width: 90px; text-align: right"
+        formControlName="amount"
       />
-    </div>
-    <div class="entry-col">
-      <label>Place</label
-      ><input type="text" formControlName="place" style="width: 100px" />
-    </div>
-    <div class="entry-col">
-      <label>Time</label
-      ><input type="time" formControlName="time" style="width: 80px" />
     </div>
 
     <div class="entry-col">
@@ -221,12 +188,9 @@
             <th width="80">Date</th>
             <th>Item Name</th>
             <th>Product</th>
-            <th>Event</th>
             <th>Qty</th>
             <th>Rate</th>
             <th>Total</th>
-            <th>Place</th>
-            <th>Time</th>
           </tr>
         </thead>
         <tbody>
@@ -234,12 +198,9 @@
             <td>{{ item.date | date: "dd/MM/yyyy" }}</td>
             <td>{{ item.itemName }}</td>
             <td>{{ item.productName }}</td>
-            <td>{{ item.event }}</td>
             <td class="text-center">{{ item.qty }}</td>
             <td class="text-right">{{ item.rate }}</td>
             <td class="text-right">{{ item.total }}</td>
-            <td>{{ item.place }}</td>
-            <td>{{ item.time }}</td>
           </tr>
         </tbody>
       </table>

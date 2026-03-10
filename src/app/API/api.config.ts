@@ -20,4 +20,5 @@ export const Endpoints = {
   CUSTOMERS: `${baseUrl}/outdoorParty`,
   NOTE_SETTINGS: `${baseUrl}/noteSettings`,
   TERMS_AND_CONDITIONS: `${baseUrl}/termsAndConditions`,
+  PRODUCT_SELL: `${baseUrl}/productSell`,
 };

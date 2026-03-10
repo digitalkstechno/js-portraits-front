@@ -17,7 +17,7 @@ export class PurchaseitemsComponent {
   billService = inject(AdminService);
   router = inject(Router);
 
-  billForm!: FormGroup;
+  productSellForm!: FormGroup;
   entryForm!: FormGroup;
   count: any;
 
@@ -36,12 +36,12 @@ export class PurchaseitemsComponent {
 
   ngOnInit() {
     this.initForms();
-    this.billService.getOutdoorBillCount().subscribe((res) => {
+    this.billService.getProductSellCount().subscribe((res) => {
       // console.log(res.count);
       const count = res.count;
       this.count = count + 1;
       // console.log(this.count);
-      this.billForm.patchValue({
+      this.productSellForm.patchValue({
         billNo: this.count,
       });
     });
@@ -50,24 +50,22 @@ export class PurchaseitemsComponent {
     this.loadBooks();
 
     // Jab bhi discount, tax ya advance badle, calculation refresh ho
-    this.billForm.valueChanges.subscribe(() => {
+    this.productSellForm.valueChanges.subscribe(() => {
       this.calculateGrandTotal();
     });
   }
 
   initForms() {
-    this.billForm = this.fb.group({
-      book: [''],
+    this.productSellForm = this.fb.group({
+      bookName: [''],
       billNo: [this.count],
-      date: [new Date().toISOString().split('T')[0]],
-      outdoorParty: [''],
-      address: [''],
-      orderNo: [''],
+      purchaseDate: [new Date().toISOString().split('T')[0]],
+      partyName: [''],
+      contactNo: [''],
+      
       gstType: [''],
       govt: [''],
-      coupleName: [''],
       gst: [''],
-      package: [''],
       items: this.fb.array([]),
       subTotal: [0],
       discount: [0],
@@ -88,12 +86,9 @@ export class PurchaseitemsComponent {
       itemId: [''],
       productName: ['', Validators.required],
       productId: [''],
-      event: [''],
       qty: [],
       rate: [0],
       amount: [0],
-      place: [''],
-      time: [''],
     });
   }
 
@@ -129,8 +124,8 @@ export class PurchaseitemsComponent {
   }
 
   selectParty(party: any) {
-    this.billForm.patchValue({
-      outdoorParty: party.name,
+    this.productSellForm.patchValue({
+      partyName: party.name,
     });
 
     this.filteredCustomers = [];
@@ -150,18 +145,18 @@ export class PurchaseitemsComponent {
   }
 
   selectBook(book: any) {
-    this.billForm.patchValue({
-      book: book.bookName,
+    this.productSellForm.patchValue({
+      bookName: book.bookName,
     });
     this.filteredBooks = [];
   }
 
   searchQuotation() {
-    const qNo = this.billForm.get('orderNo')?.value;
+    const qNo = this.productSellForm.get('orderNo')?.value;
 
     this.billService.getQuotationByNumber(qNo).subscribe((res: any) => {
       // Patch Main Form
-      this.billForm.patchValue({
+      this.productSellForm.patchValue({
         date: this.formatDate(res.date),
         outdoorParty: res.outdoorParty,
         contactNo: res.contactNo,
@@ -238,7 +233,7 @@ export class PurchaseitemsComponent {
 
   // --- TABLE & TOTALS LOGIC ---
   get itemsFormArray() {
-    return this.billForm.get('items') as FormArray;
+    return this.productSellForm.get('items') as FormArray;
   }
 
   addItem() {
@@ -266,7 +261,7 @@ export class PurchaseitemsComponent {
       (c: any) => (subTotal += c.get('total')?.value || 0),
     );
 
-    const f = this.billForm.value;
+    const f = this.productSellForm.value;
     const taxable = subTotal - f.discount;
 
     const cgstAmt = (taxable * f.cgstPerc) / 100;
@@ -275,7 +270,7 @@ export class PurchaseitemsComponent {
 
     const netTotal = taxable + cgstAmt + sgstAmt + igstAmt;
 
-    this.billForm.patchValue(
+    this.productSellForm.patchValue(
       {
         subTotal,
         cgstAmt: cgstAmt.toFixed(2),
@@ -320,7 +315,7 @@ export class PurchaseitemsComponent {
     }
 
     // 4. Reset Main Bill Form
-    this.billForm.reset({
+    this.productSellForm.reset({
       book: '',
       billNo: '',
       date: new Date().toISOString().split('T')[0],
@@ -359,12 +354,12 @@ export class PurchaseitemsComponent {
   }
 
   onSubmit() {
-    if (this.billForm.invalid) {
-      this.billForm.markAllAsTouched();
+    if (this.productSellForm.invalid) {
+      this.productSellForm.markAllAsTouched();
       return;
     }
 
-    const formValue = this.billForm.value;
+    const formValue = this.productSellForm.value;
 
     const payload = {
       book: formValue.book,
