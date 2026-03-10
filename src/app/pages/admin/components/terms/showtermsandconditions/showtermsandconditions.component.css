@@ -1,4 +1,7 @@
 .master-window {
+  position: absolute;
+  top: 72px;
+  left: 930px;
   width: 750px;
   background-color: #d6eaf8; /* ERP Light Blue */
   border: 2px solid #2e86c1;

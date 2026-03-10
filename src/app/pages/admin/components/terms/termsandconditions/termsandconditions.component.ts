@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { SHARED_MODULES } from '../../../../../constants/sharedModule';
 import { Router } from '@angular/router';
@@ -15,6 +15,7 @@ export class TermsandconditionsComponent {
   router = inject(Router);
   service = inject(AdminService);
   selectedIndex = 0; // Default pehla item khulega
+  private cdr = inject(ChangeDetectorRef); // Inject karein
 
   constructor(private fb: FormBuilder) {}
 
@@ -52,22 +53,31 @@ export class TermsandconditionsComponent {
     return this.termsForm.get('conditions') as FormArray;
   }
 
-  isOldTerm(index: number): boolean {
-    const control = this.conditions.at(index);
-    // Agar header mein pehle se value hai jab page load hua tha, toh use readonly rakhein
-    // Iske liye aap ek hidden field 'isNew' bhi use kar sakte hain
-    return control.value.header !== '' && !control.get('isNew')?.value;
+  // 1. trackBy function (Must have for FormArray)
+  trackByFn(index: number, item: any) {
+    return index; // Ya agar unique ID hai toh wo use karein
   }
 
-  // Naya T&C block add karne ke liye
+  // 2. isOldTerm fix (ensure it's safe)
+  isOldTerm(index: number): boolean {
+    const control = this.conditions.at(index);
+    if (!control) return false;
+
+    const isNew = control.get('isNew')?.value;
+    if (isNew === true) return false;
+
+    // Agar header bhara hua hai aur naya nahi hai, tabhi readonly karein
+    return !!control.value.header;
+  }
+
+  // 3. addCondition fix
   addCondition() {
     const conditionGroup = this.fb.group({
       header: [''],
       body: [''],
-      isNew: [true],
+      isNew: [true], // Flag to keep it editable
     });
     this.conditions.push(conditionGroup);
-    this.selectedIndex = this.conditions.length - 1; // Focus on last added
   }
 
   // Row delete karne ke liye

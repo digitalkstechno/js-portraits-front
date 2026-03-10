@@ -1,4 +1,4 @@
-<div class="window-container" [formGroup]="termsForm">
+<div class="window-container">
   <div class="title-bar d-flex justify-content-between align-items-center">
     <div class="flex-grow-1 text-center fw-bold">
       Terms & Conditions Settings
@@ -6,62 +6,98 @@
     <button class="btn-close-custom" (click)="onExit()">×</button>
   </div>
 
-  <div class="window-body p-3">
-    <div formArrayName="conditions">
-      <div
-        *ngFor="let item of conditions.controls; let i = index"
-        [formGroupName]="i"
-        class="terms-block mb-3 p-2 border border-primary-subtle"
-      >
-        <div class="d-flex justify-content-between mb-2" *ngIf="!item.value.header && !item.value.body">
-          <span class="badge bg-primary">Condition #{{ i + 1 }}</span>
-          <button
-            class="btn btn-sm btn-danger py-0"
-            (click)="removeCondition(i)"
-          >
-            Remove
-          </button>
-        </div>
+  <div class="window-body d-flex p-0" style="height: 450px; background: white">
+    <div
+      class="sidebar-list border-end border-secondary bg-white"
+      style="width: 220px; display: flex; flex-direction: column"
+    >
+      <div class="list-header p-2 fw-bold small border-bottom bg-light">
+        Headings
+      </div>
 
-        <div class="row mb-2 align-items-center">
-          <label class="col-sm-3 fw-bold small">Heading :</label>
-          <div class="col-sm-9">
-            <input
-              type="text"
-              formControlName="header"
-              class="form-control form-control-sm border-dark"
-              placeholder="e.g. Payment Terms"
-              [readonly]="isOldTerm(i)" 
-              [style.background-color]="isOldTerm(i) ? '#e9ecef' : 'white'"
-            />
-          </div>
-        </div>
-
-        <div class="row align-items-start">
-          <label class="col-sm-3 fw-bold small">Content :</label>
-          <div class="col-sm-9">
-            <textarea
-              formControlName="body"
-              class="form-control custom-textarea"
-              placeholder="Enter details here..."
-              [readonly]="isOldTerm(i)" 
-              [style.background-color]="isOldTerm(i) ? '#e9ecef' : 'white'"
-            ></textarea>
-          </div>
+      <div class="scroll-area" style="flex-grow: 1; overflow-y: auto">
+        <div
+          *ngFor="
+            let item of conditions.controls;
+            let i = index;
+            trackBy: trackByFn
+          "
+          (click)="selectedIndex = i"
+          [class.active-row]="selectedIndex === i"
+          class="list-item p-2 border-bottom small cursor-pointer"
+        >
+          {{ i + 1 }}. {{ item.value.header || "New Term..." }}
         </div>
       </div>
-    </div>
 
-    <div class="d-flex justify-content-between mt-3 border-top pt-3">
-      <button class="btn-action" (click)="addCondition()">
+      <button
+        class="btn-add-sidebar w-100"
+        (click)="addCondition()"
+        style="
+          background: #27ae60;
+          color: white;
+          border: none;
+          padding: 8px;
+          font-weight: bold;
+        "
+      >
         + Add New Term
       </button>
-      <div class="d-flex gap-2">
-        <button class="btn-action" (click)="onSubmit()">Save Settings</button>
-        <button class="btn-action" (click)="onExit()">Exit</button>
-        <button class="btn-action" (click)="onView()">View</button>
+    </div>
+
+    <div class="editor-area flex-grow-1 p-3 bg-light" [formGroup]="termsForm">
+      <div formArrayName="conditions" *ngIf="conditions.length > 0">
+        <ng-container *ngFor="let item of conditions.controls; let i = index">
+          <div
+            [formGroupName]="i"
+            *ngIf="selectedIndex === i"
+            class="editor-content"
+          >
+            <div class="d-flex justify-content-between mb-3">
+              <span class="badge bg-primary">Condition #{{ i + 1 }}</span>
+              <button
+                class="btn btn-sm btn-danger py-0"
+                (click)="removeCondition(i)"
+              >
+                Remove Term
+              </button>
+            </div>
+
+            <div class="mb-3">
+              <label class="fw-bold small d-block">Heading :</label>
+              <input
+                type="text"
+                formControlName="header"
+                class="form-control form-control-sm border-dark"
+                [readonly]="isOldTerm(i)"
+                [style.background-color]="isOldTerm(i) ? '#e9ecef' : 'white'"
+              />
+            </div>
+
+            <div>
+              <label class="fw-bold small d-block">Content :</label>
+              <textarea
+                formControlName="body"
+                class="form-control border-dark"
+                style="height: 250px; font-size: 13px"
+                [readonly]="isOldTerm(i)"
+                [style.background-color]="isOldTerm(i) ? '#e9ecef' : 'white'"
+              ></textarea>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <div *ngIf="conditions.length === 0" class="text-center mt-5 text-muted">
+        No terms found. Click "+ Add New" to start.
       </div>
     </div>
+  </div>
+
+  <div class="p-2 border-top bg-light d-flex justify-content-end gap-2">
+    <button class="btn-action" (click)="onSubmit()">Save Settings</button>
+    <button class="btn-action" (click)="onExit()">Exit</button>
+    <button class="btn-action" (click)="onView()">View</button>
   </div>
 </div>
 <div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
