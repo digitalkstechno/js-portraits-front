@@ -87,6 +87,7 @@ export class AdminheaderComponent {
               link: '/admin/salary/individual-report',
             },
             { label: 'Overall Salary', link: '/admin/salary/overall-report' },
+            { label: 'Payments Report', link: '/admin/payments/report'},
             { label: 'Summary', link: '/admin/summary' },
           ],
         },

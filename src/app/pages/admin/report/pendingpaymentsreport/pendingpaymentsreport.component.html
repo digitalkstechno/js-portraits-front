@@ -1,0 +1,30 @@
+<div class="report-container">
+  <h2>Pending Payments Report</h2>
+
+  <table class="report-table">
+    <thead>
+      <tr>
+        <th>Bill No</th>
+        <th>Party Name</th>
+        <th class="text-right">Grand Total</th>
+        <th class="text-right">Amount Paid</th>
+        <th class="text-right">Balance Due</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of pendingList">
+        <td>{{ item.billNo }}</td>
+        <td>{{ item.partyName }}</td>
+        <td class="text-right">{{ item.grandTotal | number:'1.2-2' }}</td>
+        <td class="text-right">{{ item.amountPaid | number:'1.2-2' }}</td>
+        <td class="text-right balance-col">{{ item.balanceDue | number:'1.2-2' }}</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4" class="text-right">Total Outstanding:</td>
+        <td class="text-right total-outstanding">{{ getTotalPending() | number:'1.2-2' }}</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

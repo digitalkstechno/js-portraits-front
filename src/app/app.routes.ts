@@ -100,6 +100,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'payments/report',
+        loadComponent: () =>
+          import('./pages/admin/report/pendingpaymentsreport/pendingpaymentsreport.component').then(
+            (m) => m.PendingpaymentsreportComponent,
+          ),
+      },
+      {
         path: 'note-settings',
         loadComponent: () =>
           import('./pages/admin/components/notesettings/notesettings.component').then(
