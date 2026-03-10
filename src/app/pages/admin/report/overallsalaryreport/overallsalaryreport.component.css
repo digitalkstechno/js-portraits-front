@@ -191,3 +191,39 @@ tbody tr:hover {
   position: relative;
   height: 260px;
 }
+
+.btn-pdf {
+  background: #ef4444; /* Red for PDF */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-excel {
+  background: #10b981; /* Green for Excel */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-pdf:hover { background: #dc2626; }
+.btn-excel:hover { background: #059669; }
+
+/* Ensure table prints nicely if using browser print */
+@media print {
+  .chart-card, .stats-row, .btn-download {
+    display: none !important;
+  }
+  .table-wrapper {
+    width: 100%;
+  }
+}

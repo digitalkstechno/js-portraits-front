@@ -1,6 +1,17 @@
 <!-- staff-salary-report.component.html -->
 <div class="salary-report-window">
-  <h2>Staff Salary Reports</h2>
+  <div class="report-header-row" style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+    <h2>Staff Salary Reports</h2>
+    
+    <div class="actions" style="margin-left: auto; display: flex; gap: 10px;">
+      <button (click)="downloadPDF()" class="btn-pdf">
+        PDF Report
+      </button>
+      <button (click)="downloadReport()" class="btn-excel">
+        Excel Report
+      </button>
+    </div>
+  </div>
 
   <!-- Overall Employee Wise Summary -->
   <section class="section">

@@ -8,6 +8,9 @@ import {
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { StaffService } from '../../components/staff-management/service/staff.service';
+import * as XLSX from 'xlsx'; 
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 Chart.register(...registerables);
 
 interface StaffSalary {
@@ -254,5 +257,71 @@ export class OverallsalaryreportComponent implements AfterViewInit {
 
   private toDate(iso: string): string {
     return new Date(iso).toLocaleDateString('en-GB');
+  }
+
+  // Aapke existing loadStaffSalary ke niche ye function add karein
+  downloadReport() {
+    // 1. Data prepare karein (Table format ke liye)
+    const dataToExport = this.employeeTotals.map((row) => ({
+      'Employee Name': row.staffName,
+      'Total Paid (₹)': row.totalPaid,
+      'Last Paid Date': new Date(row.lastPaidOn).toLocaleDateString('en-GB'),
+    }));
+
+    // 2. Worksheet create karein
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataToExport);
+
+    // 3. Columns ki width set karein (Optional, for better look)
+    ws['!cols'] = [{ wch: 25 }, { wch: 15 }, { wch: 15 }];
+
+    // 4. Workbook create karke download karein
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Salary Report');
+
+    const fileName = `Staff_Salary_Report_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+  }
+
+  downloadPDF() {
+    const doc = new jsPDF();
+
+    // 1. Report Title & Header
+    doc.setFontSize(18);
+    doc.text('Staff Salary Report', 14, 20);
+
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 28);
+    doc.text(`Total Employees: ${this.employeeTotals.length}`, 14, 34);
+    doc.text(
+      `Total Amount Paid: Rs. ${this.totalPaid.toLocaleString('en-IN')}`,
+      14,
+      40,
+    );
+
+    // 2. Prepare Table Data
+    const head = [['Employee Name', 'Total Paid (INR)', 'Last Paid Date']];
+    const data = this.employeeTotals.map((row) => [
+      row.staffName,
+      `Rs. ${row.totalPaid.toLocaleString('en-IN')}`,
+      new Date(row.lastPaidOn).toLocaleDateString('en-GB'),
+    ]);
+
+    // 3. Generate Table (AutoTable)
+    autoTable(doc, {
+      startY: 45,
+      head: head,
+      body: data,
+      theme: 'striped', // Clean professional look
+      headStyles: { fillColor: [14, 165, 233] }, // Matches your blue theme (#0ea5e9)
+      styles: { fontSize: 10, cellPadding: 5 },
+      columnStyles: {
+        1: { halign: 'right' }, // Amount column right align
+      },
+    });
+
+    // 4. Save the PDF
+    const fileName = `Salary_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+    doc.save(fileName);
   }
 }
