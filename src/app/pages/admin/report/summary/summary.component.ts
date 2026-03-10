@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Chart, registerables } from 'chart.js';
+import { Chart, registerables, ChartOptions } from 'chart.js';
 
 Chart.register(...registerables); // Required in newer Chart.js versions
 
@@ -28,6 +28,7 @@ interface EmployeeReport {
 export class SummaryComponent implements OnInit, AfterViewInit {
   // Use ViewChild to reference the canvas safely
   @ViewChild('revenueChart') chartCanvas!: ElementRef;
+  @ViewChild('donutChart') donutCanvas!: ElementRef<HTMLCanvasElement>;
 
   reportData: EmployeeReport[] = [
     {
@@ -61,9 +62,51 @@ export class SummaryComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.initChart();
+    this.initDonutChart();
   }
 
   initChart() {
+    const options: ChartOptions<'line'> = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#e5e7eb',
+            boxWidth: 14,
+            usePointStyle: true,
+          },
+        },
+        tooltip: {
+          backgroundColor: '#020617',
+          borderColor: '#334155',
+          borderWidth: 1,
+          titleColor: '#e5e7eb',
+          bodyColor: '#cbd5f5',
+          padding: 10,
+        },
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#9ca3af',
+          },
+          grid: {
+            color: 'rgba(148,163,184,0.12)',
+          },
+        },
+        y: {
+          ticks: {
+            color: '#9ca3af',
+          },
+          grid: {
+            color: 'rgba(148,163,184,0.12)',
+          },
+        },
+      },
+    };
+
     new Chart(this.chartCanvas.nativeElement, {
       type: 'line',
       data: {
@@ -72,28 +115,88 @@ export class SummaryComponent implements OnInit, AfterViewInit {
           {
             label: 'Order Revenue',
             data: [12000, 19000, 15000, 22000],
-            borderColor: '#3b82f6',
-            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderColor: '#60a5fa',
+            backgroundColor: 'rgba(37, 99, 235, 0.25)',
             fill: true,
             tension: 0.4,
+            pointRadius: 4,
+            pointBackgroundColor: '#1d4ed8',
           },
           {
             label: 'Bill Revenue',
             data: [10000, 15000, 14000, 21000],
-            borderColor: '#10b981',
-            borderDash: [5, 5],
+            borderColor: '#34d399',
+            backgroundColor: 'transparent',
+            borderDash: [6, 6],
             fill: false,
             tension: 0.4,
+            pointRadius: 4,
+            pointBackgroundColor: '#22c55e',
           },
         ],
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'bottom' },
+      options,
+    });
+  }
+
+  initDonutChart() {
+    const ctx = this.donutCanvas.nativeElement;
+
+    const options: ChartOptions<'doughnut'> = {
+      cutout: '65%', // donut feel [web:26][web:29]
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            color: '#e5e7eb',
+            boxWidth: 14,
+            usePointStyle: true,
+          },
+        },
+        tooltip: {
+          backgroundColor: '#020617',
+          borderColor: '#334155',
+          borderWidth: 1,
+          titleColor: '#e5e7eb',
+          bodyColor: '#cbd5f5',
+          padding: 10,
         },
       },
+    };
+
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Total Revenue', 'Total Cost'],
+        datasets: [
+          {
+            data: [this.totalRevenue, this.totalCost],
+            backgroundColor: ['#22c55e', '#f97316'],
+            borderColor: ['#16a34a', '#ea580c'],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options,
     });
+  }
+
+  outdoorOrderRevenue = 45200;
+  outdoorBillRevenue = 38000;
+  totalSalaryCost = 12400;
+  totalPurchase = 12400;
+  totalSpend = 12400;
+
+  get totalRevenue(): number {
+    return this.outdoorOrderRevenue + this.outdoorBillRevenue;
+  }
+
+  get totalCost(): number {
+    return this.totalSalaryCost + this.totalPurchase + this.totalSpend;
+  }
+
+  get netProfit(): number {
+    return this.totalRevenue - this.totalCost;
   }
 }

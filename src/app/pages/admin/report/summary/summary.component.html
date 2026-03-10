@@ -1,65 +1,105 @@
 <div class="dashboard-wrapper">
+  <!-- KPI CARDS -->
   <div class="flex-container mb-8">
     <div class="card card-blue flex-item">
       <h3 class="card-title">Outdoor Order Revenue</h3>
-      <p class="card-value">$45,200</p>
+      <p class="card-value">{{ outdoorOrderRevenue | currency }}</p>
     </div>
 
     <div class="card card-green flex-item">
       <h3 class="card-title">Outdoor Bill Revenue</h3>
-      <p class="card-value">$38,000</p>
-    </div>
-
-    <div class="card card-yellow flex-item">
-      <h3 class="card-title">Pending Payments</h3>
-      <p class="card-value">$7,200</p>
+      <p class="card-value">{{ outdoorBillRevenue | currency }}</p>
     </div>
 
     <div class="card card-purple flex-item">
       <h3 class="card-title">Total Salary Cost</h3>
-      <p class="card-value">$12,400</p>
+      <p class="card-value">{{ totalSalaryCost | currency }}</p>
+    </div>
+
+    <div class="card card-purple flex-item">
+      <h3 class="card-title">Total Purchase</h3>
+      <p class="card-value">{{ totalPurchase | currency }}</p>
+    </div>
+
+    <div class="card card-purple flex-item">
+      <h3 class="card-title">Total Spend</h3>
+      <p class="card-value">{{ totalSpend | currency }}</p>
     </div>
   </div>
 
-  <div class="chart-container">
-    <h2 class="section-title">Revenue Trend</h2>
-    <div class="chart-wrapper">
-      <canvas #revenueChart></canvas>
+  <!-- TOP ROW: Donut + Summary -->
+  <div class="kpi-top">
+    <div class="donut-card">
+      <h2 class="section-title">Revenue vs Cost Split</h2>
+      <div class="donut-wrapper">
+        <canvas #donutChart></canvas>
+      </div>
     </div>
-  </div>
 
-  <div class="table-container">
-    <h2 class="section-title p-4 bg-gray-50 border-b">Employee Performance</h2>
-    <div class="overflow-x-auto">
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Role</th>
-            <th>Salary</th>
-            <th>Revenue Gen.</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+    <div class="summary-container">
+      <h2 class="section-title">KPI Summary</h2>
+      <table class="summary-table">
         <tbody>
-          <tr *ngFor="let emp of reportData">
-            <td class="font-semibold">{{ emp.name }}</td>
-            <td class="text-muted">{{ emp.role }}</td>
-            <td>{{ emp.salary | currency }}</td>
-            <td class="text-green font-bold">{{ emp.revenue | currency }}</td>
-            <td>
-              <span
-                class="badge"
-                [ngClass]="
-                  emp.status === 'Paid' ? 'badge-paid' : 'badge-pending'
-                "
-              >
-                {{ emp.status }}
-              </span>
+          <tr>
+            <td>Outdoor Order Revenue</td>
+            <td class="text-right">
+              {{ outdoorOrderRevenue | currency }}
+            </td>
+          </tr>
+          <tr>
+            <td>Outdoor Bill Revenue</td>
+            <td class="text-right">
+              {{ outdoorBillRevenue | currency }}
+            </td>
+          </tr>
+          <tr class="summary-separator">
+            <td><strong>Total Revenue</strong></td>
+            <td class="text-right font-bold">
+              {{ totalRevenue | currency }}
+            </td>
+          </tr>
+          <tr>
+            <td>Total Salary Cost</td>
+            <td class="text-right">
+              {{ totalSalaryCost | currency }}
+            </td>
+          </tr>
+          <tr>
+            <td>Total Purchase</td>
+            <td class="text-right">
+              {{ totalPurchase | currency }}
+            </td>
+          </tr>
+          <tr>
+            <td>Total Spend</td>
+            <td class="text-right">
+              {{ totalSpend | currency }}
+            </td>
+          </tr>
+          <tr class="summary-separator">
+            <td><strong>Total Cost</strong></td>
+            <td class="text-right font-bold">
+              {{ totalCost | currency }}
+            </td>
+          </tr>
+          <tr class="summary-profit">
+            <td><strong>Net Profit</strong></td>
+            <td class="text-right font-bold">
+              {{ netProfit | currency }}
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- BOTTOM ROW: FULL-WIDTH LINE CHART -->
+  <div class="chart-row">
+    <div class="chart-container">
+      <h2 class="section-title">Revenue vs Cost Trend</h2>
+      <div class="chart-wrapper">
+        <canvas #revenueChart></canvas>
+      </div>
     </div>
   </div>
 </div>
