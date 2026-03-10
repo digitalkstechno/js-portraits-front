@@ -74,7 +74,7 @@
       <div class="field-group">
         <div class="field-item">
           <small class="text-muted"
-            >GST will be auto-calculated  {{ fixedGstRate }}%</small
+            >GST will be auto-calculated {{ fixedGstRate }}%</small
           >
         </div>
       </div>
@@ -221,20 +221,14 @@
           <input
             type="number"
             formControlName="discount"
+            (input)="calculateGrandTotal()"
             class="editable-input"
           />
         </div>
-
         <div class="summary-row">
           <label>GST ({{ fixedGstRate }}%)</label>
-          <input
-            type="text"
-            formControlName="totalGst"
-            readonly
-            class="tax-amt-highlight"
-          />
+          <input type="text" formControlName="totalGst" readonly />
         </div>
-
         <div class="summary-row net-total-row">
           <label>GRAND TOTAL</label>
           <input
@@ -245,23 +239,51 @@
           />
         </div>
 
-        <div class="summary-row">
-          <label style="color: #2f855a">Advance</label>
-          <input
-            type="number"
-            formControlName="advance"
-            class="editable-input"
-          />
-        </div>
+        <hr class="summary-divider" />
 
-        <div class="summary-row balance-due-row">
-          <label>BALANCE DUE</label>
-          <input
-            type="text"
-            formControlName="balanceDue"
-            readonly
-            class="highlight-balance"
-          />
+        <div class="payment-section">
+          <div class="summary-row">
+            <label>Payment Mode</label>
+            <select formControlName="paymentMode" class="editable-input">
+              <option value="Cash">Cash</option>
+              <option value="UPI">UPI</option>
+              <option value="Card">Card</option>
+              <option value="Net Banking">Net Banking</option>
+            </select>
+          </div>
+
+          <div
+            class="summary-row"
+            *ngIf="productSellForm.get('paymentMode')?.value !== 'Cash'"
+          >
+            <label>Transaction ID</label>
+            <input
+              type="text"
+              formControlName="transactionId"
+              placeholder="UPI/UTR No."
+              class="editable-input"
+            />
+          </div>
+
+          <div class="summary-row">
+            <label style="color: #2f855a; font-weight: bold">Amount Paid</label>
+            <input
+              type="number"
+              formControlName="advance"
+              (input)="calculateGrandTotal()"
+              class="editable-input highlight-paid"
+            />
+          </div>
+
+          <div class="summary-row balance-due-row">
+            <label>BALANCE DUE</label>
+            <input
+              type="text"
+              formControlName="balanceDue"
+              readonly
+              class="highlight-balance"
+            />
+          </div>
         </div>
       </div>
     </div>

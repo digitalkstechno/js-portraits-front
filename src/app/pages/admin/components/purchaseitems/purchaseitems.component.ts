@@ -97,23 +97,19 @@ export class PurchaseitemsComponent {
       bookName: [''],
       billNo: [this.count],
       purchaseDate: [new Date().toISOString().split('T')[0]],
-      partyName: [''],
+      partyName: ['', Validators.required],
       contactNo: [''],
 
-      gstType: [''],
-      govt: [''],
-      gst: [''],
       items: this.fb.array([]),
       subTotal: [0],
       discount: [0],
-      cgstPerc: [0],
-      cgstAmt: [0],
-      sgstPerc: [0],
-      sgstAmt: [0],
-      igstPerc: [0],
-      igstAmt: [0],
-      netTotal: [0],
-      advance: [0],
+      totalGst: [0],
+      grandTotal: [0],
+
+      // Naye Payment Fields
+      paymentMode: ['Cash'],
+      transactionId: [''],
+      advance: [0], // Isse hi hum Amount Paid maan rahe hain
       balanceDue: [0],
     });
 
