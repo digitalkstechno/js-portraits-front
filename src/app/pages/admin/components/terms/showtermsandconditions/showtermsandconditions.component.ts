@@ -17,16 +17,23 @@ export class ShowtermsandconditionsComponent {
   selectedTerm: any = { header: '', body: '' };
 
   ngOnInit() {
-    if (this.termsList.length > 0) {
-      this.selectTerm(this.termsList[0]); // Default pehla select karein
-    }
-    this.loadTerms();
+    this.loadTerms(); // Sirf call karein, select subscribe ke andar hoga
   }
 
   loadTerms() {
-    this.service.getTermsAndConditions().subscribe((res) => {
-      this.termsList = res.data?.conditions;
-      console.log(this.termsList);
+    this.service.getTermsAndConditions().subscribe((res: any) => {
+      // 1. Data list mein assign karein
+      this.termsList = res.data?.conditions || [];
+
+      // 2. Sirf tab select karein jab data successfully aa chuka ho
+      if (this.termsList.length > 0) {
+        // Agar pehle se koi term selected hai (editing ke waqt), toh use wahi rehne dein
+        // Warna default pehla select karein
+        const currentHeader = this.selectedTerm?.header;
+        const found = this.termsList.find((t) => t.header === currentHeader);
+
+        this.selectTerm(found || this.termsList[0]);
+      }
     });
   }
 
@@ -40,22 +47,30 @@ export class ShowtermsandconditionsComponent {
   isError = false;
 
   onSubmit() {
-    const payload = {
-      conditions: [
-        {
+    // 1. Pura array map karein: Agar header match kare toh update karein, warna wahi rehne dein
+    const updatedConditions = this.termsList.map((item: any) => {
+      if (item.header === this.selectedTerm.header) {
+        return {
           header: this.selectedTerm.header,
           body: this.selectedTerm.body,
-        },
-      ],
+        };
+      }
+      return item;
+    });
+
+    // 2. Payload mein poora updated array bhejiye
+    const payload = {
+      conditions: updatedConditions,
+      user: 'Admin',
     };
+
     this.service.createTermsAndConditions(payload).subscribe({
       next: (res: any) => {
-        this.triggerPopup('Terms and conditions updated Successfully!', false);
-        this.loadTerms();
+        this.triggerPopup('Terms updated Successfully!', false);
+        this.loadTerms(); // Refresh list from backend
       },
       error: (err: any) => {
-        console.error('Error saving notes', err);
-        this.triggerPopup('Something went wrong while updating!', true);
+        this.triggerPopup('Update failed!', true);
       },
     });
   }
@@ -73,7 +88,25 @@ export class ShowtermsandconditionsComponent {
   }
 
   onDelete() {
-    console.log('Deleting...');
+    if (!confirm('Are you sure you want to delete this term?')) return;
+
+    // Selected item ko list se nikal dein
+    const updatedConditions = this.termsList.filter(
+      (item: any) => item.header !== this.selectedTerm.header,
+    );
+
+    const payload = {
+      conditions: updatedConditions,
+      user: 'Admin',
+    };
+
+    this.service.createTermsAndConditions(payload).subscribe({
+      next: (res: any) => {
+        this.triggerPopup('Term Deleted Successfully!', false);
+        this.selectedTerm = { header: '', body: '' }; // Clear editor
+        this.loadTerms();
+      },
+    });
   }
 
   onExit() {

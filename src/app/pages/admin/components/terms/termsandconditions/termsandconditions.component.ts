@@ -23,14 +23,26 @@ export class TermsandconditionsComponent {
       conditions: this.fb.array([]),
     });
 
-    // Default ek empty row add karne ke liye
-    this.addCondition();
     this.loadTerms();
   }
 
   loadTerms() {
-    this.service.getTermsAndConditions().subscribe((res) => {
-      console.log(res);
+    this.service.getTermsAndConditions().subscribe((res: any) => {
+      // Check karein ki data sahi format mein aa raha hai
+      const existingConditions = res.data?.conditions || [];
+
+      if (existingConditions.length > 0) {
+        this.conditions.clear(); // Purana empty field hataiye
+
+        existingConditions.forEach((item: any) => {
+          this.conditions.push(
+            this.fb.group({
+              header: [item.header],
+              body: [item.body],
+            }),
+          );
+        });
+      }
     });
   }
 
@@ -50,7 +62,15 @@ export class TermsandconditionsComponent {
 
   // Row delete karne ke liye
   removeCondition(index: number) {
-    this.conditions.removeAt(index);
+    // Simple check
+    const confirmDelete = confirm(
+      'Are you sure you want to remove this condition? Changes will be permanent after saving.',
+    );
+
+    if (confirmDelete) {
+      this.conditions.removeAt(index);
+      this.triggerPopup('Condition removed from list!', false);
+    }
   }
 
   showPopup = false;
@@ -58,16 +78,19 @@ export class TermsandconditionsComponent {
   isError = false;
 
   onSubmit() {
-    if (this.termsForm.invalid) {
-      this.termsForm.markAllAsTouched();
-      return;
-    }
+    if (this.termsForm.invalid) return;
 
-    const formValue = this.termsForm.value;
+    // Sirf conditions ka array aur user ka naam bhejna hai
+    const payload = {
+      conditions: this.termsForm.value.conditions,
+      user: 'Admin', // Aap yahan login user ka naam bhej sakte hain
+    };
 
-    this.service.createTermsAndConditions(formValue).subscribe({
+    this.service.createTermsAndConditions(payload).subscribe({
       next: (res: any) => {
         this.triggerPopup('Terms and conditions Saved Successfully!', false);
+        // Data save hone ke baad dobara load karne ki zaroorat nahi hai
+        // kyunki UI already updated hai, par safe side ke liye kar sakte hain.
         this.loadTerms();
       },
       error: (err: any) => {
