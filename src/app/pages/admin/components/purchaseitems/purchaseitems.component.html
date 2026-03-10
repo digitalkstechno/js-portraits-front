@@ -37,18 +37,22 @@
         </div>
         <div class="field-item">
           <label>Date</label>
-          <input type="date" formControlName="purchaseDate" style="width: 260px" />
+          <input
+            type="date"
+            formControlName="purchaseDate"
+            style="width: 260px"
+          />
         </div>
       </div>
 
       <div class="field-group">
         <div class="field-item">
-          <label>Outdoor Party</label>
+          <label>Party Name</label>
           <input
             type="text"
             style="width: 280px"
             formControlName="partyName"
-            placeholder="Search Outdoor party"
+            placeholder="Search Party..."
             (input)="filterParty($event)"
           />
           <div class="dropdown-list" *ngIf="filteredCustomers.length">
@@ -69,23 +73,10 @@
 
       <div class="field-group">
         <div class="field-item">
-          <label>GST Type</label
-          ><input type="text" formControlName="gstType" style="width: 280px" />
+          <small class="text-muted"
+            >GST will be auto-calculated  {{ fixedGstRate }}%</small
+          >
         </div>
-        <div class="field-item">
-          <label>Govt</label
-          ><input type="text" formControlName="govt" style="width: 260px" />
-        </div>
-      </div>
-
-      <div class="field-group">
-        <div class="field-item">
-          <label>GST</label
-          ><input type="text" formControlName="gst" style="width: 280px" />
-        </div>
-      </div>
-
-      <div class="field-group">
       </div>
     </div>
 
@@ -99,8 +90,12 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ productSellForm.value.billNo }}</td>
-            <td>{{ productSellForm.value.purchaseDate | date: "dd/MM/yyyy" }}</td>
+            <td>{{ productSellForm.get("billNo")?.value }}</td>
+            <td>
+              {{
+                productSellForm.get("purchaseDate")?.value | date: "dd/MM/yyyy"
+              }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -109,8 +104,8 @@
 
   <div class="item-entry-strip" [formGroup]="entryForm">
     <div class="entry-col">
-      <label>Date</label
-      ><input type="date" formControlName="date" style="width: 110px" />
+      <label>Date</label>
+      <input type="date" formControlName="date" style="width: 110px" />
     </div>
 
     <div class="entry-col search-container" style="flex: 2">
@@ -154,21 +149,20 @@
     </div>
 
     <div class="entry-col">
-      <label>Qty</label
-      ><input type="number" formControlName="qty" style="width: 80px" />
+      <label>Qty</label>
+      <input type="number" formControlName="qty" style="width: 80px" />
     </div>
     <div class="entry-col">
-      <label>Rate</label
-      ><input type="number" formControlName="rate" style="width: 80px" />
+      <label>Rate</label>
+      <input type="number" formControlName="rate" style="width: 80px" />
     </div>
     <div class="entry-col">
-      <label>Amount</label
-      ><input
+      <label>Amount</label>
+      <input
         type="text"
-        [value]="entryForm.value.qty * entryForm.value.rate"
+        [value]="entryForm.get('qty')?.value * entryForm.get('rate')?.value"
         readonly
-        style="width: 90px; text-align: right"
-        formControlName="amount"
+        style="width: 90px; text-align: right; background: #f0f0f0"
       />
     </div>
 
@@ -194,13 +188,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of itemsFormArray.value; let i = index">
-            <td>{{ item.date | date: "dd/MM/yyyy" }}</td>
-            <td>{{ item.itemName }}</td>
-            <td>{{ item.productName }}</td>
-            <td class="text-center">{{ item.qty }}</td>
-            <td class="text-right">{{ item.rate }}</td>
-            <td class="text-right">{{ item.total }}</td>
+          <tr
+            *ngFor="let item of itemsFormArray.controls; let i = index"
+            [formGroup]="$any(item)"
+          >
+            <td>{{ item.get("date")?.value | date: "dd/MM/yyyy" }}</td>
+            <td>{{ item.get("itemName")?.value }}</td>
+            <td>{{ item.get("productName")?.value }}</td>
+            <td class="text-center">{{ item.get("qty")?.value }}</td>
+            <td class="text-right">
+              {{ item.get("rate")?.value | number: "1.2-2" }}
+            </td>
+            <td class="text-right">
+              {{ item.get("total")?.value | number: "1.2-2" }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -212,89 +213,50 @@
     >
       <div class="summary-box">
         <div class="summary-row">
-          <label>Sub Total</label
-          ><input type="text" formControlName="subTotal" readonly />
+          <label>Sub Total</label>
+          <input type="text" formControlName="subTotal" readonly />
         </div>
         <div class="summary-row">
-          <label>Discount</label
-          ><input
+          <label>Discount</label>
+          <input
             type="number"
             formControlName="discount"
             class="editable-input"
           />
         </div>
 
-        <div class="tax-group">
-          <div class="summary-row tax-row">
-            <label>CGST (%)</label>
-            <div class="tax-inputs">
-              <input
-                type="number"
-                formControlName="cgstPerc"
-                class="tax-perc"
-              />
-              <input
-                type="text"
-                formControlName="cgstAmt"
-                readonly
-                class="tax-amt"
-              />
-            </div>
-          </div>
-          <div class="summary-row tax-row">
-            <label>SGST (%)</label>
-            <div class="tax-inputs">
-              <input
-                type="number"
-                formControlName="sgstPerc"
-                class="tax-perc"
-              />
-              <input
-                type="text"
-                formControlName="sgstAmt"
-                readonly
-                class="tax-amt"
-              />
-            </div>
-          </div>
-          <div class="summary-row tax-row">
-            <label>IGST (%)</label>
-            <div class="tax-inputs">
-              <input
-                type="number"
-                formControlName="igstPerc"
-                class="tax-perc"
-              />
-              <input
-                type="text"
-                formControlName="igstAmt"
-                readonly
-                class="tax-amt"
-              />
-            </div>
-          </div>
+        <div class="summary-row">
+          <label>GST ({{ fixedGstRate }}%)</label>
+          <input
+            type="text"
+            formControlName="totalGst"
+            readonly
+            class="tax-amt-highlight"
+          />
         </div>
 
         <div class="summary-row net-total-row">
-          <label>NET TOTAL</label
-          ><input
+          <label>GRAND TOTAL</label>
+          <input
             type="text"
-            formControlName="netTotal"
+            formControlName="grandTotal"
             readonly
             class="highlight-net"
           />
         </div>
+
         <div class="summary-row">
-          <label style="color: #2f855a">Advance</label
-          ><input
+          <label style="color: #2f855a">Advance</label>
+          <input
             type="number"
             formControlName="advance"
             class="editable-input"
           />
         </div>
+
         <div class="summary-row balance-due-row">
-          <label>BALANCE DUE</label
-          ><input
+          <label>BALANCE DUE</label>
+          <input
             type="text"
             formControlName="balanceDue"
             readonly
@@ -307,16 +269,12 @@
 
   <div class="action-bar">
     <button class="btn btn-save" (click)="onSubmit()">Save</button>
-    <button class="btn btn-exit">Delete</button>
-    <button class="btn">Print with Rate</button>
-    <button class="btn">Print without Rate</button>
     <button class="btn" (click)="clearAll()">Cancel</button>
+    <button class="btn">Print</button>
     <button class="btn btn-exit" (click)="close()">Exit</button>
-    <button class="btn btn-social">Send SMS</button>
-    <button class="btn btn-social">Send WhatsApp</button>
-    <button class="btn btn-social">Send Email</button>
   </div>
 </div>
+
 <div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
   <div class="toast-content">
     <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>

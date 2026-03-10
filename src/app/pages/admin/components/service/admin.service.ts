@@ -174,4 +174,9 @@ export class AdminService {
   getProductSellCount(): Observable<any> {
     return this.http.get<any>(`${Endpoints.PRODUCT_SELL}/count`);
   }
+
+  // gst
+  getGstConfiguration(): Observable<any> {
+    return this.http.get<any>(`${Endpoints.PRODUCT_SELL}/count`);
+  }
 }

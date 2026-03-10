@@ -36,6 +36,7 @@ export class PurchaseitemsComponent {
 
   ngOnInit() {
     this.initForms();
+    this.loadGstSettings();
     this.billService.getProductSellCount().subscribe((res) => {
       // console.log(res.count);
       const count = res.count;
@@ -55,6 +56,42 @@ export class PurchaseitemsComponent {
     });
   }
 
+  fixedGstRate: number = 0; // Will be fetched from DB
+
+  loadGstSettings() {
+    // Assuming you have a service method to get common settings
+    this.billService.getGstConfiguration().subscribe((res: any) => {
+      // Assuming your settings panel returns { gstPercentage: 18 }
+      this.fixedGstRate = res.gstPercentage || 0;
+      this.calculateGrandTotal(); // Recalculate once GST is loaded
+    });
+  }
+
+  calculateGrandTotal() {
+    let subTotal = 0;
+
+    // Summing up items in the table
+    this.itemsFormArray.controls.forEach((c: any) => {
+      subTotal += c.get('total')?.value || 0;
+    });
+
+    const f = this.productSellForm.value;
+    const taxable = subTotal - (f.discount || 0);
+
+    // AUTO-CALCULATION using the rate from the OTHER panel
+    const totalGstAmt = (taxable * this.fixedGstRate) / 100;
+    const netTotal = taxable + totalGstAmt;
+
+    this.productSellForm.patchValue(
+      {
+        subTotal: subTotal.toFixed(2),
+        totalGst: totalGstAmt.toFixed(2), // This matches your Mongoose Schema
+        grandTotal: netTotal.toFixed(2),
+        balanceDue: (netTotal - (f.advance || 0)).toFixed(2),
+      },
+      { emitEvent: false },
+    );
+  }
   initForms() {
     this.productSellForm = this.fb.group({
       bookName: [''],
@@ -62,7 +99,7 @@ export class PurchaseitemsComponent {
       purchaseDate: [new Date().toISOString().split('T')[0]],
       partyName: [''],
       contactNo: [''],
-      
+
       gstType: [''],
       govt: [''],
       gst: [''],
@@ -151,45 +188,6 @@ export class PurchaseitemsComponent {
     this.filteredBooks = [];
   }
 
-  searchQuotation() {
-    const qNo = this.productSellForm.get('orderNo')?.value;
-
-    this.billService.getQuotationByNumber(qNo).subscribe((res: any) => {
-      // Patch Main Form
-      this.productSellForm.patchValue({
-        date: this.formatDate(res.date),
-        outdoorParty: res.outdoorParty,
-        contactNo: res.contactNo,
-        couple: res.couple,
-        address: res.address,
-        remarks: res.remarks,
-      });
-
-      // Clear existing items
-      this.itemsFormArray.clear();
-
-      // Add quotation items
-      res.items.forEach((item: any) => {
-        const itemGroup = this.fb.group({
-          date: [item.date],
-          itemName: [item.itemName],
-          productName: [item.productId?.product_name || 'Product'],
-          productId: [item.productId?._id],
-          event: [item.event],
-          qty: [item.qty],
-          rate: [item.rate],
-          total: [item.total],
-          place: [item.place],
-          time: [item.time],
-        });
-
-        this.itemsFormArray.push(itemGroup);
-      });
-
-      this.calculateGrandTotal();
-    });
-  }
-
   loadItems() {
     this.itemService
       .getItems()
@@ -253,34 +251,6 @@ export class PurchaseitemsComponent {
     this.itemsFormArray.push(itemGroup);
     this.calculateGrandTotal();
     this.clearEntry();
-  }
-
-  calculateGrandTotal() {
-    let subTotal = 0;
-    this.itemsFormArray.controls.forEach(
-      (c: any) => (subTotal += c.get('total')?.value || 0),
-    );
-
-    const f = this.productSellForm.value;
-    const taxable = subTotal - f.discount;
-
-    const cgstAmt = (taxable * f.cgstPerc) / 100;
-    const sgstAmt = (taxable * f.sgstPerc) / 100;
-    const igstAmt = (taxable * f.igstPerc) / 100;
-
-    const netTotal = taxable + cgstAmt + sgstAmt + igstAmt;
-
-    this.productSellForm.patchValue(
-      {
-        subTotal,
-        cgstAmt: cgstAmt.toFixed(2),
-        sgstAmt: sgstAmt.toFixed(2),
-        igstAmt: igstAmt.toFixed(2),
-        netTotal: netTotal.toFixed(2),
-        balanceDue: (netTotal - f.advance).toFixed(2),
-      },
-      { emitEvent: false },
-    );
   }
 
   clearEntry() {
