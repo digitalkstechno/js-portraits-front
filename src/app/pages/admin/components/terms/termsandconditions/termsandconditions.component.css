@@ -85,3 +85,51 @@
     opacity: 1;
   }
 }
+
+/* Sidebar Styles */
+.sidebar-list {
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.scroll-area {
+  flex-grow: 1;
+  overflow-y: auto;
+  max-height: 380px;
+}
+
+.list-item {
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: 0.2s;
+}
+
+.list-item:hover {
+  background-color: #d6eaf8;
+}
+
+.active-row {
+  background-color: #2e86c1 !important;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-add-sidebar {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 8px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.editor-area {
+  overflow-y: hidden;
+}
+
+.list-header {
+  background-color: #d5dbdb;
+}

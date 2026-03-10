@@ -14,6 +14,7 @@ export class TermsandconditionsComponent {
   termsForm!: FormGroup;
   router = inject(Router);
   service = inject(AdminService);
+  selectedIndex = 0; // Default pehla item khulega
 
   constructor(private fb: FormBuilder) {}
 
@@ -51,26 +52,27 @@ export class TermsandconditionsComponent {
     return this.termsForm.get('conditions') as FormArray;
   }
 
+  isOldTerm(index: number): boolean {
+    const control = this.conditions.at(index);
+    // Agar header mein pehle se value hai jab page load hua tha, toh use readonly rakhein
+    // Iske liye aap ek hidden field 'isNew' bhi use kar sakte hain
+    return control.value.header !== '' && !control.get('isNew')?.value;
+  }
+
   // Naya T&C block add karne ke liye
   addCondition() {
     const conditionGroup = this.fb.group({
-      header: [''], // Example: "Payment Terms"
-      body: [''], // Example: "50% Advance, 50% on Delivery"
+      header: [''],
+      body: [''],
+      isNew: [true],
     });
     this.conditions.push(conditionGroup);
+    this.selectedIndex = this.conditions.length - 1; // Focus on last added
   }
 
   // Row delete karne ke liye
   removeCondition(index: number) {
-    // Simple check
-    const confirmDelete = confirm(
-      'Are you sure you want to remove this condition? Changes will be permanent after saving.',
-    );
-
-    if (confirmDelete) {
-      this.conditions.removeAt(index);
-      this.triggerPopup('Condition removed from list!', false);
-    }
+    this.conditions.removeAt(index);
   }
 
   showPopup = false;

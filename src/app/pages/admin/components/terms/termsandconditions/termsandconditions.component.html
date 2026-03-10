@@ -13,7 +13,7 @@
         [formGroupName]="i"
         class="terms-block mb-3 p-2 border border-primary-subtle"
       >
-        <div class="d-flex justify-content-between mb-2">
+        <div class="d-flex justify-content-between mb-2" *ngIf="!item.value.header && !item.value.body">
           <span class="badge bg-primary">Condition #{{ i + 1 }}</span>
           <button
             class="btn btn-sm btn-danger py-0"
@@ -31,6 +31,8 @@
               formControlName="header"
               class="form-control form-control-sm border-dark"
               placeholder="e.g. Payment Terms"
+              [readonly]="isOldTerm(i)" 
+              [style.background-color]="isOldTerm(i) ? '#e9ecef' : 'white'"
             />
           </div>
         </div>
@@ -42,6 +44,8 @@
               formControlName="body"
               class="form-control custom-textarea"
               placeholder="Enter details here..."
+              [readonly]="isOldTerm(i)" 
+              [style.background-color]="isOldTerm(i) ? '#e9ecef' : 'white'"
             ></textarea>
           </div>
         </div>
