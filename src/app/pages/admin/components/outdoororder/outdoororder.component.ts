@@ -263,6 +263,7 @@ export class OutdoororderComponent implements OnInit {
       grandTotal: formValue.grandTotal,
       paymentMode: formValue.paymentMode,
       transactionId: formValue.transactionId,
+      balanceDue: formValue.balanceDue,
 
       items: this.items.value,
     };
