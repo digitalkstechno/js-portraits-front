@@ -131,6 +131,11 @@
   page-break-inside: avoid;
 }
 
+.footer-left{
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
 @media print {
   body {
     -webkit-print-color-adjust: exact;

@@ -10,9 +10,9 @@
         <div class="header-divider"></div>
 
         <div class="company-block">
-          <div class="company-name">THE JS PORTRAITS</div>
-          <div class="company-sub">Photography Studio</div>
-          <div>+91 95273 01154</div>
+          <div class="company-name">{{ printSettings?.companyName }}</div>
+          <!-- <div class="company-sub">Photography Studio</div> -->
+          <div>{{ printSettings.phone }}</div>
         </div>
       </div>
 
@@ -65,12 +65,8 @@
 
     <!-- FOOTER -->
     <div class="invoice-footer">
-      <div class="footer-left">
-        123 Anywhere St, Any City<br />
-        State, Country 12345<br />
-        Mobile: +1 064 4578 2<br />
-        middleton.com<br />
-        portfolio.com/janny
+      <div class="footer-left"  [innerHTML]="formattedAddress">
+      {{ printSettings.address }}
       </div>
 
       <div class="footer-right">
