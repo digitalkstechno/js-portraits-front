@@ -277,45 +277,52 @@
           />
         </div>
 
-        <div class="tax-group">
-          <div class="summary-row tax-row">
-            <label>CGST (%)</label>
-            <div class="tax-inputs">
-              <input
-                type="number"
-                formControlName="cgstPerc"
-                class="tax-perc"
-              />
-              <input
-                type="text"
-                formControlName="cgstAmt"
-                readonly
-                class="tax-amt"
-              />
+        <div class="tax-group" *ngIf="gstConfig">
+          <ng-container *ngIf="gstConfig.isLocal">
+            <div class="summary-row tax-row">
+              <label>CGST (%)</label>
+              <div class="tax-inputs">
+                <input
+                  type="number"
+                  formControlName="cgstPerc"
+                  readonly
+                  class="tax-perc"
+                />
+                <input
+                  type="text"
+                  formControlName="cgstAmt"
+                  readonly
+                  class="tax-amt"
+                />
+              </div>
             </div>
-          </div>
-          <div class="summary-row tax-row">
-            <label>SGST (%)</label>
-            <div class="tax-inputs">
-              <input
-                type="number"
-                formControlName="sgstPerc"
-                class="tax-perc"
-              />
-              <input
-                type="text"
-                formControlName="sgstAmt"
-                readonly
-                class="tax-amt"
-              />
+
+            <div class="summary-row tax-row">
+              <label>SGST (%)</label>
+              <div class="tax-inputs">
+                <input
+                  type="number"
+                  formControlName="sgstPerc"
+                  readonly
+                  class="tax-perc"
+                />
+                <input
+                  type="text"
+                  formControlName="sgstAmt"
+                  readonly
+                  class="tax-amt"
+                />
+              </div>
             </div>
-          </div>
-          <div class="summary-row tax-row">
+          </ng-container>
+
+          <div class="summary-row tax-row" *ngIf="gstConfig.isInterstate">
             <label>IGST (%)</label>
             <div class="tax-inputs">
               <input
                 type="number"
                 formControlName="igstPerc"
+                readonly
                 class="tax-perc"
               />
               <input

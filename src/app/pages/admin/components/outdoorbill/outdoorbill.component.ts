@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ItemsService } from '../../master/service/items.service';
 import { AdminService } from '../service/admin.service';
+import { ConfigService } from '../service/configService/config.service';
 
 @Component({
   selector: 'app-outdoorbill',
@@ -15,6 +16,7 @@ export class OutdoorbillComponent {
   fb = inject(FormBuilder);
   itemService = inject(ItemsService);
   billService = inject(AdminService);
+  gstService = inject(ConfigService);
   router = inject(Router);
 
   billForm!: FormGroup;
@@ -51,6 +53,7 @@ export class OutdoorbillComponent {
     this.loadCustomers();
     this.loadBooks();
     this.loadBills();
+    this.loadGstConfiguration();
 
     // Jab bhi discount, tax ya advance badle, calculation refresh ho
     this.billForm.valueChanges.subscribe(() => {
@@ -121,6 +124,26 @@ export class OutdoorbillComponent {
     });
   }
 
+  gstConfig: any;
+  loadGstConfiguration() {
+    this.gstService.getGstConfig().subscribe((config: any) => {
+      if (config) {
+        this.gstConfig = config;
+        this.gstService.getGstConfig().subscribe((config) => {
+          if (config) {
+            // अगर Local है तो आधा-आधा, वरना IGST
+            this.billForm.patchValue({
+              cgstPerc: config.isLocal ? config.defaultGstRate / 2 : 0,
+              sgstPerc: config.isLocal ? config.defaultGstRate / 2 : 0,
+              igstPerc: config.isInterstate ? config.defaultGstRate : 0,
+            });
+            this.calculateGrandTotal();
+          }
+        });
+      }
+    });
+  }
+
   filterParty(event: any) {
     const value = event.target.value.toLowerCase();
     if (!value) {
@@ -166,7 +189,7 @@ export class OutdoorbillComponent {
 
   filteredBills: any[] = [];
   searchBills(event: any) {
-    const term = event.target.value.toString().toLowerCase(); 
+    const term = event.target.value.toString().toLowerCase();
 
     if (term) {
       this.filteredBills = this.bills.filter(
@@ -349,23 +372,32 @@ export class OutdoorbillComponent {
       subTotal += Number(c.get('amount')?.value || 0);
     });
 
-    const f = this.billForm.value;
-    const taxable = subTotal - (f.discount || 0);
+    // getRawValue() इस्तेमाल करें ताकि readonly fields भी मिल सकें
+    const f = this.billForm.getRawValue();
 
-    const cgstAmt = (taxable * (f.cgstPerc || 0)) / 100;
-    const sgstAmt = (taxable * (f.sgstPerc || 0)) / 100;
-    const igstAmt = (taxable * (f.igstPerc || 0)) / 100;
+    const discount = Number(f.discount || 0);
+    const taxable = subTotal - discount;
+
+    // Percentages को Numbers में बदलें
+    const cPerc = Number(f.cgstPerc || 0);
+    const sPerc = Number(f.sgstPerc || 0);
+    const iPerc = Number(f.igstPerc || 0);
+
+    const cgstAmt = (taxable * cPerc) / 100;
+    const sgstAmt = (taxable * sPerc) / 100;
+    const igstAmt = (taxable * iPerc) / 100;
 
     const netTotal = taxable + cgstAmt + sgstAmt + igstAmt;
+    const advance = Number(f.advance || 0);
 
     this.billForm.patchValue(
       {
-        subTotal,
+        subTotal: subTotal.toFixed(2),
         cgstAmt: cgstAmt.toFixed(2),
         sgstAmt: sgstAmt.toFixed(2),
         igstAmt: igstAmt.toFixed(2),
         netTotal: netTotal.toFixed(2),
-        balanceDue: (netTotal - (f.advance || 0)).toFixed(2),
+        balanceDue: (netTotal - advance).toFixed(2),
       },
       { emitEvent: false },
     );
