@@ -1,95 +1,135 @@
 <div class="report-window">
   <div class="report-header">
-    <h2>Outdoor Revenue Report</h2>
+    <div>
+      <h2>Outdoor Revenue Analysis</h2>
+      <p class="sub text-muted">
+        Comparison of Booked Orders vs. Final Invoices
+      </p>
+    </div>
+    <div class="actions">
+      <button class="btn-export" (click)="loadAllData()">
+        <i class="fa fa-refresh"></i> Refresh
+      </button>
+    </div>
   </div>
 
   <div class="summary-grid">
-    <div class="summary-group">
-      <h3><i class="fa fa-shopping-cart"></i> Orders Overview</h3>
-      <div class="summary-cards">
-        <div class="card blue">
-          <div class="label">Total Order Value</div>
+    <div class="summary-box order-stats">
+      <div class="box-header">
+        <i class="fa fa-shopping-cart"></i>
+        <span>Orders Overview</span>
+      </div>
+      <div class="stat-row">
+        <div class="stat-item">
+          <label>Total Value</label>
           <div class="value">₹{{ totalOrderAmount | number: "1.0-0" }}</div>
         </div>
-        <div class="card red">
-          <div class="label">Orders Pending</div>
-          <div class="value">₹{{ totalOrderPending | number: "1.0-0" }}</div>
+        <div class="stat-item">
+          <label>Total Pending</label>
+          <div class="value text-red">
+            ₹{{ totalOrderPending | number: "1.0-0" }}
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="summary-group">
-      <h3><i class="fa fa-file-invoice-dollar"></i> Billing Overview</h3>
-      <div class="summary-cards">
-        <div class="card green">
-          <div class="label">Total Billed Amount</div>
+    <div class="summary-box bill-stats">
+      <div class="box-header">
+        <i class="fa fa-file-invoice-dollar"></i>
+        <span>Billing Overview</span>
+      </div>
+      <div class="stat-row">
+        <div class="stat-item">
+          <label>Total Billed</label>
           <div class="value">₹{{ totalBilledAmount | number: "1.0-0" }}</div>
         </div>
-        <div class="card red">
-          <div class="label">Bills Outstanding</div>
-          <div class="value">₹{{ totalBillPending | number: "1.0-0" }}</div>
+        <div class="stat-item">
+          <label>Outstanding</label>
+          <div class="value text-red">
+            ₹{{ totalBillPending | number: "1.0-0" }}
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="grid-vertical">
-    <div class="table-wrapper">
-      <div class="table-title">Recent Outdoor Orders</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Party</th>
-            <th>Order No</th>
-            <th class="text-right">Order Amount</th>
-            <th class="text-right">Advance Received</th>
-            <th class="text-right">Balance Due</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let order of outdoorOrders">
-            <td>{{ order.date | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ order.outdoorParty || order.address || 'N/A' }}</td>
-            <td>{{ order.orderNo }}</td>
-            <td class="text-right">₹{{ order.grandTotal | number: '1.2-2' }}</td>
-            <td class="text-right">₹{{ order.advance | number: '1.2-2' }}</td>
-            <td class="text-right text-red">₹{{ (order.grandTotal - order.advance) | number: '1.2-2' }}</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="chart-card-full">
+    <h3>Revenue Growth: Orders vs Bills</h3>
+    <div class="chart-container">
+      <canvas #revenueChartCanvas></canvas>
+    </div>
+  </div>
+
+  <div class="tables-flex-container">
+    <div class="table-card">
+      <div class="card-header border-blue">
+        <h4>Recent Outdoor Orders</h4>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Party</th>
+              <th>Order #</th>
+              <th class="text-right">Total</th>
+              <th class="text-right">Advance</th>
+              <th class="text-right">Balance Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of outdoorOrders">
+              <td>{{ order.date | date: "dd MMM" }}</td>
+              <td class="font-medium">
+                {{ order.outdoorParty || order.address || "N/A" }}
+              </td>
+              <td><span class="text-muted">#</span>{{ order.orderNo }}</td>
+              <td class="text-right">₹{{ order.grandTotal | number }}</td>
+              <td class="text-right">₹{{ order.advance | number }}</td>
+              <td class="text-right text-red">
+                ₹{{ order.grandTotal - order.advance | number }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="table-wrapper">
-      <div class="table-title">Final Generated Bills</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Party</th>
-            <th>Bill No</th>
-            <th class="text-right">Bill Amount</th>
-            <th class="text-right">Advance (Bill)</th>
-            <th class="text-right">Due Amount</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let bill of outdoorBills">
-            <td>{{ bill.date | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ bill.outdoorParty }}</td>
-            <td>{{ bill.billNo }}</td>
-            <td class="text-right">₹{{ bill.grandTotal | number: '1.2-2' }}</td>
-            <td class="text-right">₹{{ bill.advance | number: '1.2-2' }}</td>
-            <td class="text-right text-red">₹{{ (bill.grandTotal - bill.advance) | number: '1.2-2' }}</td>
-            <td>
-              <span class="badge" [ngClass]="bill.paymentStatus?.toLowerCase()">
-                {{ bill.paymentStatus }}
-              </span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="table-card">
+      <div class="card-header border-green">
+        <h4>Final Generated Bills</h4>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Party</th>
+              <th>Bill #</th>
+              <th class="text-right">Total</th>
+              <th class="text-right">Amount Paid</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bill of outdoorBills">
+              <td>{{ bill.date | date: "dd MMM" }}</td>
+              <td class="font-medium">{{ bill.outdoorParty }}</td>
+              <td><span class="text-muted">#</span>{{ bill.billNo }}</td>
+              <td class="text-right">₹{{ bill.grandTotal | number }}</td>
+              <td class="text-right">₹{{ bill.advance | number }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="bill.paymentStatus?.toLowerCase()"
+                >
+                  {{ bill.paymentStatus }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

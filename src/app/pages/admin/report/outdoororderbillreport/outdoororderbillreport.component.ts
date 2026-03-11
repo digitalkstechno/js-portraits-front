@@ -199,36 +199,60 @@ export class OutdoororderbillreportComponent {
   private buildRevenueChart() {
     const canvas = this.revenueChartCanvas?.nativeElement;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    if (this.chartInstance) {
-      this.chartInstance.destroy();
-    }
+    if (this.chartInstance) this.chartInstance.destroy();
 
-    // group revenue by date
-    const revenueByDate = new Map<string, number>();
-    this.revenueRows.forEach((row) => {
-      const key = row.date;
-      const existing = revenueByDate.get(key) ?? 0;
-      revenueByDate.set(key, existing + row.billedAmount);
+    // 1. सभी यूनिक डेट्स निकालें और उन्हें सॉर्ट करें
+    const dateSet = new Set<string>();
+    this.outdoorOrders.forEach((o) => dateSet.add(this.toDate(o.date)));
+    this.outdoorBills.forEach((b) => dateSet.add(this.toDate(b.date)));
+
+    // तारीखों को कैलेंडर के हिसाब से सॉर्ट करें
+    const sortedLabels = Array.from(dateSet).sort((a, b) => {
+      return (
+        new Date(a.split('-').reverse().join('-')).getTime() -
+        new Date(b.split('-').reverse().join('-')).getTime()
+      );
     });
 
-    const labels = Array.from(revenueByDate.keys()).sort();
-    const values = labels.map((d) => revenueByDate.get(d) ?? 0);
+    // 2. डेटा को तारीख के हिसाब से मैप करें
+    const orderValues = sortedLabels.map((label) => {
+      return this.outdoorOrders
+        .filter((o) => this.toDate(o.date) === label)
+        .reduce((sum, o) => sum + Number(o.grandTotal || 0), 0);
+    });
 
-    const config: ChartConfiguration<'bar'> = {
+    const billValues = sortedLabels.map((label) => {
+      return this.outdoorBills
+        .filter((b) => this.toDate(b.date) === label)
+        .reduce((sum, b) => sum + Number(b.grandTotal || 0), 0);
+    });
+
+    // 3. चार्ट बनाएँ
+    this.chartInstance = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels,
+        labels: sortedLabels,
         datasets: [
           {
-            label: 'Revenue (₹)',
-            data: values,
-            backgroundColor: '#4f46e5',
-            borderRadius: 6,
-            maxBarThickness: 48,
+            label: 'Total Orders (₹)',
+            data: orderValues,
+            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+            borderColor: '#3b82f6',
+            borderWidth: 1,
+            borderRadius: 5,
+            barThickness: 25,
+          },
+          {
+            label: 'Total Billed (₹)',
+            data: billValues,
+            backgroundColor: 'rgba(16, 185, 129, 0.8)',
+            borderColor: '#10b981',
+            borderWidth: 1,
+            borderRadius: 5,
+            barThickness: 25,
           },
         ],
       },
@@ -236,27 +260,26 @@ export class OutdoororderbillreportComponent {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: true },
+          legend: {
+            position: 'top',
+            labels: { usePointStyle: true, padding: 20 },
+          },
           tooltip: {
-            callbacks: {
-              label: (context) =>
-                ` ₹${(context.parsed.y ?? 0).toLocaleString('en-IN')}`,
-            },
+            backgroundColor: '#1e293b',
+            padding: 12,
+            callbacks: { label: (ctx) => ` ₹${ctx.parsed.y?.toLocaleString()}` },
           },
         },
         scales: {
-          x: {
-            grid: { display: false },
-          },
+          x: { grid: { display: false } },
           y: {
             beginAtZero: true,
-            grid: { color: '#e5e7eb' },
+            grid: { color: '#f1f5f9' },
+            ticks: { callback: (v) => '₹' + v },
           },
         },
       },
-    };
-
-    this.chartInstance = new Chart(ctx, config);
+    });
   }
 
   private toDate(iso: string): string {
