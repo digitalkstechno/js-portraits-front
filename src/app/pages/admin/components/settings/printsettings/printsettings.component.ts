@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SHARED_MODULES } from '../../../../../constants/sharedModule';
+import { ConfigService } from '../../service/configService/config.service';
 
 @Component({
   selector: 'app-printsettings',
@@ -14,6 +15,7 @@ export class PrintsettingsComponent {
   isError = false;
   showPopup = false;
   popupMessage = '';
+  printService = inject(ConfigService);
 
   constructor(private fb: FormBuilder) {
     this.printSettingsForm = this.fb.group({
@@ -52,11 +54,29 @@ export class PrintsettingsComponent {
   }
 
   savePrintSettings() {
-    localStorage.setItem(
-      'printConfig',
-      JSON.stringify(this.printSettingsForm.value),
-    );
-    this.triggerPopup('Company profile updated!', false);
+    if (this.printSettingsForm.invalid) {
+      this.printSettingsForm.markAllAsTouched();
+      return;
+    }
+
+    const settings = this.printSettingsForm.value;
+
+    this.printService.configprintSettings(settings).subscribe({
+      next: (res: any) => {
+        localStorage.setItem(
+          'printConfig',
+          JSON.stringify(this.printSettingsForm.value),
+        );
+        this.triggerPopup('Print settings Updated!', false);
+      },
+      error: (err: any) => {
+        console.error('Error saving print settings', err);
+        this.triggerPopup(
+          'Something went wrong while saving Print settings!',
+          true,
+        );
+      },
+    });
   }
 
   triggerPopup(message: string, error: boolean) {
