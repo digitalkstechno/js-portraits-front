@@ -158,43 +158,94 @@
 .terms-page{
   width:210mm;
   min-height:297mm;
-  padding:40px 50px;
+  padding:50px 60px;
   display:flex;
   flex-direction:column;
-  page-break-after: always;
+  position:relative;
+  background:#e5e5e5;
+  overflow:hidden;
+  page-break-after:always;
+  font-family: "Poppins", sans-serif;
 }
+
+/* Background triangle shapes */
+
+.bg-shape{
+  position:absolute;
+  width:300px;
+  height:300px;
+  background:#d8cfc7;
+  opacity:0.25;
+}
+
+.bg-shape.top{
+  top:0;
+  right:0;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
+.bg-shape.bottom{
+  bottom:0;
+  left:0;
+  clip-path: polygon(0 100%, 0 0, 100% 100%);
+}
+
+/* Main content */
 
 .terms-content{
   flex:1;
+  position:relative;
+  z-index:2;
 }
+
+/* Title */
+
+.terms-title{
+  text-align:center;
+  font-size:34px;
+  font-weight:600;
+  margin-bottom:35px;
+  letter-spacing:1px;
+}
+
+/* Section block */
+
+.terms-section{
+  margin-bottom:22px;
+  line-height:1.7;
+  font-size:15px;
+}
+
+/* Black header like Canva */
+
+.section-header{
+  display:inline-block;
+  background:black;
+  color:white;
+  padding:6px 14px;
+  border-radius:14px;
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+/* Body */
+
+.terms-body{
+  margin-left:5px;
+}
+
+/* Footer */
 
 .terms-footer{
   margin-top:auto;
   display:flex;
   justify-content:space-between;
   font-size:14px;
-  page-break-inside: avoid;
+  position:relative;
+  z-index:2;
 }
 
-.terms-title {
-  text-align: center;
-  font-size: 32px;
-  margin-bottom: 30px;
-}
-
-.section-header {
-  background: black;
-  color: white;
-  padding: 6px 14px;
-  border-radius: 10px;
-  display: inline-block;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.terms-section {
-  margin-bottom: 20px;
-  line-height: 1.7;
-  margin-bottom:20px;
-  page-break-inside: avoid;
+.sign{
+  font-weight:600;
 }

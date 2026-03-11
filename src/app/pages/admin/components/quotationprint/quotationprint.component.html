@@ -86,30 +86,27 @@
   <!-- ================= TERMS PAGES ================= -->
 
   <div *ngFor="let page of paginatedTerms" class="terms-page">
+    <!-- Background shapes -->
+    <div class="bg-shape top"></div>
+    <div class="bg-shape bottom"></div>
 
     <div class="terms-content">
-  
       <h1 class="terms-title">Terms and Conditions</h1>
-  
+
       <div *ngFor="let term of page" class="terms-section">
-  
         <div class="section-header">
           {{ term.header }}
         </div>
-  
-        <p>
+
+        <p class="terms-body">
           {{ term.body }}
         </p>
-  
       </div>
-  
     </div>
-  
-    <!-- FOOTER -->
+
     <div class="terms-footer">
       <span>Received By : __________________</span>
       <span class="sign">FOR, THE JS PORTRAITS</span>
     </div>
-  
   </div>
 </div>
