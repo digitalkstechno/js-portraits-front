@@ -29,6 +29,8 @@ export class OutdoororderComponent implements OnInit {
   entryQty: number = 0;
   entryRate: number = 0;
   fixedGstRate: number = 0; // Config se aayega
+  filteredOrders: any[] = [];
+  orders: any[] = [];
 
   ngOnInit() {
     this.orderForm = this.fb.group({
@@ -49,8 +51,8 @@ export class OutdoororderComponent implements OnInit {
       grandTotal: [0],
       // Payment Section
       paymentMode: ['Cash'], // Added
-      transactionId: [''],   // Added          // Matches your "Amount Paid" logic
-      balanceDue: [0]        // Added
+      transactionId: [''], // Added          // Matches your "Amount Paid" logic
+      balanceDue: [0], // Added
     });
 
     this.outdoorService.getOrderCount().subscribe((res) => {
@@ -70,6 +72,7 @@ export class OutdoororderComponent implements OnInit {
 
     this.loadItems();
     this.loadCustomers();
+    this.loadOrders();
   }
 
   loadItems() {
@@ -81,6 +84,13 @@ export class OutdoororderComponent implements OnInit {
   loadCustomers() {
     this.outdoorService.getCustomers().subscribe((res: any) => {
       this.parties = res.data || res;
+    });
+  }
+
+  loadOrders() {
+    this.outdoorService.getOutdoorOrder().subscribe((res) => {
+      this.orders = res.orders;
+      console.log(this.orders);
     });
   }
 
@@ -141,6 +151,70 @@ export class OutdoororderComponent implements OnInit {
   removeItem(index: number) {
     this.items.removeAt(index);
     this.calculateSubtotal();
+  }
+
+  searchOrders(event: any) {
+    const term = event.target.value.toString().toLowerCase();
+
+    if (term) {
+      this.filteredOrders = this.orders.filter((order) =>
+        order.orderNo.toString().toLowerCase().includes(term),
+      );
+    } else {
+      this.filteredOrders = [];
+    }
+  }
+
+  // 2. बिल सिलेक्ट होने पर सारा डेटा फॉर्म में भरना
+  selectOrder(order: any) {
+    console.log(order);
+    this.orderForm.patchValue({
+      date: this.formatDate(order.date),
+      orderNo: order.orderNo,
+      subTotal: order.subTotal,
+      discount: order.discount,
+      cgstPerc: order.cgstPerc,
+      cgstAmt: order.cgstAmt,
+      sgstPerc: order.sgstPerc,
+      sgstAmt: order.sgstAmt,
+      igstPerc: order.igstPerc,
+      igstAmt: order.igstAmt,
+      grandTotal: order.grandTotal,
+      balanceDue: order.balanceDue,
+      advance: order.advance,
+      outdoorParty: order.outdoorParty,
+      contactNo: order.contactNo,
+      quotationNo: order.quotationNo,
+      couple: order.couple,
+      address: order.address,
+      remarks: order.remarks,
+      notes: order.notes,
+    });
+
+    // 2. Items (FormArray) को अपडेट करें
+    const itemsArray = this.orderForm.get('items') as FormArray;
+
+    // पहले पुराने आइटम्स साफ़ करें
+    while (itemsArray.length !== 0) {
+      itemsArray.removeAt(0);
+    }
+
+    // अब रिस्पॉन्स वाले नए आइटम्स जोड़ें
+    order.items.forEach((item: any) => {
+      itemsArray.push(
+        this.fb.group({
+          date: this.formatDate(item.date),
+          itemName: item.itemName,
+          eventName: item.eventName,
+          productName: item.productId?.product_name,
+          qty: item.qty,
+          rate: item.rate,
+          total: item.total,
+        }),
+      );
+    });
+
+    this.filteredOrders = []; // ड्रॉपडाउन बंद करें
   }
 
   calculateSubtotal() {

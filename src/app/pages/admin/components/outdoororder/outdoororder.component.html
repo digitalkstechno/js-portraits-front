@@ -13,9 +13,18 @@
             <input
               type="text"
               style="width: 80px"
+              (input)="searchOrders($event)"
               formControlName="orderNo"
-              readonly
             />
+            <div class="dropdown-list" *ngIf="filteredOrders.length > 0">
+              <div
+                class="dropdown-item"
+                *ngFor="let order of filteredOrders"
+                (click)="selectOrder(order)"
+              >
+                {{ order.orderNo }}
+              </div>
+            </div>
           </div>
           <div class="field-item">
             <label>Date</label>
@@ -231,6 +240,7 @@
                 orderForm.get('grandTotal')?.value -
                 orderForm.get('advance')?.value
               "
+              formControlName="balanceDue"
               readonly
             />
           </div>
