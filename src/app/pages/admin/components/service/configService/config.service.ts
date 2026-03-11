@@ -17,4 +17,13 @@ export class ConfigService {
   getGstConfig(): Observable<any> {
     return this.http.get<any>(Endpoints.GST_CONFIGURATION);
   }
+
+  // print settings
+  configprintSettings(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.PRINT_SETTINGS, data);
+  }
+
+  getPrintSettings(): Observable<any> {
+    return this.http.get<any>(Endpoints.PRINT_SETTINGS);
+  }
 }

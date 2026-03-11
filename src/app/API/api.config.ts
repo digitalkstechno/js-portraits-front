@@ -22,4 +22,5 @@ export const Endpoints = {
   NOTE_SETTINGS: `${baseUrl}/noteSettings`,
   TERMS_AND_CONDITIONS: `${baseUrl}/termsAndConditions`,
   GST_CONFIGURATION: `${baseUrl}/gstConfig`,
+  PRINT_SETTINGS: `${baseUrl}/printSettings`,
 };
