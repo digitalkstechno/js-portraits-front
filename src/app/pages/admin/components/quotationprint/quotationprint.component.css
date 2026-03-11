@@ -117,3 +117,44 @@
     margin: 0;
   }
 }
+
+.invoice-page{
+  width:210mm;
+  min-height:297mm;
+  padding:30px;
+  page-break-after: always;
+}
+
+.terms-page{
+  width:210mm;
+  min-height:297mm;
+  padding:40px 50px;
+  page-break-after: always;
+}
+
+.terms-title{
+  text-align:center;
+  font-size:32px;
+  margin-bottom:30px;
+}
+
+.section-header{
+  background:black;
+  color:white;
+  padding:6px 14px;
+  border-radius:10px;
+  display:inline-block;
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+.terms-section{
+  margin-bottom:20px;
+  line-height:1.7;
+}
+
+.terms-footer{
+  display:flex;
+  justify-content:space-between;
+  margin-top:60px;
+}

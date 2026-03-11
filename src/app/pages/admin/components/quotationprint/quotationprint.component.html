@@ -1,92 +1,106 @@
 <div class="invoice-wrapper">
+  <!-- ================= INVOICE PAGE ================= -->
 
-  <!-- TOP COLOURED SECTION -->
-  <div class="top-section">
+  <div class="invoice-page">
+    <!-- TOP COLOURED SECTION -->
+    <div class="top-section">
+      <div class="invoice-header">
+        <div class="invoice-title">INVOICE</div>
 
-    <div class="invoice-header">
-      <div class="invoice-title">INVOICE</div>
+        <div class="header-divider"></div>
 
-      <div class="header-divider"></div>
+        <div class="company-block">
+          <div class="company-name">THE JS PORTRAITS</div>
+          <div class="company-sub">Photography Studio</div>
+          <div>+91 95273 01154</div>
+        </div>
+      </div>
 
-      <div class="company-block">
-        <div class="company-name">THE JS PORTRAITS</div>
-        <div class="company-sub">Photography Studio</div>
-        <div>+91 95273 01154</div>
+      <!-- BILL INFO -->
+      <div class="invoice-info">
+        <div class="left-info">
+          <div><b>Invoice number:</b> 2345-001</div>
+          <div><b>Issue date:</b> January 27, 2026</div>
+        </div>
+
+        <div class="right-info">
+          <div><b>Billed To</b></div>
+          <div>Rose Daniel</div>
+          <div>990 W. Oklahoma St.</div>
+          <div>Ontario, CA 91762</div>
+        </div>
       </div>
     </div>
 
-    <!-- BILL INFO -->
-    <div class="invoice-info">
-      <div class="left-info">
-        <div><b>Invoice number:</b> 2345-001</div>
-        <div><b>Issue date:</b> January 27, 2026</div>
+    <!-- SERVICES TABLE -->
+    <table class="invoice-table">
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Item Description</th>
+          <th>Event Name</th>
+          <th>Qty</th>
+          <th *ngIf="showRate">Rate</th>
+          <th *ngIf="showRate">Total</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let d of data.items; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ d.itemName }} ({{ d.productId?.product_name }})</td>
+          <td>{{ d.event }}</td>
+          <td>{{ d.qty }}</td>
+          <td *ngIf="showRate">{{ d.rate }}</td>
+          <td *ngIf="showRate">{{ d.total }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- TOTAL SECTION -->
+    <div class="total-section">
+      <div *ngIf="showDiscount">Discount : {{ data.discount }}</div>
+      <div class="grand-total">TOTAL : {{ data.grandTotal }}</div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="invoice-footer">
+      <div class="footer-left">
+        123 Anywhere St, Any City<br />
+        State, Country 12345<br />
+        Mobile: +1 064 4578 2<br />
+        middleton.com<br />
+        portfolio.com/janny
       </div>
 
-      <div class="right-info">
-        <div><b>Billed To</b></div>
-        <div>Rose Daniel</div>
-        <div>990 W. Oklahoma St.</div>
-        <div>Ontario, CA 91762</div>
+      <div class="footer-right">
+        <b>Bank Transfer Details</b><br />
+        Bank: Lolite Bank Ltd.<br />
+        Account Name: JANNY MIDDLETON<br />
+        Account Number: 123 4567<br /><br />
+        Please pay invoice within 15 days.
       </div>
     </div>
-
   </div>
 
+  <!-- ================= TERMS PAGES ================= -->
 
-  <!-- SERVICES TABLE -->
-  <table class="invoice-table">
-    <thead>
-      <tr>
-        <th>No.</th>
-        <th>Item Description</th>
-        <th>Event Name</th>
-        <th>Qty</th>
-        <th *ngIf="showRate">Rate</th>
-        <th *ngIf="showRate">Total</th>
-      </tr>
-    </thead>
+  <div *ngFor="let page of paginatedTerms" class="terms-page">
+    <h1 class="terms-title">Terms and Conditions</h1>
 
-    <tbody>
-      <tr *ngFor="let d of data.items; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ d.itemName }} ({{d.productId?.product_name }})</td>
-        <td>{{ d.event }}</td>
-        <td>{{ d.qty }}</td>
-        <td *ngIf="showRate">{{ d.rate }}</td>
-        <td *ngIf="showRate">{{ d.total }}</td>
-      </tr>
-    </tbody>
-  </table>
+    <div *ngFor="let term of page" class="terms-section">
+      <div class="section-header">
+        {{ term.header }}
+      </div>
 
-
-  <!-- TOTAL SECTION -->
-  <div class="total-section">
-    <!-- <div>Sub Total : {{ data.subTotal }}</div> -->
-    <!-- <div>Tax ({{ gst }}%) : {{ gstAmt }}</div> -->
-    <div *ngIf="showDiscount">Discount : {{ data.discount }}</div>
-    <div class="grand-total">TOTAL : {{ data.grandTotal }}</div>
-  </div>
-
-
-  <!-- FOOTER -->
-  <div class="invoice-footer">
-
-    <div class="footer-left">
-      123 Anywhere St, Any City<br>
-      State, Country 12345<br>
-      Mobile: +1 064 4578 2<br>
-      middleton.com<br>
-      portfolio.com/janny
+      <p>
+        {{ term.body }}
+      </p>
     </div>
 
-    <div class="footer-right">
-      <b>Bank Transfer Details</b><br>
-      Bank: Lolite Bank Ltd.<br>
-      Account Name: JANNY MIDDLETON<br>
-      Account Number: 123 4567<br><br>
-      Please pay invoice within 15 days.
+    <div class="terms-footer">
+      <span>Received By : __________________</span>
+      <span class="sign">FOR, THE JS PORTRAITS</span>
     </div>
-
   </div>
-
 </div>

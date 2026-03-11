@@ -17,6 +17,7 @@ export class QuotationprintComponent {
 
   ngOnInit() {
     console.log('quotation data', this.data);
+    console.log('Terms conditions', this.terms);
     this.gst = this.data.cgstPerc
       ? this.data.cgstPerc + this.data.cgstPerc
       : this.data.igstPerc
@@ -28,5 +29,17 @@ export class QuotationprintComponent {
       : this.data.igstPerc
         ? this.data.igstAmt
         : 0;
+  }
+
+  termsPerPage = 5;
+
+  get paginatedTerms() {
+    const pages = [];
+
+    for (let i = 0; i < this.terms.length; i += this.termsPerPage) {
+      pages.push(this.terms.slice(i, i + this.termsPerPage));
+    }
+
+    return pages;
   }
 }
