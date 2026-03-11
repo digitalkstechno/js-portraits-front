@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
+import { ConfigService } from '../service/configService/config.service';
 
 @Component({
   selector: 'app-gstconfiguration',
@@ -13,6 +14,7 @@ export class GstconfigurationComponent {
   showPopup = false;
   popupMessage = '';
   isError = false;
+  gstSerice = inject(ConfigService);
 
   constructor(private fb: FormBuilder) {
     this.gstSettingsForm = this.fb.group({
@@ -21,13 +23,18 @@ export class GstconfigurationComponent {
       isInterstate: [false], // Interstate default unselected
     });
   }
-  
+
   ngOnInit() {
-    // पहले से सेव की हुई सेटिंग्स लोड करें
-    const savedSettings = localStorage.getItem('gstSettings');
-    if (savedSettings) {
-      this.gstSettingsForm.patchValue(JSON.parse(savedSettings));
-    }
+    this.gstSerice.getGstConfig().subscribe((res: any) => {
+      if (res && res.defaultGstRate) {
+        this.gstSettingsForm.patchValue(res);
+        localStorage.setItem('gstConfig', JSON.stringify(res)); // लोकल भी अपडेट कर दें
+      } else {
+        // 2. अगर API में नहीं है, तब localStorage चेक करें
+        const saved = localStorage.getItem('gstConfig');
+        if (saved) this.gstSettingsForm.patchValue(JSON.parse(saved));
+      }
+    });
   }
 
   toggleRadio(value: string) {
@@ -38,10 +45,26 @@ export class GstconfigurationComponent {
   }
 
   saveSettings() {
+    if (this.gstSettingsForm.invalid) {
+      this.gstSettingsForm.markAllAsTouched();
+      return;
+    }
+
     const settings = this.gstSettingsForm.value;
-    // localStorage में स्टोर करें ताकि कैलकुलेशन फंक्शन इसे उठा सके
-    localStorage.setItem('gstConfig', JSON.stringify(settings));
-    this.triggerPopup('Settings Updated!', false);
+
+    this.gstSerice.configGstSettings(settings).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('gstConfig', JSON.stringify(settings));
+        this.triggerPopup('GST Configuration settings Updated!', false);
+      },
+      error: (err: any) => {
+        console.error('Error saving GST configuration', err);
+        this.triggerPopup(
+          'Something went wrong while saving GST configuration!',
+          true,
+        );
+      },
+    });
   }
 
   triggerPopup(message: string, error: boolean) {
