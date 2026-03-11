@@ -24,6 +24,8 @@ export class QuotationComponent {
 
   filteredCustomers: any[] = [];
   filteredProducts: any[] = [];
+  filteredQuotations: any[] = [];
+  quotation: any[] = [];
   filteredItems: any[] = [];
   productsList: any[] = [];
   itemsList: any[] = [];
@@ -87,6 +89,7 @@ export class QuotationComponent {
     this.loadItems();
     this.loadCustomers();
     this.loadTerms();
+    this.loadQuotations();
     this.loadGstConfiguration();
   }
 
@@ -112,6 +115,13 @@ export class QuotationComponent {
     this.quotationService.getTermsAndConditions().subscribe((res: any) => {
       const existingConditions = res.data?.conditions || [];
       this.savedTermsFromMaster = existingConditions;
+    });
+  }
+
+  loadQuotations() {
+    this.quotationService.getQuotation().subscribe((res) => {
+      this.quotation = res.data;
+      console.log(this.quotation);
     });
   }
 
@@ -155,6 +165,84 @@ export class QuotationComponent {
     });
 
     this.filteredCustomers = [];
+  }
+
+  searchQuotations(event: any) {
+    const term = event.target.value.toString();
+
+    if (term) {
+      this.filteredQuotations = this.quotation.filter((quot) =>
+        quot.quotationNo.toString().includes(term),
+      );
+    } else {
+      this.filteredQuotations = [];
+    }
+  }
+
+  // 2. patch all data on select bill
+  selectQuotation(quot: any) {
+    this.quotationForm.patchValue(
+      {
+        date: this.formatDate(quot.date),
+        billNo: quot.billNo,
+        discount: quot.discount || 0,
+        amountPaid: quot.amountPaid || 0,
+        cgstPerc: quot.cgstPerc,
+        cgstAmt: quot.cgstAmt,
+        sgstPerc: quot.sgstPerc,
+        sgstAmt: quot.sgstAmt,
+        igstPerc: quot.igstPerc,
+        igstAmt: quot.igstAmt,
+        outdoorParty: quot.outdoorParty,
+        contactNo: quot.contactNo,
+        address: quot.address,
+        email: quot.email,
+        functionName: quot.functionName,
+        refBy: quot.refBy,
+        bookName: quot.bookName?._id, // ID पैच कर रहे हैं
+      },
+      { emitEvent: false },
+    );
+
+    // 2. Items Array साफ़ करें
+    const itemsArray = this.quotationForm.get('items') as FormArray;
+    itemsArray.clear(); // removeAt(0) वाले लूप से बेहतर है
+
+    // 3. नए आइटम्स जोड़ें
+    quot.items.forEach((item: any) => {
+      itemsArray.push(
+        this.fb.group({
+          date: this.formatDate(item.date),
+          itemName: item.itemName,
+          productName: item.productName,
+          qty: item.qty,
+          rate: item.rate,
+          total: item.amount || item.qty * item.rate,
+        }),
+      );
+    });
+
+    // 4. सबसे जरूरी: पैच करने के बाद दोबारा कैलकुलेट करें
+    this.calculateGrandTotal();
+
+    this.filteredQuotations = [];
+  }
+
+  // 3. FormArray (Items) को भरने के लिए (अगर जरूरत हो)
+  setQuotationItems(items: any[]) {
+    const itemFormArray = this.quotationForm.get('items') as FormArray;
+    itemFormArray.clear(); // पुराना डेटा साफ़ करें
+
+    items.forEach((item) => {
+      itemFormArray.push(
+        this.fb.group({
+          itemName: item.name,
+          productName: item.productName,
+          qty: item.qty,
+          price: item.price,
+        }),
+      );
+    });
   }
 
   // Item search logic
@@ -365,6 +453,18 @@ export class QuotationComponent {
 
   close() {
     this.router.navigateByUrl('/admin');
+  }
+
+  formatDate(dateStr: string) {
+    if (!dateStr) return '';
+
+    const d = new Date(dateStr);
+
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
   printConfig = { rate: true, disc: true };

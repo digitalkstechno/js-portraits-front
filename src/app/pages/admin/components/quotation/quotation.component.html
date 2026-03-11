@@ -12,8 +12,21 @@
           <input
             type="text"
             style="width: 80px"
+            (input)="searchQuotations($event)"
             formControlName="quotationNo"
+            autocomplete="off"
           />
+          <div class="dropdown-list" *ngIf="filteredQuotations.length > 0">
+            <div
+              class="dropdown-item"
+              *ngFor="let quotation of filteredQuotations"
+              (click)="selectQuotation(quotation)"
+            >
+              Bill #{{ quotation.quotationNo }} - {{ quotation.outdoorParty }} (₹{{
+                quotation.grandTotal
+              }})
+            </div>
+          </div>
         </div>
 
         <div class="field-item">
