@@ -62,6 +62,7 @@
   background-color: #e7dfd6;
   border-collapse: collapse;
   width: 100%;
+  page-break-inside:auto;
 }
 
 .invoice-table thead {
@@ -88,6 +89,10 @@
   background-color: #f5f5f5;
 }
 
+.invoice-table tr{
+  page-break-inside:avoid;
+}
+
 .total-section {
   margin-top: 20px;
   text-align: right;
@@ -100,12 +105,30 @@
   margin-top: 10px;
 }
 
-.invoice-footer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 60px;
-  font-size: 12px;
-  color: #555;
+.invoice-page{
+  width:210mm;
+  min-height:297mm;
+  padding:30px;
+  display:flex;
+  flex-direction:column;
+  page-break-after: always;
+}
+
+.invoice-content{
+  flex:1;
+}
+
+/* footer always bottom */
+.invoice-footer{
+  margin-top:auto;
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  page-break-inside: avoid;
+}
+
+.total-section{
+  page-break-inside: avoid;
 }
 
 @media print {
@@ -132,18 +155,25 @@
   }
 }
 
-.invoice-page {
-  width: 210mm;
-  min-height: 297mm;
-  padding: 30px;
+.terms-page{
+  width:210mm;
+  min-height:297mm;
+  padding:40px 50px;
+  display:flex;
+  flex-direction:column;
   page-break-after: always;
 }
 
-.terms-page {
-  width: 210mm;
-  min-height: 297mm;
-  padding: 40px 50px;
-  page-break-after: always;
+.terms-content{
+  flex:1;
+}
+
+.terms-footer{
+  margin-top:auto;
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  page-break-inside: avoid;
 }
 
 .terms-title {
@@ -165,10 +195,6 @@
 .terms-section {
   margin-bottom: 20px;
   line-height: 1.7;
-}
-
-.terms-footer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 550px;
+  margin-bottom:20px;
+  page-break-inside: avoid;
 }
