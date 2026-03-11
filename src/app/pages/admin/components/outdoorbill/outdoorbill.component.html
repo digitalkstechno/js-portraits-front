@@ -43,9 +43,7 @@
               *ngFor="let bill of filteredBills"
               (click)="selectBill(bill)"
             >
-              Bill #{{ bill.billNo }} - {{ bill.outdoorParty }} (₹{{
-                bill.grandTotal
-              }})
+              {{ bill.billNo }}
             </div>
           </div>
         </div>

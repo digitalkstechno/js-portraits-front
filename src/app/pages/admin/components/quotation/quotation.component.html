@@ -22,9 +22,7 @@
               *ngFor="let quotation of filteredQuotations"
               (click)="selectQuotation(quotation)"
             >
-              Bill #{{ quotation.quotationNo }} - {{ quotation.outdoorParty }} (₹{{
-                quotation.grandTotal
-              }})
+              {{ quotation.quotationNo }}
             </div>
           </div>
         </div>
