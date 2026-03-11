@@ -6,6 +6,7 @@ import { ItemsService } from '../../master/service/items.service';
 import { AdminService } from '../service/admin.service';
 import { PdfService } from '../service/pdf-service/pdf.service';
 import { QuotationprintComponent } from "../quotationprint/quotationprint.component";
+import { ConfigService } from '../service/configService/config.service';
 
 @Component({
   selector: 'app-quotation',
@@ -19,6 +20,7 @@ export class QuotationComponent {
   productService = inject(ItemsService);
   quotationService = inject(AdminService);
   pdfService = inject(PdfService);
+  gstService = inject(ConfigService);
 
   filteredCustomers: any[] = [];
   filteredProducts: any[] = [];
@@ -59,9 +61,12 @@ export class QuotationComponent {
     items: this.fb.array([]),
     subTotal: [0],
     discount: [0],
-    cgst: [0],
-    sgst: [0],
-    igst: [0],
+    cgstPerc: [0],
+    cgstAmt: [0],
+    sgstPerc: [0],
+    sgstAmt: [0],
+    igstPerc: [0],
+    igstAmt: [0],
     grandTotal: [0],
     notes: [''],
     remarks: [''],
@@ -82,6 +87,7 @@ export class QuotationComponent {
     this.loadItems();
     this.loadCustomers();
     this.loadTerms();
+    this.loadGstConfiguration();
   }
 
   // LOAD ITEMS
@@ -106,6 +112,26 @@ export class QuotationComponent {
     this.quotationService.getTermsAndConditions().subscribe((res: any) => {
       const existingConditions = res.data?.conditions || [];
       this.savedTermsFromMaster = existingConditions;
+    });
+  }
+
+  gstConfig: any;
+  loadGstConfiguration() {
+    this.gstService.getGstConfig().subscribe((config: any) => {
+      if (config) {
+        this.gstConfig = config;
+        this.gstService.getGstConfig().subscribe((config) => {
+          if (config) {
+            // अगर Local है तो आधा-आधा, वरना IGST
+            this.quotationForm.patchValue({
+              cgstPerc: config.isLocal ? config.defaultGstRate / 2 : 0,
+              sgstPerc: config.isLocal ? config.defaultGstRate / 2 : 0,
+              igstPerc: config.isInterstate ? config.defaultGstRate : 0,
+            });
+            this.calculateGrandTotal();
+          }
+        });
+      }
     });
   }
 
@@ -221,18 +247,44 @@ export class QuotationComponent {
   calculateGrandTotal() {
     let subTotal = 0;
 
+    // 1. सभी आइटम्स का टोटल निकालें
     this.items.controls.forEach((item: any) => {
-      subTotal += item.get('total')?.value || 0;
+      // सुनिश्चित करें कि FormArray में फील्ड का नाम 'total' ही है
+      subTotal += Number(item.get('total')?.value || 0);
     });
 
-    const discount = Number(this.quotationForm.get('discount')?.value || 0);
+    // 2. फॉर्म से Taxable वैल्यू और GST Rates निकालें
+    const f = this.quotationForm.getRawValue();
+    const discount = Number(f.discount || 0);
+    const taxable = subTotal - discount;
 
-    const grandTotal = subTotal - discount;
+    // ये Percentages आपकी GST Configuration से पैच होनी चाहिए
+    const cgstPerc = Number(f.cgstPerc || 0);
+    const sgstPerc = Number(f.sgstPerc || 0);
+    const igstPerc = Number(f.igstPerc || 0);
 
-    this.quotationForm.patchValue({
-      subTotal,
-      grandTotal,
-    });
+    // 3. GST Amounts की गणना
+    const cgstAmt = (taxable * cgstPerc) / 100;
+    const sgstAmt = (taxable * sgstPerc) / 100;
+    const igstAmt = (taxable * igstPerc) / 100;
+
+    const totalGst = cgstAmt + sgstAmt + igstAmt;
+
+    // 4. Final Totals
+    const netTotal = taxable + totalGst;
+
+    // 5. फॉर्म में वैल्यूज अपडेट करें
+    this.quotationForm.patchValue(
+      {
+        subTotal: subTotal.toFixed(2),
+        cgstAmt: cgstAmt.toFixed(2),
+        sgstAmt: sgstAmt.toFixed(2),
+        igstAmt: igstAmt.toFixed(2),
+        totalGst: totalGst.toFixed(2),
+        grandTotal: netTotal.toFixed(2), // या netTotal.toFixed(2)
+      },
+      { emitEvent: false },
+    );
   }
 
   clearItem() {
@@ -267,6 +319,12 @@ export class QuotationComponent {
       subTotal: [0],
       discount: [0],
       grandTotal: [0],
+      cgstPerc: [0],
+      cgstAmt: [0],
+      sgstPerc: [0],
+      sgstAmt: [0],
+      igstPerc: [0],
+      igstAmt: [0],
       notes: [''],
       remarks: [''],
     });

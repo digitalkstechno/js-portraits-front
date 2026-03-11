@@ -40,7 +40,6 @@ export class PurchaseitemsComponent {
 
   ngOnInit() {
     this.initForms();
-    this.loadGstSettings();
     this.billService.getProductSellCount().subscribe((res) => {
       // console.log(res.count);
       const count = res.count;
@@ -62,14 +61,41 @@ export class PurchaseitemsComponent {
     });
   }
 
-  fixedGstRate: number = 0; // Will be fetched from DB
+  initForms() {
+    this.productSellForm = this.fb.group({
+      bookName: [''],
+      billNo: [this.count],
+      purchaseDate: [new Date().toISOString().split('T')[0]],
+      partyName: ['', Validators.required],
+      contactNo: [''],
 
-  loadGstSettings() {
-    // Assuming you have a service method to get common settings
-    this.billService.getGstConfiguration().subscribe((res: any) => {
-      // Assuming your settings panel returns { gstPercentage: 18 }
-      this.fixedGstRate = res.gstPercentage || 0;
-      this.calculateGrandTotal(); // Recalculate once GST is loaded
+      items: this.fb.array([]),
+      subTotal: [0],
+      discount: [0],
+      grandTotal: [0],
+      cgstPerc: [0],
+      cgstAmt: [0],
+      sgstPerc: [0],
+      sgstAmt: [0],
+      igstPerc: [0],
+      igstAmt: [0],
+
+      // Naye Payment Fields
+      paymentMode: ['Cash'],
+      transactionId: [''],
+      amountPaid: [0],
+      balanceDue: [0],
+    });
+
+    this.entryForm = this.fb.group({
+      date: [new Date().toISOString().split('T')[0]],
+      itemName: ['', Validators.required],
+      itemId: [''],
+      productName: ['', Validators.required],
+      productId: [''],
+      qty: [],
+      rate: [0],
+      amount: [0],
     });
   }
 
@@ -118,44 +144,6 @@ export class PurchaseitemsComponent {
       },
       { emitEvent: false },
     );
-  }
-
-  initForms() {
-    this.productSellForm = this.fb.group({
-      bookName: [''],
-      billNo: [this.count],
-      purchaseDate: [new Date().toISOString().split('T')[0]],
-      partyName: ['', Validators.required],
-      contactNo: [''],
-
-      items: this.fb.array([]),
-      subTotal: [0],
-      discount: [0],
-      grandTotal: [0],
-      cgstPerc: [0],
-      cgstAmt: [0],
-      sgstPerc: [0],
-      sgstAmt: [0],
-      igstPerc: [0],
-      igstAmt: [0],
-
-      // Naye Payment Fields
-      paymentMode: ['Cash'],
-      transactionId: [''],
-      amountPaid: [0],
-      balanceDue: [0],
-    });
-
-    this.entryForm = this.fb.group({
-      date: [new Date().toISOString().split('T')[0]],
-      itemName: ['', Validators.required],
-      itemId: [''],
-      productName: ['', Validators.required],
-      productId: [''],
-      qty: [],
-      rate: [0],
-      amount: [0],
-    });
   }
 
   loadCustomers() {

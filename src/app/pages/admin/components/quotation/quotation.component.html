@@ -253,7 +253,12 @@
       <div class="summary-box">
         <div class="summary-row">
           <label>Sub Total</label>
-          <input type="text" formControlName="subTotal" style="background-color: #eae6e6" readonly />
+          <input
+            type="text"
+            formControlName="subTotal"
+            style="background-color: #eae6e6"
+            readonly
+          />
         </div>
 
         <div class="summary-row">
@@ -265,39 +270,63 @@
           />
         </div>
 
-        <div class="summary-row">
-          <label>CGST</label>
-          <input
-            type="number"
-            formControlName="cgst"
-            (input)="calculateGrandTotal()"
-            style="background-color: #eae6e6"
-            readonly
-          />
-        </div>
+        <div class="tax-group" *ngIf="gstConfig">
+          <ng-container *ngIf="gstConfig.isLocal">
+            <div class="summary-row tax-row">
+              <label>CGST (%)</label>
+              <div class="tax-inputs">
+                <input
+                  type="number"
+                  formControlName="cgstPerc"
+                  readonly
+                  class="tax-perc"
+                />
+                <input
+                  type="text"
+                  formControlName="cgstAmt"
+                  readonly
+                  class="tax-amt"
+                />
+              </div>
+            </div>
 
-        <div class="summary-row">
-          <label>SGST</label>
-          <input
-            type="number"
-            formControlName="sgst"
-            (input)="calculateGrandTotal()"
-            style="background-color: #eae6e6"
-            readonly
-          />
-        </div>
+            <div class="summary-row tax-row">
+              <label>SGST (%)</label>
+              <div class="tax-inputs">
+                <input
+                  type="number"
+                  formControlName="sgstPerc"
+                  readonly
+                  class="tax-perc"
+                />
+                <input
+                  type="text"
+                  formControlName="sgstAmt"
+                  readonly
+                  class="tax-amt"
+                />
+              </div>
+            </div>
+          </ng-container>
 
-        <div class="summary-row">
-          <label>IGST</label>
-          <input
-            type="number"
-            formControlName="igst"
-            (input)="calculateGrandTotal()"
-            style="background-color: #eae6e6"
-            readonly
-          />
+          <div class="summary-row tax-row" *ngIf="gstConfig.isInterstate">
+            <label>IGST (%)</label>
+            <div class="tax-inputs">
+              <input
+                type="number"
+                formControlName="igstPerc"
+                readonly
+                class="tax-perc"
+              />
+              <input
+                type="text"
+                formControlName="igstAmt"
+                readonly
+                class="tax-amt"
+              />
+            </div>
+          </div>
         </div>
-
         <div class="summary-row grand-total-highlight">
           <label>NET TOTAL</label>
           <input
@@ -345,6 +374,7 @@
     [data]="quotationData"
     [showRate]="showRate"
     [showDiscount]="showDiscount"
-    [terms]="savedTermsFromMaster">
+    [terms]="savedTermsFromMaster"
+  >
   </app-quotationprint>
 </div>

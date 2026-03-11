@@ -380,7 +380,7 @@ tbody tr:hover {
 
 .dropdown-list {
   position: absolute;
-  top: 100%;   /* show just below input */
+  top: 100%; /* show just below input */
   left: 90px;
   width: 75%;
   border: 1px solid #999;
@@ -389,7 +389,7 @@ tbody tr:hover {
   overflow-y: auto;
   border-radius: 2px;
   z-index: 1000;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 .dropdown-item {
@@ -442,12 +442,11 @@ tbody tr:hover {
   }
 }
 
-.print-area{
-  display:none;
+.print-area {
+  display: none;
 }
 
 @media print {
-
   body * {
     visibility: hidden;
   }
@@ -457,12 +456,37 @@ tbody tr:hover {
     visibility: visible;
   }
 
-  .print-area{
-    display:block;
-    position:absolute;
-    left:0;
-    top:0;
-    width:100%;
+  .print-area {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
   }
+}
 
+.tax-row label {
+  font-size: 11px !important;
+  color: #718096;
+}
+
+.tax-inputs {
+  display: flex;
+  gap: 5px;
+}
+
+/* Percentage input (Small) */
+.tax-perc {
+  width: 60px !important;
+  text-align: center !important;
+  color: #3182ce;
+  font-weight: bold;
+}
+
+/* Calculated Tax Amount */
+.tax-amt {
+  width: 75px !important;
+  background: transparent;
+  border: none !important;
+  font-weight: 600;
 }
