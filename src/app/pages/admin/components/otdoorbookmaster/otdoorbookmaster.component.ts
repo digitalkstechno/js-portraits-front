@@ -37,6 +37,28 @@ export class OtdoorbookmasterComponent {
     });
   }
 
+  updateBook(item: any) {
+    const id = item._id;
+
+    // क्लिक होने के बाद वैल्यू को टॉगल (Toggle) करें
+    const newValue = !item.notDisplayInOutBill;
+
+    const updateData = {
+      notDisplayInOutBill: newValue, // नई वैल्यू भेजें
+    };
+
+    this.bookService.updateOutdoorBook(id, updateData).subscribe({
+      next: (res: any) => {
+        this.triggerPopup('Outdoor book updated Successfully!', false);
+        this.loadBooks();
+      },
+      error: (err: any) => {
+        console.error('Error updating outdoor book', err);
+        this.triggerPopup('Something went wrong!', true);
+      },
+    });
+  }
+
   onSubmit() {
     if (this.bookForm.invalid) {
       this.bookForm.markAllAsTouched();
@@ -76,6 +98,6 @@ export class OtdoorbookmasterComponent {
     this.bookForm.reset();
   }
   onExit() {
-    this.router.navigateByUrl('/admin')
+    this.router.navigateByUrl('/admin');
   }
 }

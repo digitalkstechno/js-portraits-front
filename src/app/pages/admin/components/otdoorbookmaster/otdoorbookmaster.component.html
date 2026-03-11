@@ -50,7 +50,7 @@
           >
             <td class="small">{{ item.bookName }}</td>
             <td class="text-center">
-              <input type="checkbox" [checked]="item.notDisplay" />
+              <input type="checkbox" [checked]="item.notDisplayInOutBill" (change)="updateBook(item)" />
             </td>
           </tr>
           <tr *ngFor="let i of [1, 2, 3, 4]">

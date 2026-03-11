@@ -148,6 +148,10 @@ export class AdminService {
     return this.http.post<any>(Endpoints.OUTDOOR_BOOKS, data);
   }
 
+  updateOutdoorBook(id: string, data: any): Observable<any> {
+    return this.http.put<any>(`${Endpoints.OUTDOOR_BOOKS}/${id}`, data);
+  }
+
   // customers
   getCustomers(): Observable<any> {
     return this.http.get<any>(Endpoints.CUSTOMERS);

@@ -108,7 +108,8 @@ export class OutdoorbillComponent {
 
   loadBooks() {
     this.billService.getOutdoorBooks().subscribe((res: any) => {
-      this.books = res.books;
+      const books = res.books;
+      this.books = books.filter((b: any) => !b.notDisplayInOutBill);
       console.log(this.books);
     });
   }
