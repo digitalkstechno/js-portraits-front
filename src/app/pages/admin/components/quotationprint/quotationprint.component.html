@@ -101,8 +101,16 @@
     </div>
 
     <div class="terms-footer">
-      <span>Received By : __________________</span>
-      <span class="sign">FOR, THE JS PORTRAITS</span>
+
+      <div class="received">
+        Received By : __________________
+      </div>
+    
+      <div class="sign">
+        <img [src]="printSettings?.signatureBase64" class="signature-img">
+        <div class="sign-text">FOR, THE JS PORTRAITS</div>
+      </div>
+    
     </div>
   </div>
 </div>

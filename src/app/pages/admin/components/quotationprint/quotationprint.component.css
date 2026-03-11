@@ -243,14 +243,27 @@
 /* Footer */
 
 .terms-footer{
-  margin-top:auto;
   display:flex;
   justify-content:space-between;
-  font-size:14px;
-  position:relative;
-  z-index:2;
+  align-items:flex-end;
+  margin-top:40px;
 }
 
 .sign{
+  text-align:center;
+}
+
+.signature-img{
+  height:55px;
+  margin-bottom:-8px;
+  width:auto;
+  object-fit:contain;
+  display:block;
+  margin:auto;
+  mix-blend-mode: multiply;
+}
+
+.sign-text{
   font-weight:600;
+  margin-top:4px;
 }
