@@ -28,11 +28,6 @@ export class GstconfigurationComponent {
     this.gstSerice.getGstConfig().subscribe((res: any) => {
       if (res && res.defaultGstRate) {
         this.gstSettingsForm.patchValue(res);
-        localStorage.setItem('gstConfig', JSON.stringify(res)); // लोकल भी अपडेट कर दें
-      } else {
-        // 2. अगर API में नहीं है, तब localStorage चेक करें
-        const saved = localStorage.getItem('gstConfig');
-        if (saved) this.gstSettingsForm.patchValue(JSON.parse(saved));
       }
     });
   }
@@ -54,7 +49,6 @@ export class GstconfigurationComponent {
 
     this.gstSerice.configGstSettings(settings).subscribe({
       next: (res: any) => {
-        localStorage.setItem('gstConfig', JSON.stringify(settings));
         this.triggerPopup('GST Configuration settings Updated!', false);
       },
       error: (err: any) => {
