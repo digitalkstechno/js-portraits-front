@@ -32,9 +32,22 @@
           <input
             type="text"
             formControlName="billNo"
-            style="width: 100px"
-            readonly
+            (input)="searchBills($event)"
+            placeholder="Type Bill No..."
+            autocomplete="off"
           />
+
+          <div class="dropdown-list" *ngIf="filteredBills.length > 0">
+            <div
+              class="dropdown-item"
+              *ngFor="let bill of filteredBills"
+              (click)="selectBill(bill)"
+            >
+              Bill #{{ bill.billNo }} - {{ bill.outdoorParty }} (₹{{
+                bill.grandTotal
+              }})
+            </div>
+          </div>
         </div>
         <div class="field-item">
           <label>Date</label>
@@ -238,7 +251,7 @@
             <td>{{ item.event }}</td>
             <td class="text-center">{{ item.qty }}</td>
             <td class="text-right">{{ item.rate }}</td>
-            <td class="text-right">{{ item.total }}</td>
+            <td class="text-right">{{ item.amount }}</td>
             <td>{{ item.place }}</td>
             <td>{{ item.time }}</td>
           </tr>
@@ -253,7 +266,7 @@
       <div class="summary-box">
         <div class="summary-row">
           <label>Sub Total</label
-          ><input type="text" formControlName="subTotal" readonly />
+          ><input type="number" formControlName="subTotal" readonly />
         </div>
         <div class="summary-row">
           <label>Discount</label

@@ -25,6 +25,7 @@ export class OutdoorbillComponent {
   filteredBooks: any[] = [];
   parties: any[] = [];
   books: any[] = [];
+  bills: any[] = [];
   itemsList: any[] = [];
   productsList: any[] = [];
   filteredItems: any[] = [];
@@ -49,6 +50,7 @@ export class OutdoorbillComponent {
     this.loadItems();
     this.loadCustomers();
     this.loadBooks();
+    this.loadBills();
 
     // Jab bhi discount, tax ya advance badle, calculation refresh ho
     this.billForm.valueChanges.subscribe(() => {
@@ -111,6 +113,13 @@ export class OutdoorbillComponent {
     });
   }
 
+  loadBills() {
+    this.billService.getOutdoorBill().subscribe((res) => {
+      this.bills = res.bills;
+      console.log(this.bills);
+    });
+  }
+
   filterParty(event: any) {
     const value = event.target.value.toLowerCase();
     if (!value) {
@@ -154,6 +163,80 @@ export class OutdoorbillComponent {
     this.filteredBooks = [];
   }
 
+  filteredBills: any[] = [];
+
+  searchBills(event: any) {
+    const term = event.target.value.toString().toLowerCase(); // सर्च टर्म को स्ट्रिंग में बदलें
+
+    if (term) {
+      // मान लेते हैं कि 'allBills' में आपका वह Response Store है जो आपने ऊपर दिखाया
+      this.filteredBills = this.bills.filter(
+        (bill) =>
+          bill.billNo.toString().toLowerCase().includes(term) ||
+          bill.outdoorParty.toLowerCase().includes(term),
+      );
+    } else {
+      this.filteredBills = [];
+    }
+  }
+  // 2. बिल सिलेक्ट होने पर सारा डेटा फॉर्म में भरना
+  selectBill(bill: any) {
+    console.log(bill);
+    // 1. बेसिक फील्ड्स को पैच करें
+    this.billForm.patchValue({
+      billNo: bill.billNo,
+      subTotal: bill.subTotal,
+      grandTotal: bill.grandTotal,
+      balance: bill.balanceDue,
+      outdoorParty: bill.outdoorParty,
+      // अगर बुक का नाम ID के रूप में है:
+      bookName: bill.bookName?._id,
+    });
+
+    this.selectedBookName = bill.bookName?.bookName;
+
+    // 2. Items (FormArray) को अपडेट करें
+    const itemsArray = this.billForm.get('items') as FormArray;
+
+    // पहले पुराने आइटम्स साफ़ करें
+    while (itemsArray.length !== 0) {
+      itemsArray.removeAt(0);
+    }
+
+    // अब रिस्पॉन्स वाले नए आइटम्स जोड़ें
+    bill.items.forEach((item: any) => {
+      itemsArray.push(
+        this.fb.group({
+          date: this.formatDate(item.date),
+          itemName: item.itemName,
+          productName: item.productName,
+          qty: item.qty,
+          rate: item.rate,
+          amount: item.amount,
+        }),
+      );
+    });
+
+    this.filteredBills = []; // ड्रॉपडाउन बंद करें
+  }
+
+  // 3. FormArray (Items) को भरने के लिए (अगर जरूरत हो)
+  setBillItems(items: any[]) {
+    const itemFormArray = this.billForm.get('items') as FormArray;
+    itemFormArray.clear(); // पुराना डेटा साफ़ करें
+
+    items.forEach((item) => {
+      itemFormArray.push(
+        this.fb.group({
+          itemName: item.name,
+          productName: item.productName,
+          qty: item.qty,
+          price: item.price,
+        }),
+      );
+    });
+  }
+
   // searchQuotation() {
   //   const qNo = this.billForm.get('orderNo')?.value;
 
@@ -181,7 +264,7 @@ export class OutdoorbillComponent {
   //         event: [item.event],
   //         qty: [item.qty],
   //         rate: [item.rate],
-  //         total: [item.total],
+  //         amount: [item.amount],
   //         place: [item.place],
   //         time: [item.time],
   //       });
@@ -249,7 +332,7 @@ export class OutdoorbillComponent {
       event: [val.event],
       qty: [val.qty],
       rate: [val.rate],
-      total: [val.qty * val.rate],
+      amount: [val.qty * val.rate],
       place: [val.place],
       time: [val.time],
     });
@@ -260,16 +343,17 @@ export class OutdoorbillComponent {
 
   calculateGrandTotal() {
     let subTotal = 0;
-    this.itemsFormArray.controls.forEach(
-      (c: any) => (subTotal += c.get('total')?.value || 0),
-    );
+
+    this.itemsFormArray.controls.forEach((c: any) => {
+      subTotal += Number(c.get('amount')?.value || 0);
+    });
 
     const f = this.billForm.value;
-    const taxable = subTotal - f.discount;
+    const taxable = subTotal - (f.discount || 0);
 
-    const cgstAmt = (taxable * f.cgstPerc) / 100;
-    const sgstAmt = (taxable * f.sgstPerc) / 100;
-    const igstAmt = (taxable * f.igstPerc) / 100;
+    const cgstAmt = (taxable * (f.cgstPerc || 0)) / 100;
+    const sgstAmt = (taxable * (f.sgstPerc || 0)) / 100;
+    const igstAmt = (taxable * (f.igstPerc || 0)) / 100;
 
     const netTotal = taxable + cgstAmt + sgstAmt + igstAmt;
 
@@ -280,7 +364,7 @@ export class OutdoorbillComponent {
         sgstAmt: sgstAmt.toFixed(2),
         igstAmt: igstAmt.toFixed(2),
         netTotal: netTotal.toFixed(2),
-        balanceDue: (netTotal - f.advance).toFixed(2),
+        balanceDue: (netTotal - (f.advance || 0)).toFixed(2),
       },
       { emitEvent: false },
     );
