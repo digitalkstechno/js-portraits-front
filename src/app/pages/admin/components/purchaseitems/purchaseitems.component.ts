@@ -212,12 +212,11 @@ export class PurchaseitemsComponent {
     }
   }
 
-  // 2. बिल सिलेक्ट होने पर सारा डेटा फॉर्म में भरना
+  // 2. patch all data on select bill
   selectBill(bill: any) {
-    // 1. फॉर्म को पैच करें
     this.productSellForm.patchValue(
       {
-        date: this.formatDate(bill.sellDate), // चेक करें: sellDate या date?
+        date: this.formatDate(bill.sellDate), 
         billNo: bill.billNo,
         discount: bill.discount || 0,
         amountPaid: bill.amountPaid || 0,
@@ -238,11 +237,11 @@ export class PurchaseitemsComponent {
     bill.items.forEach((item: any) => {
       itemsArray.push(
         this.fb.group({
+          date: this.formatDate(item.date),          
           itemName: item.itemName,
           productName: item.productName,
           qty: item.qty,
           rate: item.rate,
-          // ध्यान दें: अगर आपके कैलकुलेशन फंक्शन में 'total' की है, तो यहाँ भी वही नाम रखें
           total: item.amount || item.qty * item.rate,
         }),
       );
