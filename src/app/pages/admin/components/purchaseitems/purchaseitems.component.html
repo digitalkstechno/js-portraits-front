@@ -12,10 +12,11 @@
           <input
             type="text"
             style="width: 80px"
-            formControlName="bookName"
+            [value]="selectedBookName"
             placeholder="BNI"
             (input)="filterBooks($event)"
           />
+          <input type="hidden" formControlName="bookName" />
           <div class="dropdown-list" *ngIf="filteredBooks.length">
             <div
               class="dropdown-item"
@@ -31,9 +32,22 @@
           <input
             type="text"
             formControlName="billNo"
-            style="width: 100px"
-            readonly
+            (input)="searchBills($event)"
+            placeholder="Type Bill No..."
+            autocomplete="off"
           />
+
+          <div class="dropdown-list" *ngIf="filteredBills.length > 0">
+            <div
+              class="dropdown-item"
+              *ngFor="let bill of filteredBills"
+              (click)="selectBill(bill)"
+            >
+              Bill #{{ bill.billNo }} - {{ bill.outdoorParty }} (₹{{
+                bill.grandTotal
+              }})
+            </div>
+          </div>
         </div>
         <div class="field-item">
           <label>Date</label>

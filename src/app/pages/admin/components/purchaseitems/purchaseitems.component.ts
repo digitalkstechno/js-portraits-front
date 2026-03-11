@@ -25,6 +25,7 @@ export class PurchaseitemsComponent {
   filteredBooks: any[] = [];
   parties: any[] = [];
   books: any[] = [];
+  bills: any[] = [];
   itemsList: any[] = [];
   productsList: any[] = [];
   filteredItems: any[] = [];
@@ -33,6 +34,7 @@ export class PurchaseitemsComponent {
   isError = false;
   showPopup = false;
   popupMessage = '';
+  selectedBookName: string = '';
 
   ngOnInit() {
     this.initForms();
@@ -49,6 +51,7 @@ export class PurchaseitemsComponent {
     this.loadItems();
     this.loadCustomers();
     this.loadBooks();
+    this.loadBills();
 
     // Jab bhi discount, tax ya advance badle, calculation refresh ho
     this.productSellForm.valueChanges.subscribe(() => {
@@ -69,22 +72,29 @@ export class PurchaseitemsComponent {
 
   calculateGrandTotal() {
     let subTotal = 0;
+
+    // सभी आइटम्स का टोटल निकालें
     this.itemsFormArray.controls.forEach((c: any) => {
-      subTotal += c.get('total')?.value || 0;
+      subTotal += Number(c.get('total')?.value || 0);
     });
 
     const f = this.productSellForm.getRawValue();
-    const taxable = subTotal - (f.discount || 0);
-    const totalGstAmt = (taxable * this.fixedGstRate) / 100;
+
+    const discount = Number(f.discount || 0);
+    const taxable = subTotal - discount;
+    const totalGstAmt = (taxable * (this.fixedGstRate || 0)) / 100;
     const netTotal = taxable + totalGstAmt;
-    const paid = f.amountPaid || 0;
+    const paid = Number(f.amountPaid || 0);
+
+    // balanceDue = कुल बिल - जितना पैसा मिला
+    const due = netTotal - paid;
 
     this.productSellForm.patchValue(
       {
         subTotal: subTotal.toFixed(2),
         totalGst: totalGstAmt.toFixed(2),
         grandTotal: netTotal.toFixed(2),
-        balanceDue: (netTotal - paid).toFixed(2),
+        balanceDue: due.toFixed(2), // अब यह नेगेटिव नहीं आएगा
       },
       { emitEvent: false },
     );
@@ -136,6 +146,13 @@ export class PurchaseitemsComponent {
     });
   }
 
+  loadBills() {
+    this.billService.getProductSell().subscribe((res) => {
+      this.bills = res.data;
+      console.log(this.bills);
+    });
+  }
+
   filterParty(event: any) {
     const value = event.target.value.toLowerCase();
     if (!value) {
@@ -147,16 +164,12 @@ export class PurchaseitemsComponent {
       (party: any) =>
         party.name && party.name.toString().toLowerCase().includes(value),
     );
-
-    this.filteredBooks = this.books.filter(
-      (book: any) =>
-        book.bookName && book.bookName.toString().toLowerCase().includes(value),
-    );
   }
 
   selectParty(party: any) {
     this.productSellForm.patchValue({
       partyName: party.name,
+      contactNo: party.contact,
     });
 
     this.filteredCustomers = [];
@@ -164,6 +177,7 @@ export class PurchaseitemsComponent {
 
   filterBooks(event: any) {
     const value = event.target.value.toLowerCase();
+    this.selectedBookName = value;
     if (!value) {
       this.filteredBooks = [];
       return;
@@ -176,10 +190,85 @@ export class PurchaseitemsComponent {
   }
 
   selectBook(book: any) {
+    this.selectedBookName = book.bookName;
     this.productSellForm.patchValue({
-      bookName: book.bookName,
+      bookName: book._id,
     });
     this.filteredBooks = [];
+  }
+
+  filteredBills: any[] = [];
+  searchBills(event: any) {
+    const term = event.target.value.toString().toLowerCase();
+
+    if (term) {
+      this.filteredBills = this.bills.filter(
+        (bill) =>
+          bill.billNo.toString().toLowerCase().includes(term) ||
+          bill.outdoorParty.toLowerCase().includes(term),
+      );
+    } else {
+      this.filteredBills = [];
+    }
+  }
+
+  // 2. बिल सिलेक्ट होने पर सारा डेटा फॉर्म में भरना
+  selectBill(bill: any) {
+    // 1. फॉर्म को पैच करें
+    this.productSellForm.patchValue(
+      {
+        date: this.formatDate(bill.sellDate), // चेक करें: sellDate या date?
+        billNo: bill.billNo,
+        discount: bill.discount || 0,
+        amountPaid: bill.amountPaid || 0,
+        partyName: bill.partyName,
+        contactNo: bill.contactNo,
+        bookName: bill.bookName?._id, // ID पैच कर रहे हैं
+      },
+      { emitEvent: false },
+    );
+
+    this.selectedBookName = bill.bookName?.bookName;
+
+    // 2. Items Array साफ़ करें
+    const itemsArray = this.productSellForm.get('items') as FormArray;
+    itemsArray.clear(); // removeAt(0) वाले लूप से बेहतर है
+
+    // 3. नए आइटम्स जोड़ें
+    bill.items.forEach((item: any) => {
+      itemsArray.push(
+        this.fb.group({
+          itemName: item.itemName,
+          productName: item.productName,
+          qty: item.qty,
+          rate: item.rate,
+          // ध्यान दें: अगर आपके कैलकुलेशन फंक्शन में 'total' की है, तो यहाँ भी वही नाम रखें
+          total: item.amount || item.qty * item.rate,
+        }),
+      );
+    });
+
+    // 4. सबसे जरूरी: पैच करने के बाद दोबारा कैलकुलेट करें
+    this.calculateGrandTotal();
+
+    this.filteredBills = [];
+  }
+
+  // 3. FormArray (Items) को भरने के लिए (अगर जरूरत हो)
+  setBillItems(items: any[]) {
+    const itemFormArray = this.productSellForm.get('items') as FormArray;
+    itemFormArray.clear(); // पुराना डेटा साफ़ करें
+
+    items.forEach((item) => {
+      itemFormArray.push(
+        this.fb.group({
+          itemName: item.name,
+          productName: item.productName,
+          qty: item.qty,
+          price: item.price,
+        }),
+      );
+    });
   }
 
   loadItems() {
