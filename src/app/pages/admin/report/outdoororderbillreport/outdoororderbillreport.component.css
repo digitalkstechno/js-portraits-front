@@ -145,3 +145,30 @@ td {
   background: #fee2e2;
   color: #b91c1c;
 }
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr; /* Bar बड़ा, Line और Pie छोटे */
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.chart-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.chart-container-pie {
+  height: 250px;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 1200px) {
+  .charts-grid {
+    grid-template-columns: 1fr; /* मोबाइल पर सब एक लाइन में */
+  }
+}

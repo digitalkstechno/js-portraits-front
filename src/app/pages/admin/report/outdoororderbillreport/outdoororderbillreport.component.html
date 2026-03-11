@@ -44,7 +44,7 @@
           <div class="value">₹{{ totalBilledAmount | number: "1.0-0" }}</div>
         </div>
         <div class="stat-item">
-          <label>Outstanding</label>
+          <label>Total Pending</label>
           <div class="value text-red">
             ₹{{ totalBillPending | number: "1.0-0" }}
           </div>
@@ -53,10 +53,26 @@
     </div>
   </div>
 
-  <div class="chart-card-full">
-    <h3>Revenue Growth: Orders vs Bills</h3>
-    <div class="chart-container">
-      <canvas #revenueChartCanvas></canvas>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Orders vs Bills (Bar)</h3>
+      <div class="chart-container">
+        <canvas #revenueChartCanvas></canvas>
+      </div>
+    </div>
+  
+    <div class="chart-card">
+      <h3>Revenue Trend (Line)</h3>
+      <div class="chart-container">
+        <canvas #lineChartCanvas></canvas>
+      </div>
+    </div>
+  
+    <div class="chart-card">
+      <h3>Payment Status (Pie)</h3>
+      <div class="chart-container-pie">
+        <canvas #pieChartCanvas></canvas>
+      </div>
     </div>
   </div>
 

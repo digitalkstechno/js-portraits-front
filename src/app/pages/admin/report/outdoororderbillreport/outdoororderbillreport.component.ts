@@ -55,6 +55,8 @@ export interface OutdoorBill {
   styleUrl: './outdoororderbillreport.component.css',
 })
 export class OutdoororderbillreportComponent {
+  @ViewChild('lineChartCanvas') lineChartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('pieChartCanvas') pieChartCanvas!: ElementRef<HTMLCanvasElement>;
   @ViewChild('revenueChartCanvas')
   revenueChartCanvas!: ElementRef<HTMLCanvasElement>;
   outdoorOrders: any[] = [];
@@ -110,7 +112,11 @@ export class OutdoororderbillreportComponent {
 
       this.buildAggregates();
       // चार्ट बनाने से पहले थोड़ा समय दें ताकि Canvas DOM में रेंडर हो जाए
-      setTimeout(() => this.buildRevenueChart(), 100);
+      setTimeout(() => {
+        this.buildRevenueChart();
+        this.buildLineChart();
+        this.buildPieChart();
+      }, 100);
     });
   }
 
@@ -195,6 +201,82 @@ export class OutdoororderbillreportComponent {
     this.totalPending = this.revenueRows.reduce((sum, r) => sum + r.pending, 0);
   }
 
+
+  // --- 1. Line/Dot Chart (Revenue Trend) ---
+  private buildLineChart() {
+    const ctx = this.lineChartCanvas.nativeElement.getContext('2d');
+    if (!ctx) return;
+
+    const dateLabels = Array.from(
+      new Set(this.outdoorBills.map((b) => this.toDate(b.date))),
+    ).sort();
+    const trendData = dateLabels.map((d) =>
+      this.outdoorBills
+        .filter((b) => this.toDate(b.date) === d)
+        .reduce((s, b) => s + Number(b.grandTotal), 0),
+    );
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: dateLabels,
+        datasets: [
+          {
+            label: 'Daily Revenue',
+            data: trendData,
+            borderColor: '#6366f1',
+            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 6,
+            pointBackgroundColor: '#fff',
+            pointBorderWidth: 2,
+          },
+        ],
+      },
+      options: { responsive: true, maintainAspectRatio: false },
+    });
+  }
+
+  // --- 2. Pie Chart (Payment Status Distribution) ---
+  private buildPieChart() {
+    const ctx = this.pieChartCanvas.nativeElement.getContext('2d');
+    if (!ctx) return;
+
+    const statusCounts = {
+      Paid: this.outdoorBills.filter((b) => b.paymentStatus === 'Paid').length,
+      Partial: this.outdoorBills.filter((b) => b.paymentStatus === 'Partial')
+        .length,
+      Pending: this.outdoorBills.filter((b) => b.paymentStatus === 'Pending')
+        .length,
+    };
+
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Paid', 'Partial', 'Pending'],
+        datasets: [
+          {
+            data: [
+              statusCounts.Paid,
+              statusCounts.Partial,
+              statusCounts.Pending,
+            ],
+            backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+            hoverOffset: 10,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom' },
+        },
+      },
+    });
+  }
+
   chartInstance: any;
   private buildRevenueChart() {
     const canvas = this.revenueChartCanvas?.nativeElement;
@@ -267,7 +349,9 @@ export class OutdoororderbillreportComponent {
           tooltip: {
             backgroundColor: '#1e293b',
             padding: 12,
-            callbacks: { label: (ctx) => ` ₹${ctx.parsed.y?.toLocaleString()}` },
+            callbacks: {
+              label: (ctx) => ` ₹${ctx.parsed.y?.toLocaleString()}`,
+            },
           },
         },
         scales: {
