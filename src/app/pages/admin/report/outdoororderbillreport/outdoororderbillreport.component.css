@@ -160,3 +160,46 @@ tbody tr:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.summary-grid {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.summary-group {
+  flex: 1;
+  background: #f8fafc;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.summary-group h3 {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #64748b;
+  border-bottom: 2px solid #3b82f6;
+  display: inline-block;
+}
+
+.grid-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.table-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: #1e293b;
+  padding-left: 5px;
+  border-left: 4px solid #3b82f6;
+}
+
+.card.blue { border-left: 5px solid #3b82f6; }
+.card.green { border-left: 5px solid #10b981; }
+.card.red { border-left: 5px solid #ef4444; }
+
+.text-red { color: #ef4444; font-weight: 500; }

@@ -114,45 +114,73 @@ export class OutdoororderbillreportComponent {
     });
   }
 
+  // private buildAggregates() {
+  //   console.log('Processing Aggregates...');
+
+  //   this.revenueRows = this.outdoorOrders.map((order) => {
+  //     // मिलान के लिए नाम का इस्तेमाल करें क्योंकि quotationNo बिल में नहीं है
+  //     const orderPartyName = (order.outdoorParty || '').trim().toLowerCase();
+
+  //     // बिल ढूंढें - यहाँ हमने Date matching हटा दी है क्योंकि वो मैच नहीं हो रही
+  //     const bill = this.outdoorBills.find((b) => {
+  //       const billPartyName = (b.outdoorParty || '').trim().toLowerCase();
+  //       // अगर पार्टी का नाम "Ravi" (Order) === "Ravi" (Bill) है
+  //       return billPartyName !== '' && billPartyName === orderPartyName;
+  //     });
+
+  //     if (bill) {
+  //       console.log(
+  //         `Matched Order ${order.orderNo} with Bill ${bill.billNo} for ${order.outdoorParty}`,
+  //       );
+  //     }
+
+  //     const billedAmt = Number(bill?.grandTotal || 0);
+  //     const advanceReceived = Number(bill?.advance || 0);
+  //     // Pending = बिल की कुल राशि - एडवांस
+  //     const pendingAmt = billedAmt - advanceReceived;
+
+  //     return {
+  //       date: new Date(order.date).toLocaleDateString('en-GB'),
+  //       party: order.outdoorParty || 'Customer 1', // अगर नाम नहीं है तो Default
+  //       orderNo: order.orderNo,
+  //       billNo: bill?.billNo || '-',
+  //       orderAmount: Number(order.grandTotal || 0),
+  //       billedAmount: billedAmt,
+  //       pending: pendingAmt > 0 ? pendingAmt : 0,
+  //       paymentStatus: bill?.paymentStatus || 'Pending',
+  //     };
+  //   });
+
+  //   // Totals अपडेट करें
+  //   this.updateTotals();
+  // }
+
+  // Variables for Summary
+  totalOrderPending = 0;
+  totalBillPending = 0;
+
   private buildAggregates() {
-    console.log('Processing Aggregates...');
+    // 1. Order Calculations
+    this.totalOrderAmount = 0;
+    this.totalOrderPending = 0;
 
-    this.revenueRows = this.outdoorOrders.map((order) => {
-      // मिलान के लिए नाम का इस्तेमाल करें क्योंकि quotationNo बिल में नहीं है
-      const orderPartyName = (order.outdoorParty || '').trim().toLowerCase();
-
-      // बिल ढूंढें - यहाँ हमने Date matching हटा दी है क्योंकि वो मैच नहीं हो रही
-      const bill = this.outdoorBills.find((b) => {
-        const billPartyName = (b.outdoorParty || '').trim().toLowerCase();
-        // अगर पार्टी का नाम "Ravi" (Order) === "Ravi" (Bill) है
-        return billPartyName !== '' && billPartyName === orderPartyName;
-      });
-
-      if (bill) {
-        console.log(
-          `Matched Order ${order.orderNo} with Bill ${bill.billNo} for ${order.outdoorParty}`,
-        );
-      }
-
-      const billedAmt = Number(bill?.grandTotal || 0);
-      const advanceReceived = Number(bill?.advance || 0);
-      // Pending = बिल की कुल राशि - एडवांस
-      const pendingAmt = billedAmt - advanceReceived;
-
-      return {
-        date: new Date(order.date).toLocaleDateString('en-GB'),
-        party: order.outdoorParty || 'Customer 1', // अगर नाम नहीं है तो Default
-        orderNo: order.orderNo,
-        billNo: bill?.billNo || '-',
-        orderAmount: Number(order.grandTotal || 0),
-        billedAmount: billedAmt,
-        pending: pendingAmt > 0 ? pendingAmt : 0,
-        paymentStatus: bill?.paymentStatus || 'Pending',
-      };
+    this.outdoorOrders.forEach((order) => {
+      const total = Number(order.grandTotal || 0);
+      const adv = Number(order.advance || 0);
+      this.totalOrderAmount += total;
+      this.totalOrderPending += total - adv;
     });
 
-    // Totals अपडेट करें
-    this.updateTotals();
+    // 2. Bill Calculations
+    this.totalBilledAmount = 0;
+    this.totalBillPending = 0;
+
+    this.outdoorBills.forEach((bill) => {
+      const total = Number(bill.grandTotal || 0);
+      const adv = Number(bill.advance || 0);
+      this.totalBilledAmount += total;
+      this.totalBillPending += total - adv;
+    });
   }
 
   private updateTotals() {
