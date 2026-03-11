@@ -56,13 +56,12 @@
               {{ row.pending | number: "1.2-2" }}
             </td>
             <td>
-              <span
-                class="badge"
+              <span class="badge" 
                 [ngClass]="{
-                  paid: row.paymentStatus === 'Paid',
-                  pending: row.paymentStatus === 'Pending',
-                }"
-              >
+                  'paid': row.paymentStatus === 'Paid',
+                  'partial': row.paymentStatus === 'Partial',
+                  'pending': row.paymentStatus === 'Pending' || row.paymentStatus === 'Not Billed'
+                }">
                 {{ row.paymentStatus }}
               </span>
             </td>

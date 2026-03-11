@@ -150,6 +150,10 @@ tbody tr:hover {
   height: 280px;
 }
 
+.badge.partial { background-color: #fef3c7; color: #92400e; } /* Orange/Yellow for partial */
+.badge.pending { background-color: #fee2e2; color: #991b1b; } /* Red for pending */
+.badge.paid { background-color: #d1fae5; color: #065f46; }    /* Green for paid */
+
 /* responsive */
 @media (max-width: 992px) {
   .grid {

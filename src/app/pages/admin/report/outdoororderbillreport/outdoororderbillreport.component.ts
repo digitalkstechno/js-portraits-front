@@ -1,6 +1,8 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
+import { AdminService } from '../../components/service/admin.service';
+import { forkJoin } from 'rxjs';
 
 Chart.register(...registerables);
 
@@ -17,7 +19,7 @@ export interface OutdoorOrderItem {
 export interface OutdoorOrder {
   _id: string;
   orderNo: string;
-  date: string;           // ISO
+  date: string; // ISO
   outdoorParty: string;
   subTotal: number;
   discount: number;
@@ -55,41 +57,11 @@ export interface OutdoorBill {
 export class OutdoororderbillreportComponent {
   @ViewChild('revenueChartCanvas')
   revenueChartCanvas!: ElementRef<HTMLCanvasElement>;
-
-  // mock data – replace with API calls
-  outdoorOrders = [
-    {
-      _id: '69aba84f3958c3e86992b7c9',
-      orderNo: '2',
-      date: '2026-03-05T00:00:00.000Z',
-      outdoorParty: 'praveen',
-      subTotal: 2500,
-      discount: 0,
-      advance: 0,
-      grandTotal: 2500,
-    },
-  ];
-
-  outdoorBills = [
-    {
-      _id: '69aba9fb02e21635dc5576e6',
-      billNo: '1',
-      date: '2026-03-05T00:00:00.000Z',
-      outdoorParty: 'praveen',
-      subTotal: 2500,
-      discount: 0,
-      grandTotal: 2500,
-      advance: 0,
-      balance: 2500,
-      paymentStatus: 'Pending',
-    },
-  ];
-
-  // derived totals for cards/table
+  outdoorOrders: any[] = [];
+  outdoorBills: any[] = [];
   totalOrderAmount = 0;
   totalBilledAmount = 0;
   totalPending = 0;
-
   // table rows: merge order + bill
   revenueRows: {
     date: string;
@@ -102,35 +74,88 @@ export class OutdoororderbillreportComponent {
     paymentStatus: string;
   }[] = [];
 
-  ngAfterViewInit(): void {
-    this.buildAggregates();
-    this.buildRevenueChart();
+  outdoorService = inject(AdminService);
+
+  ngOnInit() {
+    this.loadAllData();
+  }
+
+  loadOrders() {
+    this.outdoorService.getOutdoorOrder().subscribe((res) => {
+      this.outdoorOrders = res.orders;
+      console.log(this.outdoorOrders);
+    });
+  }
+
+  loadBills() {
+    this.outdoorService.getOutdoorBill().subscribe((res) => {
+      this.outdoorBills = res.bills;
+      console.log(this.outdoorBills);
+    });
+  }
+
+  ngAfterViewInit(): void {}
+
+  loadAllData() {
+    forkJoin({
+      ordersRes: this.outdoorService.getOutdoorOrder(),
+      billsRes: this.outdoorService.getOutdoorBill(),
+    }).subscribe(({ ordersRes, billsRes }) => {
+      // API response structure के हिसाब से डेटा निकालें
+      this.outdoorOrders = ordersRes.orders || ordersRes || [];
+      this.outdoorBills = billsRes.bills || billsRes || [];
+
+      console.log('orders', this.outdoorOrders);
+      console.log('bills', this.outdoorBills);
+
+      this.buildAggregates();
+      // चार्ट बनाने से पहले थोड़ा समय दें ताकि Canvas DOM में रेंडर हो जाए
+      setTimeout(() => this.buildRevenueChart(), 100);
+    });
   }
 
   private buildAggregates() {
-    // For real app: group by party+date or by orderId; here we only have 1–1
-    this.revenueRows = this.outdoorOrders.map((order) => {
-      const bill = this.outdoorBills.find(
-        (b) =>
-          b.outdoorParty === order.outdoorParty &&
-          this.toDate(b.date) === this.toDate(order.date),
-      );
+    console.log('Processing Aggregates...');
 
-      const billedAmt = bill?.grandTotal ?? 0;
-      const pending = billedAmt - (bill?.advance ?? 0);
+    this.revenueRows = this.outdoorOrders.map((order) => {
+      // मिलान के लिए नाम का इस्तेमाल करें क्योंकि quotationNo बिल में नहीं है
+      const orderPartyName = (order.outdoorParty || '').trim().toLowerCase();
+
+      // बिल ढूंढें - यहाँ हमने Date matching हटा दी है क्योंकि वो मैच नहीं हो रही
+      const bill = this.outdoorBills.find((b) => {
+        const billPartyName = (b.outdoorParty || '').trim().toLowerCase();
+        // अगर पार्टी का नाम "Ravi" (Order) === "Ravi" (Bill) है
+        return billPartyName !== '' && billPartyName === orderPartyName;
+      });
+
+      if (bill) {
+        console.log(
+          `Matched Order ${order.orderNo} with Bill ${bill.billNo} for ${order.outdoorParty}`,
+        );
+      }
+
+      const billedAmt = Number(bill?.grandTotal || 0);
+      const advanceReceived = Number(bill?.advance || 0);
+      // Pending = बिल की कुल राशि - एडवांस
+      const pendingAmt = billedAmt - advanceReceived;
 
       return {
-        date: this.toDate(order.date),
-        party: order.outdoorParty,
+        date: new Date(order.date).toLocaleDateString('en-GB'),
+        party: order.outdoorParty || 'Customer 1', // अगर नाम नहीं है तो Default
         orderNo: order.orderNo,
-        billNo: bill?.billNo ?? '-',
-        orderAmount: order.grandTotal,
+        billNo: bill?.billNo || '-',
+        orderAmount: Number(order.grandTotal || 0),
         billedAmount: billedAmt,
-        pending,
-        paymentStatus: bill?.paymentStatus ?? '-',
+        pending: pendingAmt > 0 ? pendingAmt : 0,
+        paymentStatus: bill?.paymentStatus || 'Pending',
       };
     });
 
+    // Totals अपडेट करें
+    this.updateTotals();
+  }
+
+  private updateTotals() {
     this.totalOrderAmount = this.revenueRows.reduce(
       (sum, r) => sum + r.orderAmount,
       0,
@@ -142,7 +167,18 @@ export class OutdoororderbillreportComponent {
     this.totalPending = this.revenueRows.reduce((sum, r) => sum + r.pending, 0);
   }
 
+  chartInstance: any;
   private buildRevenueChart() {
+    const canvas = this.revenueChartCanvas?.nativeElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+    }
+
     // group revenue by date
     const revenueByDate = new Map<string, number>();
     this.revenueRows.forEach((row) => {
@@ -153,9 +189,6 @@ export class OutdoororderbillreportComponent {
 
     const labels = Array.from(revenueByDate.keys()).sort();
     const values = labels.map((d) => revenueByDate.get(d) ?? 0);
-
-    const ctx = this.revenueChartCanvas.nativeElement.getContext('2d');
-    if (!ctx) return;
 
     const config: ChartConfiguration<'bar'> = {
       type: 'bar',
@@ -195,10 +228,13 @@ export class OutdoororderbillreportComponent {
       },
     };
 
-    new Chart(ctx, config);
+    this.chartInstance = new Chart(ctx, config);
   }
 
   private toDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-GB'); // 05/03/2026
+    if (!iso) return 'null';
+    const d = new Date(iso);
+    // समय को पूरी तरह नज़रअंदाज़ करें, सिर्फ तारीख की तुलना करें
+    return `${d.getUTCDate()}-${d.getUTCMonth() + 1}-${d.getUTCFullYear()}`;
   }
 }
