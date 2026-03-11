@@ -143,6 +143,13 @@ export const routes: Routes = [
             (m) => m.GstconfigurationComponent,
           ),
       },
+      {
+        path: 'print/settings',
+        loadComponent: () =>
+          import('./pages/admin/components/settings/printsettings/printsettings.component').then(
+            (m) => m.PrintsettingsComponent,
+          ),
+      },
     ],
   },
 

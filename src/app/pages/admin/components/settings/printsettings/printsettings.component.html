@@ -1,0 +1,56 @@
+<div class="panel-container">
+  <div class="panel-header">
+    <h4><i class="fa fa-building"></i> Company Profile & Print Settings</h4>
+  </div>
+
+  <div class="panel-body" [formGroup]="printSettingsForm">
+    <div class="row-flex">
+      <div class="info-section">
+        <div class="field-item">
+          <label>Business / Studio Name</label>
+          <input
+            type="text"
+            formControlName="companyName"
+            placeholder="e.g. Royal Photography"
+          />
+        </div>
+        <div class="field-item">
+          <label>Address</label>
+          <textarea formControlName="address" rows="3"></textarea>
+        </div>
+        <div class="field-item">
+          <label>Contact Number</label>
+          <input type="text" formControlName="phone" />
+        </div>
+        <div class="field-item">
+          <label>GSTIN (Optional)</label>
+          <input type="text" formControlName="gstin" />
+        </div>
+      </div>
+
+      <div class="upload-section">
+        <label>Authorized Signature</label>
+        <div class="signature-preview" *ngIf="signaturePreview">
+          <img [src]="signaturePreview" alt="Signature" />
+          <button class="btn-remove" (click)="removeSignature()">×</button>
+        </div>
+        <div class="upload-placeholder" *ngIf="!signaturePreview">
+          <input
+            type="file"
+            (change)="onSignatureUpload($event)"
+            accept="image/*"
+          />
+          <i class="fa fa-cloud-upload"></i>
+          <span>Click to upload signature</span>
+        </div>
+        <p class="hint">Recommended: PNG with transparent background</p>
+      </div>
+    </div>
+
+    <div class="panel-footer">
+      <button class="btn-save" (click)="savePrintSettings()">
+        <i class="fa fa-check"></i> Save Profile
+      </button>
+    </div>
+  </div>
+</div>

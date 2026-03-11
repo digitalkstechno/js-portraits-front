@@ -96,7 +96,10 @@ export class AdminheaderComponent {
     {
       key: 'cheque',
       label: 'Cheque',
-      children: [{ label: 'GST Configuration', link: '/admin/gst/config' }],
+      children: [
+        { label: 'GST Configuration', link: '/admin/gst/config' },
+        { label: 'Print Setting', link: '/admin/print/settings' },
+      ],
     },
     { key: 'sheet', label: 'Sheet' },
     { key: 'logoff', label: 'Log Off', action: 'logout' },
