@@ -164,12 +164,10 @@ export class OutdoorbillComponent {
   }
 
   filteredBills: any[] = [];
-
   searchBills(event: any) {
-    const term = event.target.value.toString().toLowerCase(); // सर्च टर्म को स्ट्रिंग में बदलें
+    const term = event.target.value.toString().toLowerCase(); 
 
     if (term) {
-      // मान लेते हैं कि 'allBills' में आपका वह Response Store है जो आपने ऊपर दिखाया
       this.filteredBills = this.bills.filter(
         (bill) =>
           bill.billNo.toString().toLowerCase().includes(term) ||
@@ -179,10 +177,10 @@ export class OutdoorbillComponent {
       this.filteredBills = [];
     }
   }
+
   // 2. बिल सिलेक्ट होने पर सारा डेटा फॉर्म में भरना
   selectBill(bill: any) {
     console.log(bill);
-    // 1. बेसिक फील्ड्स को पैच करें
     this.billForm.patchValue({
       date: this.formatDate(bill.date),
       billNo: bill.billNo,
