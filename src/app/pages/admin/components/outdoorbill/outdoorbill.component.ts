@@ -184,12 +184,14 @@ export class OutdoorbillComponent {
     console.log(bill);
     // 1. बेसिक फील्ड्स को पैच करें
     this.billForm.patchValue({
+      date: this.formatDate(bill.date),
       billNo: bill.billNo,
       subTotal: bill.subTotal,
+      discount: bill.discount,
       grandTotal: bill.grandTotal,
-      balance: bill.balanceDue,
+      balanceDue: bill.balanceDue,
+      advance: bill.advance,
       outdoorParty: bill.outdoorParty,
-      // अगर बुक का नाम ID के रूप में है:
       bookName: bill.bookName?._id,
     });
 
