@@ -1,0 +1,104 @@
+.panel-container {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+.panel-header {
+  background: #f8f9fa;
+  padding: 12px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.panel-header h4 {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.panel-body {
+  padding: 20px;
+}
+
+.row-flex {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.field-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-item label {
+  font-weight: 600;
+  font-size: 13px;
+  color: #555;
+}
+
+.custom-select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  min-width: 200px;
+  outline: none;
+}
+
+.radio-group {
+  display: flex;
+  gap: 15px;
+  padding-top: 8px;
+}
+
+.radio-group label {
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.panel-footer {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.btn-save {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-save:hover {
+  background: #0056b3;
+}
+
+.checkbox-group {
+  display: flex;
+  gap: 20px;
+  padding-top: 10px;
+}
+
+.check-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #444;
+}
+
+.check-container input {
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+}

@@ -1,0 +1,40 @@
+<div class="panel-container">
+  <div class="panel-header">
+    <h4><i class="fa fa-percent"></i> Tax Configuration</h4>
+  </div>
+
+  <div class="panel-body" [formGroup]="gstSettingsForm">
+    <div class="row-flex">
+      <div class="field-item">
+        <label>Default GST Rate (%)</label>
+        <select class="custom-select" formControlName="defaultGstRate">
+          <option value="0">Exempt (0%)</option>
+          <option value="5">GST 5%</option>
+          <option value="12">GST 12%</option>
+          <option value="18">GST 18% (Standard)</option>
+          <option value="28">GST 28%</option>
+        </select>
+      </div>
+
+      <div class="field-item">
+        <label>Available Tax Regions</label>
+        <div class="checkbox-group">
+          <label class="check-container">
+            <input type="checkbox" formControlName="isLocal" />
+            Local (CGST+SGST)
+          </label>
+          <label class="check-container">
+            <input type="checkbox" formControlName="isInterstate" />
+            Interstate (IGST)
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-footer">
+      <button class="btn-save" (click)="saveSettings()">
+        <i class="fa fa-save"></i> Save Settings
+      </button>
+    </div>
+  </div>
+</div>

@@ -136,6 +136,13 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'gst/config',
+        loadComponent: () =>
+          import('./pages/admin/components/gstconfiguration/gstconfiguration.component').then(
+            (m) => m.GstconfigurationComponent,
+          ),
+      },
     ],
   },
 
