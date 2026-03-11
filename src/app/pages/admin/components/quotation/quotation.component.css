@@ -447,12 +447,12 @@ tbody tr:hover {
 }
 
 @media print {
-  body * {
+  body *{
     visibility: hidden;
   }
 
   .print-area,
-  .print-area * {
+  .print-area *{
     visibility: visible;
   }
 
@@ -462,6 +462,10 @@ tbody tr:hover {
     left: 0;
     top: 0;
     width: 100%;
+  }
+
+  .no-print {
+    display: none;
   }
 }
 

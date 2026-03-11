@@ -120,7 +120,7 @@ export class QuotationComponent {
 
   loadQuotations() {
     this.quotationService.getQuotation().subscribe((res) => {
-      this.quotation = res.data;
+      this.quotation = res;
       console.log(this.quotation);
     });
   }
@@ -181,6 +181,7 @@ export class QuotationComponent {
 
   // 2. patch all data on select bill
   selectQuotation(quot: any) {
+    this.quotationData = quot;
     this.quotationForm.patchValue(
       {
         date: this.formatDate(quot.date),
