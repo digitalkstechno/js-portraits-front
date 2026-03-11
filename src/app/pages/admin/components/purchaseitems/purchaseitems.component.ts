@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ItemsService } from '../../master/service/items.service';
 import { AdminService } from '../service/admin.service';
 import { Router } from '@angular/router';
+import { ConfigService } from '../service/configService/config.service';
 
 @Component({
   selector: 'app-purchaseitems',
@@ -15,6 +16,7 @@ export class PurchaseitemsComponent {
   fb = inject(FormBuilder);
   itemService = inject(ItemsService);
   billService = inject(AdminService);
+  gstservice = inject(ConfigService);
   router = inject(Router);
 
   productSellForm!: FormGroup;
@@ -52,6 +54,7 @@ export class PurchaseitemsComponent {
     this.loadCustomers();
     this.loadBooks();
     this.loadBills();
+    this.loadGstConfiguration();
 
     // Jab bhi discount, tax ya advance badle, calculation refresh ho
     this.productSellForm.valueChanges.subscribe(() => {
@@ -73,28 +76,45 @@ export class PurchaseitemsComponent {
   calculateGrandTotal() {
     let subTotal = 0;
 
-    // सभी आइटम्स का टोटल निकालें
+    // 1. सभी आइटम्स का टोटल निकालें
     this.itemsFormArray.controls.forEach((c: any) => {
-      subTotal += Number(c.get('total')?.value || 0);
+      subTotal += Number(c.get('total')?.value || 0); // पक्का करें कि आपके FormArray में की 'total' ही है
     });
 
     const f = this.productSellForm.getRawValue();
 
+    // 2. Taxable Amount निकालें
     const discount = Number(f.discount || 0);
     const taxable = subTotal - discount;
-    const totalGstAmt = (taxable * (this.fixedGstRate || 0)) / 100;
-    const netTotal = taxable + totalGstAmt;
-    const paid = Number(f.amountPaid || 0);
 
-    // balanceDue = कुल बिल - जितना पैसा मिला
+    // 3. GST Rates प्राप्त करें (जो आपने Config पैनल से सेट किए हैं)
+    // ये वैल्यूज आपके फॉर्म के हिडन या रीड-ओनली 'perc' फील्ड्स से आनी चाहिए
+    const cgstPerc = Number(f.cgstPerc || 0);
+    const sgstPerc = Number(f.sgstPerc || 0);
+    const igstPerc = Number(f.igstPerc || 0);
+
+    // 4. GST Amounts की गणना करें
+    const cgstAmt = (taxable * cgstPerc) / 100;
+    const sgstAmt = (taxable * sgstPerc) / 100;
+    const igstAmt = (taxable * igstPerc) / 100;
+
+    const totalGst = cgstAmt + sgstAmt + igstAmt;
+
+    // 5. Final Totals
+    const netTotal = taxable + totalGst;
+    const paid = Number(f.amountPaid || 0);
     const due = netTotal - paid;
 
+    // 6. फॉर्म में वैल्यूज पैच करें
     this.productSellForm.patchValue(
       {
         subTotal: subTotal.toFixed(2),
-        totalGst: totalGstAmt.toFixed(2),
+        cgstAmt: cgstAmt.toFixed(2),
+        sgstAmt: sgstAmt.toFixed(2),
+        igstAmt: igstAmt.toFixed(2),
+        totalGst: totalGst.toFixed(2),
         grandTotal: netTotal.toFixed(2),
-        balanceDue: due.toFixed(2), // अब यह नेगेटिव नहीं आएगा
+        balanceDue: due.toFixed(2),
       },
       { emitEvent: false },
     );
@@ -111,8 +131,13 @@ export class PurchaseitemsComponent {
       items: this.fb.array([]),
       subTotal: [0],
       discount: [0],
-      totalGst: [0],
       grandTotal: [0],
+      cgstPerc: [0],
+      cgstAmt: [0],
+      sgstPerc: [0],
+      sgstAmt: [0],
+      igstPerc: [0],
+      igstAmt: [0],
 
       // Naye Payment Fields
       paymentMode: ['Cash'],
@@ -150,6 +175,26 @@ export class PurchaseitemsComponent {
     this.billService.getProductSell().subscribe((res) => {
       this.bills = res.data;
       console.log(this.bills);
+    });
+  }
+
+  gstConfig: any;
+  loadGstConfiguration() {
+    this.gstservice.getGstConfig().subscribe((config: any) => {
+      if (config) {
+        this.gstConfig = config;
+        this.gstservice.getGstConfig().subscribe((config) => {
+          if (config) {
+            // अगर Local है तो आधा-आधा, वरना IGST
+            this.productSellForm.patchValue({
+              cgstPerc: config.isLocal ? config.defaultGstRate / 2 : 0,
+              sgstPerc: config.isLocal ? config.defaultGstRate / 2 : 0,
+              igstPerc: config.isInterstate ? config.defaultGstRate : 0,
+            });
+            this.calculateGrandTotal();
+          }
+        });
+      }
     });
   }
 
@@ -199,13 +244,11 @@ export class PurchaseitemsComponent {
 
   filteredBills: any[] = [];
   searchBills(event: any) {
-    const term = event.target.value.toString().toLowerCase();
+    const term = event.target.value.toString();
 
     if (term) {
-      this.filteredBills = this.bills.filter(
-        (bill) =>
-          bill.billNo.toString().toLowerCase().includes(term) ||
-          bill.outdoorParty.toLowerCase().includes(term),
+      this.filteredBills = this.bills.filter((bill) =>
+        bill.billNo.toString().includes(term),
       );
     } else {
       this.filteredBills = [];
@@ -216,10 +259,16 @@ export class PurchaseitemsComponent {
   selectBill(bill: any) {
     this.productSellForm.patchValue(
       {
-        date: this.formatDate(bill.sellDate), 
+        date: this.formatDate(bill.sellDate),
         billNo: bill.billNo,
         discount: bill.discount || 0,
         amountPaid: bill.amountPaid || 0,
+        cgstPerc: bill.cgstPerc,
+        cgstAmt: bill.cgstAmt,
+        sgstPerc: bill.sgstPerc,
+        sgstAmt: bill.sgstAmt,
+        igstPerc: bill.igstPerc,
+        igstAmt: bill.igstAmt,
         partyName: bill.partyName,
         contactNo: bill.contactNo,
         bookName: bill.bookName?._id, // ID पैच कर रहे हैं
@@ -237,7 +286,7 @@ export class PurchaseitemsComponent {
     bill.items.forEach((item: any) => {
       itemsArray.push(
         this.fb.group({
-          date: this.formatDate(item.date),          
+          date: this.formatDate(item.date),
           itemName: item.itemName,
           productName: item.productName,
           qty: item.qty,
@@ -372,10 +421,15 @@ export class PurchaseitemsComponent {
       contactNo: '',
       subTotal: 0,
       discount: 0,
-      totalGst: 0,
       grandTotal: 0,
       amountPaid: 0,
       balanceDue: 0,
+      cgstPerc: 0,
+      cgstAmt: 0,
+      sgstPerc: 0,
+      sgstAmt: 0,
+      igstPerc: 0,
+      igstAmt: 0,
     });
   }
 
@@ -413,8 +467,13 @@ export class PurchaseitemsComponent {
       // Totals & GST
       subTotal: formValue.subTotal,
       discount: formValue.discount,
-      totalGst: formValue.totalGst,
       grandTotal: formValue.grandTotal,
+      cgstPerc: formValue.cgstPerc,
+      cgstAmt: formValue.cgstAmt,
+      sgstPerc: formValue.sgstPerc,
+      sgstAmt: formValue.sgstAmt,
+      igstPerc: formValue.igstPerc,
+      igstAmt: formValue.igstAmt,
 
       // Payment Section
       paymentMode: formValue.paymentMode,

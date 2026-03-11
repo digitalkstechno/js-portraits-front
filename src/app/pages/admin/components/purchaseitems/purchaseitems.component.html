@@ -88,7 +88,7 @@
       <div class="field-group">
         <div class="field-item">
           <small class="text-muted"
-            >GST will be auto-calculated {{ fixedGstRate }}%</small
+            >GST will be auto-calculated {{ gstConfig ? gstConfig.defaultGstRate : '0' }}%</small
           >
         </div>
       </div>
@@ -239,9 +239,62 @@
             class="editable-input"
           />
         </div>
-        <div class="summary-row">
-          <label>GST ({{ fixedGstRate }}%)</label>
-          <input type="text" formControlName="totalGst" readonly />
+        <div class="tax-group" *ngIf="gstConfig">
+          <ng-container *ngIf="gstConfig.isLocal">
+            <div class="summary-row tax-row">
+              <label>CGST (%)</label>
+              <div class="tax-inputs">
+                <input
+                  type="number"
+                  formControlName="cgstPerc"
+                  readonly
+                  class="tax-perc"
+                />
+                <input
+                  type="text"
+                  formControlName="cgstAmt"
+                  readonly
+                  class="tax-amt"
+                />
+              </div>
+            </div>
+
+            <div class="summary-row tax-row">
+              <label>SGST (%)</label>
+              <div class="tax-inputs">
+                <input
+                  type="number"
+                  formControlName="sgstPerc"
+                  readonly
+                  class="tax-perc"
+                />
+                <input
+                  type="text"
+                  formControlName="sgstAmt"
+                  readonly
+                  class="tax-amt"
+                />
+              </div>
+            </div>
+          </ng-container>
+
+          <div class="summary-row tax-row" *ngIf="gstConfig.isInterstate">
+            <label>IGST (%)</label>
+            <div class="tax-inputs">
+              <input
+                type="number"
+                formControlName="igstPerc"
+                readonly
+                class="tax-perc"
+              />
+              <input
+                type="text"
+                formControlName="igstAmt"
+                readonly
+                class="tax-amt"
+              />
+            </div>
+          </div>
         </div>
         <div class="summary-row net-total-row">
           <label>GRAND TOTAL</label>
