@@ -33,6 +33,7 @@ export class OutdoorbillComponent {
   isError = false;
   showPopup = false;
   popupMessage = '';
+  selectedBookName: string = '';
 
   ngOnInit() {
     this.initForms();
@@ -57,12 +58,12 @@ export class OutdoorbillComponent {
 
   initForms() {
     this.billForm = this.fb.group({
-      book: [''],
+      bookName: [''],
       billNo: [this.count],
       date: [new Date().toISOString().split('T')[0]],
       outdoorParty: [''],
       address: [''],
-      orderNo: [''],
+      // orderNo: [''],
       gstType: [''],
       govt: [''],
       coupleName: [''],
@@ -121,11 +122,6 @@ export class OutdoorbillComponent {
       (party: any) =>
         party.name && party.name.toString().toLowerCase().includes(value),
     );
-
-    this.filteredBooks = this.books.filter(
-      (book: any) =>
-        book.bookName && book.bookName.toString().toLowerCase().includes(value),
-    );
   }
 
   selectParty(party: any) {
@@ -138,6 +134,7 @@ export class OutdoorbillComponent {
 
   filterBooks(event: any) {
     const value = event.target.value.toLowerCase();
+    this.selectedBookName = value;
     if (!value) {
       this.filteredBooks = [];
       return;
@@ -150,50 +147,51 @@ export class OutdoorbillComponent {
   }
 
   selectBook(book: any) {
+    this.selectedBookName = book.bookName;
     this.billForm.patchValue({
-      book: book.bookName,
+      bookName: book._id,
     });
     this.filteredBooks = [];
   }
 
-  searchQuotation() {
-    const qNo = this.billForm.get('orderNo')?.value;
+  // searchQuotation() {
+  //   const qNo = this.billForm.get('orderNo')?.value;
 
-    this.billService.getQuotationByNumber(qNo).subscribe((res: any) => {
-      // Patch Main Form
-      this.billForm.patchValue({
-        date: this.formatDate(res.date),
-        outdoorParty: res.outdoorParty,
-        contactNo: res.contactNo,
-        couple: res.couple,
-        address: res.address,
-        remarks: res.remarks,
-      });
+  //   this.billService.getQuotationByNumber(qNo).subscribe((res: any) => {
+  //     // Patch Main Form
+  //     this.billForm.patchValue({
+  //       date: this.formatDate(res.date),
+  //       outdoorParty: res.outdoorParty,
+  //       contactNo: res.contactNo,
+  //       couple: res.couple,
+  //       address: res.address,
+  //       remarks: res.remarks,
+  //     });
 
-      // Clear existing items
-      this.itemsFormArray.clear();
+  //     // Clear existing items
+  //     this.itemsFormArray.clear();
 
-      // Add quotation items
-      res.items.forEach((item: any) => {
-        const itemGroup = this.fb.group({
-          date: [item.date],
-          itemName: [item.itemName],
-          productName: [item.productId?.product_name || 'Product'],
-          productId: [item.productId?._id],
-          event: [item.event],
-          qty: [item.qty],
-          rate: [item.rate],
-          total: [item.total],
-          place: [item.place],
-          time: [item.time],
-        });
+  //     // Add quotation items
+  //     res.items.forEach((item: any) => {
+  //       const itemGroup = this.fb.group({
+  //         date: [item.date],
+  //         itemName: [item.itemName],
+  //         productName: [item.productId?.product_name || 'Product'],
+  //         productId: [item.productId?._id],
+  //         event: [item.event],
+  //         qty: [item.qty],
+  //         rate: [item.rate],
+  //         total: [item.total],
+  //         place: [item.place],
+  //         time: [item.time],
+  //       });
 
-        this.itemsFormArray.push(itemGroup);
-      });
+  //       this.itemsFormArray.push(itemGroup);
+  //     });
 
-      this.calculateGrandTotal();
-    });
-  }
+  //     this.calculateGrandTotal();
+  //   });
+  // }
 
   loadItems() {
     this.itemService
@@ -321,12 +319,12 @@ export class OutdoorbillComponent {
 
     // 4. Reset Main Bill Form
     this.billForm.reset({
-      book: '',
+      bookName: '',
       billNo: '',
       date: new Date().toISOString().split('T')[0],
       outdoorParty: '',
       address: '',
-      orderNo: '',
+      // orderNo: '',
       gstType: '',
       govt: '',
       coupleName: '',
@@ -367,12 +365,12 @@ export class OutdoorbillComponent {
     const formValue = this.billForm.value;
 
     const payload = {
-      book: formValue.book,
+      bookName: formValue.bookName,
       billNo: formValue.billNo,
       date: formValue.date,
       outdoorParty: formValue.outdoorParty,
       address: formValue.address,
-      orderNo: formValue.orderNo,
+      // orderNo: formValue.orderNo,
       gstType: formValue.gstType,
       govt: formValue.govt,
       coupleName: formValue.coupleName,
