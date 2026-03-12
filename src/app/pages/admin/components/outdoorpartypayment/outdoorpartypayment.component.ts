@@ -137,6 +137,8 @@ export class OutdoorpartypaymentComponent {
     this.selectedPartyName = party.name;
     this.paymentForm.patchValue({
       outdoorParty: party._id,
+      address: party.address,
+      contactNumber: party.contact,
     });
 
     this.loadBillsByParty(party?._id);
