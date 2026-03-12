@@ -51,6 +51,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'outdoor/payment',
+        loadComponent: () =>
+          import('./pages/admin/components/outdoorpartypayment/outdoorpartypayment.component').then(
+            (m) => m.OutdoorpartypaymentComponent,
+          ),
+      },
+      {
         path: 'staff/entry',
         loadComponent: () =>
           import('./pages/admin/components/staff-management/staffentry/staffentry.component').then(

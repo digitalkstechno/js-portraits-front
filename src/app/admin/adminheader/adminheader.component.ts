@@ -62,6 +62,7 @@ export class AdminheaderComponent {
         { label: 'Quotation', link: '/admin/quotation' },
         { label: 'Outdoor order', link: '/admin/outdoor/order' },
         { label: 'Outdoor bill', link: '/admin/outdoor/bill' },
+        { label: 'Outdoor party payment', link: '/admin/outdoor/payment' },
         { label: 'Note settings', link: '/admin/note-settings' },
         { label: 'Terms & Conditions', link: '/admin/terms&conditions' },
       ],

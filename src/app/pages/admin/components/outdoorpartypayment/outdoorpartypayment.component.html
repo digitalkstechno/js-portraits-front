@@ -1,0 +1,184 @@
+<div class="window">
+  <div class="title-bar">
+    <span>Outdoor Party Payment Detail</span>
+    <button class="close-btn" (click)="close()">✖</button>
+  </div>
+
+  <form [formGroup]="paymentForm" (ngSubmit)="onSave()">
+    <div class="form-container-vertical">
+      <div class="field-group">
+        <div class="field-item">
+          <label>Trans No :</label>
+          <input type="text" formControlName="transNo" style="width: 80px" />
+        </div>
+        <div class="field-item ms-auto">
+          <label>Date :</label>
+          <input type="date" formControlName="date" style="width: 120px" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Outdoor Party :</label>
+          <input
+            type="text"
+            formControlName="outdoorParty"
+            style="width: 350px"
+            placeholder="Search Party..."
+          />
+        </div>
+        <div class="field-item">
+          <label>Order No :</label>
+          <input type="text" formControlName="orderNo" style="width: 120px" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-item">
+          <label>Address :</label>
+          <input type="text" formControlName="address" style="width: 350px" />
+        </div>
+        <div class="field-item">
+          <label>Contact Number :</label>
+          <input
+            type="text"
+            formControlName="contactNumber"
+            style="width: 250px"
+            maxlength="10"
+            (keypress)="onlyNumberKey($event)"
+          />
+        </div>
+      </div>
+
+      <div class="summary-strip">
+        <div class="entry-col">
+          <label>Bill Total Amt</label>
+          <input type="text" formControlName="billTotalAmt" readonly />
+        </div>
+        <div class="entry-col">
+          <label>Total Paid Amt</label>
+          <input type="text" formControlName="totalPaidAmt" readonly />
+        </div>
+        <div class="entry-col">
+          <label>Total Pending Amt</label>
+          <input
+            type="text"
+            formControlName="totalPendingAmt"
+            class="text-danger"
+            readonly
+          />
+        </div>
+        <div class="vertical-line"></div>
+        <div class="entry-col">
+          <label>Order Total Amt</label>
+          <input type="text" formControlName="orderTotalAmt" readonly />
+        </div>
+        <div class="entry-col">
+          <label>Total Paid Amt</label>
+          <input type="text" readonly />
+        </div>
+        <div class="entry-col">
+          <label>Total Pending</label>
+          <input type="text" readonly />
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-md-7">
+          <div class="field-item mb-1">
+            <label>Payment Type :</label>
+            <select formControlName="paymentType" style="width: 150px">
+              <option value="CASH">CASH</option>
+              <option value="BANK">BANK</option>
+            </select>
+          </div>
+          <div class="field-item mb-1">
+            <label>Amount :</label>
+            <input
+              type="text"
+              formControlName="amount"
+              (keypress)="onlyNumberKey($event)"
+              style="width: 150px"
+            />
+          </div>
+          <div class="field-item">
+            <label>Remark :</label>
+            <input type="text" formControlName="remark" style="width: 450px" />
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="field-item mb-1 justify-content-end">
+            <label>Entry By :</label>
+            <input
+              type="text"
+              formControlName="entryBy"
+              style="width: 120px"
+              readonly
+            />
+          </div>
+          <div class="field-item justify-content-end">
+            <label>Update By :</label>
+            <input
+              type="text"
+              formControlName="updateBy"
+              style="width: 120px"
+              readonly
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="dual-table-container">
+        <div class="table-half">
+          <div class="table-header-red">Pending Bill Detail :</div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Bill No</th>
+                  <th>Date</th>
+                  <th>Amt</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            Total : <span class="float-end">0.00</span>
+          </div>
+        </div>
+
+        <div class="table-half">
+          <div class="table-header-red">Payment Detail :</div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Amt</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="table-footer">
+            Total : <span class="float-end">0.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button type="submit" class="btn btn-save">Save</button>
+      <button type="button" class="btn">Delete</button>
+      <button type="button" class="btn">Print</button>
+      <button type="button" class="btn">Cancel</button>
+      <button type="button" class="btn btn-exit" (click)="close()">Exit</button>
+      <button type="button" class="btn btn-social">Send SMS</button>
+      <button type="button" class="btn btn-social">Send SMS (Order)</button>
+      <button type="button" class="btn btn-social">Send Email</button>
+      <button type="button" class="btn btn-social">WhatsApp</button>
+    </div>
+  </form>
+</div>
