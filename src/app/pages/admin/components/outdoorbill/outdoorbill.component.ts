@@ -5,10 +5,11 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ItemsService } from '../../master/service/items.service';
 import { AdminService } from '../service/admin.service';
 import { ConfigService } from '../service/configService/config.service';
+import { OutdoororderprintComponent } from "../outdoororderprint/outdoororderprint.component";
 
 @Component({
   selector: 'app-outdoorbill',
-  imports: [SHARED_MODULES],
+  imports: [SHARED_MODULES, OutdoororderprintComponent],
   templateUrl: './outdoorbill.component.html',
   styleUrl: './outdoorbill.component.css',
 })
@@ -28,6 +29,7 @@ export class OutdoorbillComponent {
   parties: any[] = [];
   books: any[] = [];
   bills: any[] = [];
+  billData: any[] = [];
   itemsList: any[] = [];
   productsList: any[] = [];
   filteredItems: any[] = [];
@@ -195,9 +197,8 @@ export class OutdoorbillComponent {
     const term = event.target.value.toString().toLowerCase();
 
     if (term) {
-      this.filteredBills = this.bills.filter(
-        (bill) =>
-          bill.billNo.toString().toLowerCase().includes(term),
+      this.filteredBills = this.bills.filter((bill) =>
+        bill.billNo.toString().toLowerCase().includes(term),
       );
     } else {
       this.filteredBills = [];
@@ -206,6 +207,7 @@ export class OutdoorbillComponent {
 
   // 2. बिल सिलेक्ट होने पर सारा डेटा फॉर्म में भरना
   selectBill(bill: any) {
+    this.billData = bill;
     console.log(bill);
     this.billForm.patchValue({
       date: this.formatDate(bill.date),
@@ -540,6 +542,17 @@ export class OutdoorbillComponent {
     setTimeout(() => {
       this.showPopup = false;
     }, 3000);
+  }
+
+  printConfig = { rate: true };
+  showRate: boolean = true;
+
+  printBill(rate: boolean) {
+    this.showRate = rate;
+
+    setTimeout(() => {
+      window.print();
+    }, 200);
   }
 
   close() {
