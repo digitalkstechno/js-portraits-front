@@ -1,1 +1,78 @@
-<p>outdoorbillprint works!</p>
+<div class="invoice-wrapper">
+    <div class="invoice-page">
+      
+      <div class="top-section">
+        <div class="invoice-header-main">
+          <div class="invoice-title-big">INVOICE</div>
+          <div class="header-divider-thick"></div>
+          <div class="company-info-right">
+            <div class="company-name-bold">{{ printSettings?.companyName }}</div>
+            <div class="company-phone">{{ printSettings?.phone }}</div>
+          </div>
+        </div>
+  
+        <div class="invoice-info-row">
+          <div class="left-info">
+            <div><b>Invoice number:</b> {{ data.billNo }}</div>
+            <div><b>Issue date:</b> {{ data.date | date: 'MMMM dd, yyyy' }}</div>
+          </div>
+          <div class="right-info">
+            <div><b>Billed To</b></div>
+            <div class="customer-name">{{ data.outdoorPartyName || 'Rose Daniel' }}</div>
+            <div class="customer-address">{{ data.address }}</div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="invoice-content">
+        <table class="invoice-table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Item Description</th>
+              <th>Event Name</th>
+              <th>Qty</th>
+              <th *ngIf="showRate">Rate</th>
+              <th *ngIf="showRate">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of data.items; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ d.itemName }} <small *ngIf="d.productId">({{ d.productId?.product_name }})</small></td>
+              <td>{{ d.event || d.eventName }}</td>
+              <td>{{ d.qty }}</td>
+              <td *ngIf="showRate">{{ d.rate }}</td>
+              <td *ngIf="showRate">{{ d.total }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <div class="invoice-footer">
+        <div class="footer-left">
+          <div class="address-box">
+            <b>Studio Address:</b><br />
+            <span [innerHTML]="formattedAddress">{{ printSettings.address }}</span>
+          </div>
+          <div class="received-line">Received By : __________________</div>
+        </div>
+  
+        <div class="footer-right">
+          <div class="totals-container">
+            <div class="total-row">Sub Total : {{ data.subTotal }}</div>
+            <div class="total-row" *ngIf="data.igstAmt > 0">IGST ({{ data.igstPerc }}%) : {{ data.igstAmt }}</div>
+            <div class="total-row">Discount : {{ data.discount }}</div>
+            <div class="total-row">Advance Paid : {{ data.advance }}</div>
+            <div class="grand-total-box">Balance Due : {{ data.balanceDue }}</div>
+          </div>
+  
+          <div class="signature-section">
+            <img *ngIf="printSettings?.signatureBase64" [src]="printSettings?.signatureBase64" class="signature-img" />
+            <div class="sign-underline"></div>
+            <div class="sign-text-bottom">FOR, {{ printSettings?.companyName | uppercase }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

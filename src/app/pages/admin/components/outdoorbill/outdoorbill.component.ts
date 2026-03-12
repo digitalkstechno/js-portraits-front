@@ -5,11 +5,11 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ItemsService } from '../../master/service/items.service';
 import { AdminService } from '../service/admin.service';
 import { ConfigService } from '../service/configService/config.service';
-import { OutdoororderprintComponent } from "../outdoororderprint/outdoororderprint.component";
+import { OutdoorbillprintComponent } from "../outdoorbillprint/outdoorbillprint.component";
 
 @Component({
   selector: 'app-outdoorbill',
-  imports: [SHARED_MODULES, OutdoororderprintComponent],
+  imports: [SHARED_MODULES, OutdoorbillprintComponent],
   templateUrl: './outdoorbill.component.html',
   styleUrl: './outdoorbill.component.css',
 })

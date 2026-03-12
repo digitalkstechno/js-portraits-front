@@ -1,4 +1,4 @@
-<div class="window" [formGroup]="billForm">
+<div class="window no-print" [formGroup]="billForm">
   <div class="title-bar">
     <span>Outdoor Bill</span>
     <button class="close-btn" (click)="close()">✖</button>
@@ -401,9 +401,9 @@
   </div>
 </div>
 <div class="print-area" *ngIf="billData">
-  <app-outdoororderprint
+  <app-outdoorbillprint
     [data]="billData"
     [showRate]="showRate"
   >
-  </app-outdoororderprint>
+  </app-outdoorbillprint>
 </div>
