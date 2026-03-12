@@ -22,9 +22,12 @@ export class OutdoorpartypaymentComponent {
   parties: any[] = [];
   payments: any[] = [];
   orders: any[] = [];
+  bills: any[] = [];
+  partyBill: any[] = [];
   filteredOrders: any[] = [];
   filteredPayments: any[] = [];
   filteredCustomers: any[] = [];
+  selectedPartyName: string = '';
 
   constructor(private fb: FormBuilder) {}
 
@@ -59,6 +62,7 @@ export class OutdoorpartypaymentComponent {
 
     this.loadCustomers();
     this.loadPayments();
+    this.loadBills();
     this.loadOrders();
   }
 
@@ -75,6 +79,21 @@ export class OutdoorpartypaymentComponent {
     });
   }
 
+  loadBills() {
+    this.outdoorService.getOutdoorBill().subscribe((res) => {
+      this.bills = res.bills;
+      console.log(this.bills);
+    });
+  }
+
+  loadBillsByParty(id: string) {
+    this.outdoorService.getOutdoorBillByParty(id).subscribe((res) => {
+      this.partyBill = res.bill;
+      console.log('party bill', this.partyBill);
+      this.calculateTotals(this.partyBill);
+    });
+  }
+
   loadOrders() {
     this.outdoorService.getOutdoorOrder().subscribe((res) => {
       this.orders = res.orders;
@@ -82,8 +101,27 @@ export class OutdoorpartypaymentComponent {
     });
   }
 
+  calculateTotals(bills: any[]) {
+    let billTotalAmt = 0;
+    let totalPaidAmt = 0;
+    let totalPendingAmt = 0;
+
+    bills.forEach((bill) => {
+      billTotalAmt += bill.grandTotal || 0;
+      totalPaidAmt += bill.advance || 0;
+      totalPendingAmt += bill.balanceDue || 0;
+    });
+
+    this.paymentForm.patchValue({
+      billTotalAmt: billTotalAmt,
+      totalPaidAmt: totalPaidAmt,
+      totalPendingAmt: totalPendingAmt,
+    });
+  }
+
   filterParty(event: any) {
     const value = event.target.value.toLowerCase();
+    this.selectedPartyName = value;
     if (!value) {
       this.filteredCustomers = [];
       return;
@@ -96,9 +134,12 @@ export class OutdoorpartypaymentComponent {
   }
 
   selectParty(party: any) {
+    this.selectedPartyName = party.name;
     this.paymentForm.patchValue({
-      outdoorParty: party.name,
+      outdoorParty: party._id,
     });
+
+    this.loadBillsByParty(party?._id);
 
     this.filteredCustomers = [];
   }
@@ -125,10 +166,11 @@ export class OutdoorpartypaymentComponent {
       grandTotal: bill.grandTotal,
       balanceDue: bill.balanceDue,
       advance: bill.advance,
-      outdoorParty: bill.outdoorParty,
+      outdoorParty: bill.outdoorParty?._id,
     });
 
-    this.filteredPayments = []; // close the dropdown
+    this.selectedPartyName = bill.outdoorParty?.name;
+    this.filteredPayments = [];
   }
 
   searchOrders(event: any) {

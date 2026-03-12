@@ -25,6 +25,7 @@
             formControlName="outdoorParty"
             style="width: 350px"
             placeholder="Search Party..."
+            [value]="selectedPartyName"
             (input)="filterParty($event)"
           />
           <div

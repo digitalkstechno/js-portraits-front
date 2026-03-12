@@ -105,6 +105,10 @@ export class AdminService {
     return this.http.get<any>(`${Endpoints.OUTDOOR_BILL}/${id}`);
   }
 
+  getOutdoorBillByParty(id: string): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_BILL}/${id}`);
+  }
+
   getBillQuotationByNumber(num: string): Observable<any> {
     return this.http.get<any>(`${Endpoints.OUTDOOR_BILL}/${num}`);
   }

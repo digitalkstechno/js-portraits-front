@@ -37,6 +37,7 @@ export class OutdoorbillComponent {
   showPopup = false;
   popupMessage = '';
   selectedBookName: string = '';
+  selectedPartyName: string = '';
 
   ngOnInit() {
     this.initForms();
@@ -146,6 +147,7 @@ export class OutdoorbillComponent {
 
   filterParty(event: any) {
     const value = event.target.value.toLowerCase();
+    this.selectedPartyName = value;
     if (!value) {
       this.filteredCustomers = [];
       return;
@@ -158,8 +160,9 @@ export class OutdoorbillComponent {
   }
 
   selectParty(party: any) {
+    this.selectedPartyName = party.name;
     this.billForm.patchValue({
-      outdoorParty: party.name,
+      outdoorParty: party._id,
     });
 
     this.filteredCustomers = [];
@@ -194,8 +197,7 @@ export class OutdoorbillComponent {
     if (term) {
       this.filteredBills = this.bills.filter(
         (bill) =>
-          bill.billNo.toString().toLowerCase().includes(term) ||
-          bill.outdoorParty.toLowerCase().includes(term),
+          bill.billNo.toString().toLowerCase().includes(term),
       );
     } else {
       this.filteredBills = [];
@@ -219,11 +221,12 @@ export class OutdoorbillComponent {
       grandTotal: bill.grandTotal,
       balanceDue: bill.balanceDue,
       advance: bill.advance,
-      outdoorParty: bill.outdoorParty,
+      outdoorParty: bill.outdoorParty?._id,
       bookName: bill.bookName?._id,
     });
 
     this.selectedBookName = bill.bookName?.bookName;
+    this.selectedPartyName = bill.outdoorParty?.name;
 
     // 2. Items (FormArray) को अपडेट करें
     const itemsArray = this.billForm.get('items') as FormArray;
