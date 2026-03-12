@@ -18,6 +18,15 @@
           (input)="onStaffSearch($any($event.target).value)"
           autocomplete="off"
         />
+        <div
+          *ngIf="
+            salaryForm.get('staffName')?.touched &&
+            salaryForm.get('staffName')?.invalid
+          "
+          class="error-msg-container"
+        >
+          <small>Please select a staff.</small>
+        </div>
 
         <div class="dropdown-list" *ngIf="showDropdown">
           <div
@@ -49,6 +58,15 @@
       <div class="field-item">
         <label>Amount</label>
         <input type="number" formControlName="amount" />
+        <div
+          *ngIf="
+            salaryForm.get('amount')?.touched &&
+            salaryForm.get('amount')?.invalid
+          "
+          class="error-msg-container"
+        >
+          <small>Please enter a valid amount.</small>
+        </div>
       </div>
 
       <!-- Payment Mode -->

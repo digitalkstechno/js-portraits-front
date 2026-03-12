@@ -61,6 +61,7 @@ form {
   gap: 8px;
   min-width: 260px;
   position: relative;
+  margin-bottom: 15px;
 }
 
 label {
