@@ -16,7 +16,17 @@
 
         <div class="col-md-3">
           <label>HSN Code</label>
-          <input type="text" formControlName="hsn_code" />
+          <input
+            type="text"
+            formControlName="hsn_code"
+            maxlength="8" 
+            (keypress)="onlyNumberKey($event)"
+            placeholder="4, 6, or 8 digits"
+          />
+          
+          <div *ngIf="itemForm.get('hsn_code')?.touched && itemForm.get('hsn_code')?.invalid" class="error-text">
+            <small>Please enter a valid HSN code (4, 6, or 8 digits).</small>
+          </div>
         </div>
 
         <div class="col-md-3">

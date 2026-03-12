@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { AdminService } from '../../components/service/admin.service';
 import { ItemsService } from '../service/items.service';
@@ -28,8 +28,14 @@ export class ItemmasterComponent {
     private router: Router,
   ) {
     this.itemForm = fb.group({
-      item_name: [''],
-      hsn_code: [''],
+      item_name: ['', [Validators.required]],
+      hsn_code: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]{4}$|^[0-9]{6}$|^[0-9]{8}$'),
+        ],
+      ],
       display_in_stock: [false],
       entry_by: [''],
       updated_by: [''],
@@ -80,6 +86,14 @@ export class ItemmasterComponent {
       console.log(true);
       this.itemForm.markAllAsTouched();
       return;
+    } else {
+      this.isError = true;
+      this.popupMessage = 'Please fix the errors before saving.';
+      this.showPopup = true;
+
+      // Auto-hide popup after 3 seconds
+      this.triggerPopup(this.popupMessage, this.isError);
+      setTimeout(() => (this.showPopup = false), 3000);
     }
 
     const payload = this.itemForm.value;
@@ -112,5 +126,14 @@ export class ItemmasterComponent {
 
   close() {
     this.router.navigateByUrl('/admin');
+  }
+
+  onlyNumberKey(event: any) {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Only allow numbers 0-9
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 }
