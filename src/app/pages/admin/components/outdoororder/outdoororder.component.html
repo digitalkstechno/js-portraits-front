@@ -41,7 +41,19 @@
               type="text"
               style="width: 135px"
               formControlName="contactNo"
+              maxlength="10"
+              (keypress)="onlyNumberKey($event)"
+              placeholder="9999888777"
             />
+            <div
+              *ngIf="
+                orderForm.get('contactNo')?.touched &&
+                orderForm.get('contactNo')?.invalid
+              "
+              class="error-msg-container"
+            >
+              <small>Please enter a valid Mobile number.</small>
+            </div>
           </div>
           <div class="field-item">
             <label>Quotation No</label>
@@ -65,6 +77,15 @@
               (input)="filterParty($event)"
               formControlName="outdoorParty"
             />
+            <div
+            *ngIf="
+              orderForm.get('outdoorParty')?.touched &&
+              orderForm.get('outdoorParty')?.invalid
+            "
+            class="error-msg-container"
+          >
+            <small>Please select a party name.</small>
+          </div>
             <div class="dropdown-list" *ngIf="filteredCustomers.length">
               <div
                 class="dropdown-item"

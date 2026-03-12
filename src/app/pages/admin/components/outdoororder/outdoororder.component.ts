@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { AdminService } from '../service/admin.service';
@@ -36,9 +36,9 @@ export class OutdoororderComponent implements OnInit {
     this.orderForm = this.fb.group({
       orderNo: [''],
       date: [new Date().toISOString().split('T')[0]],
-      contactNo: [''],
+      contactNo: ['', [Validators.required, Validators.pattern(`^[0-9]{10}$`)]],
       quotationNo: [''],
-      outdoorParty: [''],
+      outdoorParty: ['', [Validators.required]],
       couple: [''],
       address: [''],
       remarks: [''],
@@ -379,5 +379,14 @@ export class OutdoororderComponent implements OnInit {
 
   close() {
     this.router.navigateByUrl('/admin');
+  }
+
+  onlyNumberKey(event: any) {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Only allow numbers 0-9
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 }
