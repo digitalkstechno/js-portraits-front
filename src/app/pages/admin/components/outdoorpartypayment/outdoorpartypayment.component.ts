@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../service/admin.service';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-outdoorpartypayment',
@@ -12,6 +13,11 @@ import { SHARED_MODULES } from '../../../../constants/sharedModule';
 export class OutdoorpartypaymentComponent {
   paymentForm!: FormGroup;
   outdoorService = inject(AdminService);
+  router = inject(Router);
+
+  isError = false;
+  showPopup = false;
+  popupMessage = '';
 
   constructor(private fb: FormBuilder) {}
 
@@ -41,13 +47,46 @@ export class OutdoorpartypaymentComponent {
     return true;
   }
 
-  onSave() {
-    if (this.paymentForm.valid) {
-      console.log(this.paymentForm.value);
+  onSubmit() {
+    if (this.paymentForm.invalid) {
+      this.paymentForm.markAllAsTouched();
+      return;
     }
+
+    const formValue = this.paymentForm.value;
+    this.outdoorService.createOutdoorOrder(formValue).subscribe({
+      next: (res: any) => {
+        this.triggerPopup('Outdoor Order Created Successfully!', false);
+
+        this.paymentForm.reset({
+          date: new Date().toISOString().split('T')[0],
+          paymentMode: 'Cash',
+          subTotal: 0,
+          discount: 0,
+          advance: 0,
+          grandTotal: 0,
+        });
+      },
+
+      error: (err: any) => {
+        console.error('Order creation failed', err);
+        this.triggerPopup('Something went wrong while saving!', true);
+      },
+    });
+  }
+
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   close() {
-    /* logic to close */
+    this.router.navigateByUrl('/admin');
   }
 }
