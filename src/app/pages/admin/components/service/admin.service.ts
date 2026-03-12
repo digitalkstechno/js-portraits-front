@@ -201,6 +201,10 @@ export class AdminService {
     return this.http.get<any>(`${Endpoints.OUTDOOR_PARTY_PAYMENT}/count`);
   }
 
+  getPaymentCount(): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_PARTY_PAYMENT}/count`);
+  }
+
   deletePartyPayment(id: string): Observable<any> {
     return this.http.delete(`${Endpoints.OUTDOOR_PARTY_PAYMENT}/${id}`);
   }

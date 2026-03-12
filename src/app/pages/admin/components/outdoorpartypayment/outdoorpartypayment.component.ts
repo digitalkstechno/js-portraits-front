@@ -18,14 +18,23 @@ export class OutdoorpartypaymentComponent {
   isError = false;
   showPopup = false;
   popupMessage = '';
+  count: string = '';
   parties: any[] = [];
   filteredCustomers: any[] = [];
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
+    this.outdoorService.getPaymentCount().subscribe((res) => {
+      const count = res.count;
+      this.count = count + 1;
+      this.paymentForm.patchValue({
+        transNo: this.count,
+      });
+    });
+
     this.paymentForm = this.fb.group({
-      transNo: ['39'],
+      transNo: [''],
       date: [new Date().toISOString().substring(0, 10)],
       outdoorParty: ['', Validators.required],
       orderNo: [''],
