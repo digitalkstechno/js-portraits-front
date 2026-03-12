@@ -17,6 +17,15 @@
             (input)="filterBooks($event)"
           />
           <input type="hidden" formControlName="bookName" />
+          <div
+            *ngIf="
+              productSellForm.get('bookName')?.touched &&
+              productSellForm.get('bookName')?.invalid
+            "
+            class="error-msg-container"
+          >
+            <small>Please select a book.</small>
+          </div>
           <div class="dropdown-list" *ngIf="filteredBooks.length">
             <div
               class="dropdown-item"
@@ -67,6 +76,15 @@
             placeholder="Search Party..."
             (input)="filterParty($event)"
           />
+          <div
+            *ngIf="
+              productSellForm.get('partyName')?.touched &&
+              productSellForm.get('partyName')?.invalid
+            "
+            class="error-msg-container"
+          >
+            <small>Please select a party name.</small>
+          </div>
           <div class="dropdown-list" *ngIf="filteredCustomers.length">
             <div
               class="dropdown-item"
@@ -79,14 +97,31 @@
         </div>
         <div class="field-item">
           <label>Contact No</label>
-          <input type="text" formControlName="contactNo" style="width: 260px" />
+          <input
+            type="text"
+            formControlName="contactNo"
+            style="width: 260px"
+            maxlength="10"
+            (keypress)="onlyNumberKey($event)"
+            placeholder="9999888777"
+          />
+          <div
+            *ngIf="
+              productSellForm.get('contactNo')?.touched &&
+              productSellForm.get('contactNo')?.invalid
+            "
+            class="error-msg-container"
+          >
+            <small>Please enter a valid 10 digit Contact no.</small>
+          </div>
         </div>
       </div>
 
       <div class="field-group">
         <div class="field-item">
           <small class="text-muted"
-            >GST will be auto-calculated {{ gstConfig ? gstConfig.defaultGstRate : '0' }}%</small
+            >GST will be auto-calculated
+            {{ gstConfig ? gstConfig.defaultGstRate : "0" }}%</small
           >
         </div>
       </div>

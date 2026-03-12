@@ -63,11 +63,11 @@ export class PurchaseitemsComponent {
 
   initForms() {
     this.productSellForm = this.fb.group({
-      bookName: [''],
+      bookName: ['', Validators.required],
       billNo: [this.count],
       purchaseDate: [new Date().toISOString().split('T')[0]],
       partyName: ['', Validators.required],
-      contactNo: [''],
+      contactNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
 
       items: this.fb.array([]),
       subTotal: [0],
@@ -500,5 +500,14 @@ export class PurchaseitemsComponent {
 
   close() {
     this.router.navigate(['/admin']);
+  }
+
+  onlyNumberKey(event: any) {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Only allow numbers 0-9
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 }
