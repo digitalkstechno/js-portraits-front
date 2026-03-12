@@ -25,7 +25,26 @@
             formControlName="outdoorParty"
             style="width: 350px"
             placeholder="Search Party..."
+            (input)="filterParty($event)"
           />
+          <div
+            *ngIf="
+              paymentForm.get('outdoorParty')?.touched &&
+              paymentForm.get('outdoorParty')?.invalid
+            "
+            class="error-msg-container"
+          >
+            <small>Please select a party name.</small>
+          </div>
+          <div class="dropdown-list" *ngIf="filteredCustomers.length">
+            <div
+              class="dropdown-item"
+              *ngFor="let r of filteredCustomers"
+              (click)="selectParty(r)"
+            >
+              {{ r.name }}
+            </div>
+          </div>
         </div>
         <div class="field-item">
           <label>Order No :</label>
@@ -181,4 +200,10 @@
       <button type="button" class="btn btn-social">WhatsApp</button>
     </div>
   </form>
+</div>
+<div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
+  <div class="toast-content">
+    <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
+    <span class="message">{{ popupMessage }}</span>
+  </div>
 </div>

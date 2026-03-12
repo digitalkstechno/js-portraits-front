@@ -18,6 +18,8 @@ export class OutdoorpartypaymentComponent {
   isError = false;
   showPopup = false;
   popupMessage = '';
+  parties: any[] = [];
+  filteredCustomers: any[] = [];
 
   constructor(private fb: FormBuilder) {}
 
@@ -39,6 +41,35 @@ export class OutdoorpartypaymentComponent {
       entryBy: [''],
       updateBy: [''],
     });
+
+    this.loadCustomers();
+  }
+
+  loadCustomers() {
+    this.outdoorService.getCustomers().subscribe((res: any) => {
+      this.parties = res.data || res;
+    });
+  }
+
+  filterParty(event: any) {
+    const value = event.target.value.toLowerCase();
+    if (!value) {
+      this.filteredCustomers = [];
+      return;
+    }
+
+    this.filteredCustomers = this.parties.filter(
+      (party: any) =>
+        party.name && party.name.toString().toLowerCase().includes(value),
+    );
+  }
+
+  selectParty(party: any) {
+    this.paymentForm.patchValue({
+      outdoorParty: party.name,
+    });
+
+    this.filteredCustomers = [];
   }
 
   onlyNumberKey(event: any) {
@@ -54,9 +85,9 @@ export class OutdoorpartypaymentComponent {
     }
 
     const formValue = this.paymentForm.value;
-    this.outdoorService.createOutdoorOrder(formValue).subscribe({
+    this.outdoorService.savePayment(formValue).subscribe({
       next: (res: any) => {
-        this.triggerPopup('Outdoor Order Created Successfully!', false);
+        this.triggerPopup('Outdoor party payment saved successfully!', false);
 
         this.paymentForm.reset({
           date: new Date().toISOString().split('T')[0],
@@ -69,7 +100,7 @@ export class OutdoorpartypaymentComponent {
       },
 
       error: (err: any) => {
-        console.error('Order creation failed', err);
+        console.error('Outdoor party payment creation failed', err);
         this.triggerPopup('Something went wrong while saving!', true);
       },
     });
