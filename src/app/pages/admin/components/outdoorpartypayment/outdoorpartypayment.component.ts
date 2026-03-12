@@ -74,7 +74,7 @@ export class OutdoorpartypaymentComponent {
 
   loadPayments() {
     this.outdoorService.getAllPayments().subscribe((res) => {
-      this.payments = res.bills;
+      this.payments = res;
       console.log(this.payments);
     });
   }
@@ -86,13 +86,13 @@ export class OutdoorpartypaymentComponent {
     });
   }
 
-  loadBillsByParty(id: string) {
-    this.outdoorService.getOutdoorBillByParty(id).subscribe((res) => {
-      this.partyBill = res.bill;
-      console.log('party bill', this.partyBill);
-      this.calculateTotals(this.partyBill);
-    });
-  }
+  // loadBillsByParty(id: string) {
+  //   this.outdoorService.getOutdoorBillByParty(id).subscribe((res) => {
+  //     this.partyBill = res.bill;
+  //     console.log('party bill', this.partyBill);
+  //     this.calculateTotals(this.partyBill);
+  //   });
+  // }
 
   loadOrders() {
     this.outdoorService.getOutdoorOrder().subscribe((res) => {
@@ -101,23 +101,23 @@ export class OutdoorpartypaymentComponent {
     });
   }
 
-  calculateTotals(bills: any[]) {
-    let billTotalAmt = 0;
-    let totalPaidAmt = 0;
-    let totalPendingAmt = 0;
+  // calculateTotals(bills: any[]) {
+  //   let billTotalAmt = 0;
+  //   let totalPaidAmt = 0;
+  //   let totalPendingAmt = 0;
 
-    bills.forEach((bill) => {
-      billTotalAmt += bill.grandTotal || 0;
-      totalPaidAmt += bill.advance || 0;
-      totalPendingAmt += bill.balanceDue || 0;
-    });
+  //   bills.forEach((bill) => {
+  //     billTotalAmt += bill.grandTotal || 0;
+  //     totalPaidAmt += bill.advance || 0;
+  //     totalPendingAmt += bill.balanceDue || 0;
+  //   });
 
-    this.paymentForm.patchValue({
-      billTotalAmt: billTotalAmt,
-      totalPaidAmt: totalPaidAmt,
-      totalPendingAmt: totalPendingAmt,
-    });
-  }
+  //   this.paymentForm.patchValue({
+  //     billTotalAmt: billTotalAmt,
+  //     totalPaidAmt: totalPaidAmt,
+  //     totalPendingAmt: totalPendingAmt,
+  //   });
+  // }
 
   filterParty(event: any) {
     const value = event.target.value.toLowerCase();
@@ -141,8 +141,7 @@ export class OutdoorpartypaymentComponent {
       contactNumber: party.contact,
     });
 
-    this.loadBillsByParty(party?._id);
-
+    // this.loadBillsByParty(party?._id);
     this.filteredCustomers = [];
   }
 
@@ -160,15 +159,22 @@ export class OutdoorpartypaymentComponent {
 
   // 2. patch data on select
   selectBill(bill: any) {
-    console.log(bill);
+    this.partyBill = [bill];
+    console.log("selected bill",bill);
     this.paymentForm.patchValue({
       date: this.formatDate(bill.date),
-      transNo: bill.billNo,
-      subTotal: bill.subTotal,
+      transNo: bill.transNo,
+      orderNo: bill.orderNo,
+      billTotalAmt: 0,
+      totalPaidAmt: bill.orderTotalPaidAmt,
+      totalPendingAmt: -bill.orderTotalPaidAmt,
+      orderTotalAmt: bill.orderTotalAmt,
+      orderTotalPaidAmt: bill.orderTotalPaidAmt,
       grandTotal: bill.grandTotal,
-      balanceDue: bill.balanceDue,
-      advance: bill.advance,
+      orderTotalPendingAmt: bill.orderTotalPendingAmt,
       outdoorParty: bill.outdoorParty?._id,
+      address: bill.outdoorParty?.address || bill.address,
+      contactNumber: bill.outdoorParty?.contact,
     });
 
     this.selectedPartyName = bill.outdoorParty?.name;
@@ -191,6 +197,9 @@ export class OutdoorpartypaymentComponent {
     console.log(order);
     this.paymentForm.patchValue({
       orderNo: order.orderNo,
+      billTotalAmt: 0,
+      totalPaidAmt: order.advance,
+      totalPendingAmt: -order.advance,
       orderTotalAmt: order.subTotal,
       orderTotalPaidAmt: order.advance,
       grandTotal: order.grandTotal,

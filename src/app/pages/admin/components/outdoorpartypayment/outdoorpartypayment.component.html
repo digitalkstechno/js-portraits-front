@@ -9,7 +9,21 @@
       <div class="field-group">
         <div class="field-item">
           <label>Trans No</label>
-          <input type="text" formControlName="transNo" style="width: 80px" />
+          <input
+            type="text"
+            formControlName="transNo"
+            style="width: 80px"
+            (input)="searchBills($event)"
+          />
+          <div class="dropdown-list" *ngIf="filteredPayments.length > 0">
+            <div
+              class="dropdown-item"
+              *ngFor="let bill of filteredPayments"
+              (click)="selectBill(bill)"
+            >
+              {{ bill.transNo }}
+            </div>
+          </div>
         </div>
         <div class="field-item">
           <label>Date</label>
@@ -113,7 +127,12 @@
         </div>
         <div class="entry-col">
           <label>Total Pending</label>
-          <input type="text" class="text-danger" formControlName="orderTotalPendingAmt" readonly />
+          <input
+            type="text"
+            class="text-danger"
+            formControlName="orderTotalPendingAmt"
+            readonly
+          />
         </div>
       </div>
 
@@ -165,8 +184,8 @@
       <div class="dual-table-container">
         <div class="table-half">
           <div class="table-header-red">Pending Bill Detail :</div>
-          <div class="table-scroll">
-            <table>
+          <div class="table-scroll" *ngIf="partyBill.length">
+            <table class="receipt-history-table">
               <thead>
                 <tr>
                   <th>Bill No</th>
@@ -174,7 +193,13 @@
                   <th>Amt</th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody>
+                <tr *ngFor="let p of partyBill">
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="table-footer">
@@ -184,16 +209,28 @@
 
         <div class="table-half">
           <div class="table-header-red">Payment Detail :</div>
-          <div class="table-scroll">
-            <table>
+          <div class="table-scroll" *ngIf="partyBill.length">
+            <table class="receipt-history-table">
               <thead>
                 <tr>
                   <th>Date</th>
-                  <th>Type</th>
-                  <th>Amt</th>
+                  <th>Pay Type</th>
+                  <th class="text-right">Amount</th>
+                  <th>Remark</th>
                 </tr>
               </thead>
-              <tbody></tbody>
+              <tbody>
+                <tr *ngFor="let p of partyBill">
+                  <td>{{ p.date | date: "dd MMM, yyyy" }}</td>
+                  <td>
+                    <span class="pay-badge">{{ p.paymentType }}</span>
+                  </td>
+                  <td class="text-right font-bold">
+                    {{ p.amount | number: "1.2-2" }}
+                  </td>
+                  <td class="remark-text">{{ p.remark || "-" }}</td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="table-footer">

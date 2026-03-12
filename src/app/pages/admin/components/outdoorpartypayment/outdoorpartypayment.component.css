@@ -248,3 +248,75 @@ input:focus {
     opacity: 1;
   }
 }
+
+/* Table Wrapper */
+.table-scroll {
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden; /* Corners round karne ke liye */
+  background: #fdfbf9;
+}
+
+.receipt-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Georgia", serif;
+  font-size: 14px;
+}
+
+/* Header Style */
+.receipt-history-table thead {
+  background: linear-gradient(#b5d3e3, #8fb8cc);
+}
+
+.receipt-history-table th {
+  color: #f3efe9; /* Light Beige text */
+  padding: 12px 15px;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+/* Body Rows */
+.receipt-history-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e7dfd6;
+  color: #28484a;
+}
+
+/* Zebra Stripes (Halka color difference) */
+.receipt-history-table tbody tr:nth-child(even) {
+  background-color: #f3efe9;
+}
+
+.receipt-history-table tbody tr:hover {
+  background-color: #ede4d9; /* Hover effect */
+}
+
+/* Special Columns */
+.text-right {
+  text-align: right;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.pay-badge {
+  background: #d8cfc7;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #6b4b35;
+  text-transform: uppercase;
+}
+
+.remark-text {
+  font-style: italic;
+  font-size: 13px;
+  color: #8c7b6c;
+}
