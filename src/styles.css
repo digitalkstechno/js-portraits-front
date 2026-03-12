@@ -1,4 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
-.error-text{
-    color: red;
+.error-text {
+  color: red;
+}
+
+.error-msg-container {
+  position: absolute;
+  top: 100%; /* Input ke theek niche */
+  left: 88px; /* Label ki width ke hisaab se adjust karein */
+  color: red;
+  font-size: 15px;
+  white-space: nowrap;
+  /* font-weight: bold; */
 }

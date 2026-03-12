@@ -48,6 +48,15 @@
             (input)="filterParty($event)"
             formControlName="outdoorParty"
           />
+          <div
+            *ngIf="
+              quotationForm.get('outdoorParty')?.touched &&
+              quotationForm.get('outdoorParty')?.invalid
+            "
+            class="error-msg-container"
+          >
+            <small>Please select a valid party name.</small>
+          </div>
 
           <div class="dropdown-list" *ngIf="filteredCustomers.length">
             <div
@@ -62,7 +71,23 @@
 
         <div class="field-item">
           <label>Contact No</label>
-          <input type="text" style="width: 190px" formControlName="contactNo" />
+          <input
+            type="text"
+            style="width: 190px"
+            formControlName="contactNo"
+            maxlength="10"
+            (keypress)="onlyNumberKey($event)"
+            placeholder="9999888777"
+          />
+          <div
+            *ngIf="
+              quotationForm.get('contactNo')?.touched &&
+              quotationForm.get('contactNo')?.invalid
+            "
+            class="error-text"
+          >
+            <small>Please enter a valid 10 digit contact no.</small>
+          </div>
         </div>
       </div>
 
@@ -78,7 +103,23 @@
 
         <div class="field-item">
           <label>Email</label>
-          <input type="text" style="width: 190px" formControlName="email" />
+          <input
+            type="text"
+            style="width: 190px"
+            formControlName="email"
+            placeholder="example@gmail.com"
+          />
+          <div
+            *ngIf="
+              quotationForm.get('email')?.touched &&
+              quotationForm.get('email')?.invalid
+            "
+            class="error-text"
+          >
+            <small *ngIf="quotationForm.get('email')?.errors?.['email']"
+              >Invalid email format.</small
+            >
+          </div>
         </div>
       </div>
 
@@ -116,9 +157,6 @@
   </div>
 
   <!-- ITEM ENTRY STRIP -->
-
-  <!-- ITEM ENTRY STRIP -->
-
   <div class="item-entry-strip" [formGroup]="entryForm">
     <div class="entry-col">
       <label>Date</label>
@@ -137,6 +175,15 @@
           class="professional-input"
           autocomplete="off"
         />
+        <div
+            *ngIf="
+              quotationForm.get('itemName')?.touched &&
+              quotationForm.get('itemName')?.invalid
+            "
+            class="error-msg-container"
+          >
+            <small>Please select an Item.</small>
+          </div>
         <div class="dropdown-results" *ngIf="filteredItems.length > 0">
           <div
             class="result-row"
@@ -354,16 +401,32 @@
   <div class="action-bar">
     <button class="btn btn-save" (click)="onSubmit()">Save</button>
     <button class="btn btn-exit">Delete</button>
-    <button class="btn" [disabled]="!quotationData" (click)="printQuotation(true, true)">
+    <button
+      class="btn"
+      [disabled]="!quotationData"
+      (click)="printQuotation(true, true)"
+    >
       Print with Rate & Dis
     </button>
-    <button class="btn" [disabled]="!quotationData" (click)="printQuotation(false, false)">
+    <button
+      class="btn"
+      [disabled]="!quotationData"
+      (click)="printQuotation(false, false)"
+    >
       Print without
     </button>
-    <button class="btn" [disabled]="!quotationData" (click)="printQuotation(true, false)">
+    <button
+      class="btn"
+      [disabled]="!quotationData"
+      (click)="printQuotation(true, false)"
+    >
       Print with Rate without Dis
     </button>
-    <button class="btn" [disabled]="!quotationData" (click)="printQuotation(false, false)">
+    <button
+      class="btn"
+      [disabled]="!quotationData"
+      (click)="printQuotation(false, false)"
+    >
       Print without Rate without Dis
     </button>
     <button class="btn" (click)="clearAll()">Cancel</button>

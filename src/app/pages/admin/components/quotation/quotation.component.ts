@@ -39,23 +39,23 @@ export class QuotationComponent {
   // ENTRY FORM (Item Entry Strip)
   entryForm: FormGroup = this.fb.group({
     date: [new Date().toISOString().split('T')[0]],
-    itemName: ['', Validators.required], // Name for searching
+    itemName: ['', [Validators.required]], // Name for searching
     itemId: [''], // Hidden ID
-    productName: ['', Validators.required],
+    productName: ['', [Validators.required]],
     productId: [''],
     event: [''],
     qty: [, [Validators.required, Validators.min(1)]],
-    rate: [0, Validators.required],
+    rate: [0, [Validators.required]],
     amount: [0],
   });
 
   quotationForm: FormGroup = this.fb.group({
     quotationNo: [''],
     date: [new Date().toISOString().split('T')[0]],
-    outdoorParty: [''],
+    outdoorParty: ['', [Validators.required]],
     address: [''],
-    contactNo: [''],
-    email: [''],
+    contactNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+    email: ['', [Validators.email]],
     refBy: [''],
     package: [''],
     functionDate: [''],
@@ -480,5 +480,14 @@ export class QuotationComponent {
     setTimeout(() => {
       window.print();
     }, 200);
+  }
+
+  onlyNumberKey(event: any) {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Only allow numbers 0-9
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 }
