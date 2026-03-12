@@ -41,7 +41,7 @@
           <tr *ngFor="let d of data.items; let i = index">
             <td>{{ i + 1 }}</td>
             <td>{{ d.itemName }} ({{ d.productId?.product_name }})</td>
-            <td>{{ d.event }}</td>
+            <td>{{ d.eventName }}</td>
             <td>{{ d.qty }}</td>
             <td *ngIf="showRate">{{ d.rate }}</td>
             <td *ngIf="showRate">{{ d.total }}</td>
@@ -69,7 +69,7 @@
           </div>
           <div class="total-row">Discount : {{ data.discount }}</div>
           <div class="total-row">Advance : {{ data.advance }}</div>
-          <div class="grand-total-box">Grand Total : {{ data.grandTotal }}</div>
+          <div class="grand-total-box">Grand Total : {{ data.subTotal - data.advance }}</div>
         </div>
 
         <div class="signature-section">
