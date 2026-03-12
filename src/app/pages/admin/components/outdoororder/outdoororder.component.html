@@ -1,4 +1,4 @@
-<form [formGroup]="orderForm">
+<form class="no-print" [formGroup]="orderForm">
   <div class="window">
     <div class="title-bar">
       <span>Outdoor Order Book</span>
@@ -274,8 +274,8 @@
         Save
       </button>
       <button class="btn btn-exit">Delete</button>
-      <button class="btn">Print with Rate</button>
-      <button class="btn">Print without Rate</button>
+      <button class="btn" (click)="printOrder(true)">Print with Rate</button>
+      <button class="btn" (click)="printOrder(false)">Print without Rate</button>
       <button class="btn" (click)="clear()">Cancel</button>
       <button type="button" class="btn btn-exit" (click)="close()">Exit</button>
       <button class="btn btn-social">Send SMS</button>
@@ -290,4 +290,11 @@
     <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
     <span class="message">{{ popupMessage }}</span>
   </div>
+</div>
+<div class="print-area" *ngIf="orderData">
+  <app-outdoororderprint
+    [data]="orderData"
+    [showRate]="showRate"
+  >
+  </app-outdoororderprint>
 </div>

@@ -4,10 +4,11 @@ import { Router } from '@angular/router';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { AdminService } from '../service/admin.service';
 import { ItemsService } from '../../master/service/items.service';
+import { OutdoororderprintComponent } from "../outdoororderprint/outdoororderprint.component";
 
 @Component({
   selector: 'app-outdoororder',
-  imports: [SHARED_MODULES],
+  imports: [SHARED_MODULES, OutdoororderprintComponent],
   templateUrl: './outdoororder.component.html',
   styleUrl: './outdoororder.component.css',
 })
@@ -31,6 +32,7 @@ export class OutdoororderComponent implements OnInit {
   fixedGstRate: number = 0; // Config se aayega
   filteredOrders: any[] = [];
   orders: any[] = [];
+  orderData: any[] = [];
 
   ngOnInit() {
     this.orderForm = this.fb.group({
@@ -167,7 +169,7 @@ export class OutdoororderComponent implements OnInit {
 
   // 2. बिल सिलेक्ट होने पर सारा डेटा फॉर्म में भरना
   selectOrder(order: any) {
-    console.log(order);
+    this.orderData = order;
     this.orderForm.patchValue({
       date: this.formatDate(order.date),
       orderNo: order.orderNo,
@@ -379,6 +381,17 @@ export class OutdoororderComponent implements OnInit {
 
   close() {
     this.router.navigateByUrl('/admin');
+  }
+
+  printConfig = { rate: true };
+  showRate: boolean = true;
+
+  printOrder(rate: boolean) {
+    this.showRate = rate;
+
+    setTimeout(() => {
+      window.print();
+    }, 200);
   }
 
   onlyNumberKey(event: any) {

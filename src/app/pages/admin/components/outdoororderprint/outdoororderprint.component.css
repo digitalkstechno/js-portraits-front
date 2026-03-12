@@ -1,0 +1,212 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+
+.top-section {
+  background: #d8cfc7;
+  padding: 25px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.footer-left {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.address-box {
+  margin-bottom: 15px;
+}
+
+.received {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Ensure the page fits A4 exactly */
+.invoice-wrapper {
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto;
+  background: #f3efe9;
+  box-sizing: border-box;
+}
+
+.invoice-page {
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.invoice-content {
+  flex: 1; /* Pushes the footer to the bottom */
+}
+
+.grand-total {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  border-top: 1px solid #6b4b35; /* Brown line from your theme */
+  padding-top: 5px;
+}
+
+.grand-total {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 8px;
+  padding-top: 5px;
+  border-top: 1px double #6b4b35; /* Brown line above grand total */
+}
+
+.sign {
+  width: 100%;
+  text-align: center; /* Signature text line ke center mein rahega */
+}
+
+.sign-line {
+  width: 220px;
+  height: 1px;
+  background-color: #6b4b35;
+  margin: 5px 0 5px auto; /* Line ko right side align karega */
+}
+
+.sign-line {
+  width: 200px;
+  height: 1px;
+  background-color: #6b4b35;
+  margin: 5px auto;
+}
+
+.sign-text {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Print Optimization */
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .invoice-wrapper {
+    height: 297mm;
+    overflow: hidden;
+  }
+}
+
+/* HEADER STYLING (IMAGE 2E5DE6 STYLE) */
+.invoice-header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.invoice-title-big {
+  font-size: 50px; /* Big serif font */
+  letter-spacing: 5px;
+  font-family: "Georgia", serif;
+  color: #2b2b2b;
+}
+
+.header-divider-thick {
+  width: 40px;
+  height: 90px;
+  background-color: #6b4b35; /* Dark brown block */
+  margin: 0 30px;
+}
+
+.company-info-right {
+  text-align: left;
+  flex: 1;
+}
+
+.company-name-bold {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2b2b2b;
+}
+
+.invoice-info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+/* FOOTER & TOTALS ON BOTTOM RIGHT */
+.invoice-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid #c8b7a6;
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* Totals and sign both to the right */
+  min-width: 280px;
+}
+
+.totals-container {
+  width: 100%;
+  text-align: right;
+  margin-bottom: 25px; /* Space between totals and signature */
+  font-size: 14px;
+}
+
+.grand-total-box {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 8px;
+  border-top: 1px solid #6b4b35;
+  padding-top: 5px;
+}
+
+.signature-section {
+  text-align: center;
+  width: 240px;
+}
+
+.signature-img {
+  max-height: 55px;
+  mix-blend-mode: multiply;
+  margin-bottom: -5px;
+}
+
+.sign-underline {
+  width: 100%;
+  height: 1px;
+  background-color: #6b4b35;
+  margin-bottom: 5px;
+}
+
+.sign-text-bottom {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Original Table Styles Restore */
+.invoice-table {
+  width: 100%;
+  background-color: #e7dfd6;
+  border-collapse: collapse;
+}
+
+.invoice-table th {
+  background: #c8b7a6;
+  padding: 12px;
+  text-align: left;
+}
+
+.invoice-table td {
+  padding: 10px;
+  border-bottom: 1px solid #d8cfc7;
+}
