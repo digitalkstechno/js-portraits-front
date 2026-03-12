@@ -130,7 +130,7 @@
           <tbody>
             <tr *ngFor="let bill of outdoorBills">
               <td>{{ bill.date | date: "dd MMM" }}</td>
-              <td class="font-medium">{{ bill.outdoorParty }}</td>
+              <td class="font-medium">{{ bill.outdoorParty?.name }}</td>
               <td><span class="text-muted">#</span>{{ bill.billNo }}</td>
               <td class="text-right">₹{{ bill.grandTotal | number }}</td>
               <td class="text-right">₹{{ bill.advance | number }}</td>
