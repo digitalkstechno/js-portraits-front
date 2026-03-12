@@ -62,6 +62,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  position: relative;
+  margin-bottom: 15px;
 }
 
 label {
@@ -243,10 +245,6 @@ input[type="date"] {
 .table-section td {
   text-align: left; /* Names should be left aligned */
   padding-left: 10px;
-}
-
-.field-item {
-  position: relative;
 }
 
 .field-item input {

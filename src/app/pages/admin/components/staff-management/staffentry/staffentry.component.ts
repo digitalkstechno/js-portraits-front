@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { StaffService } from '../service/staff.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SHARED_MODULES } from '../../../../../constants/sharedModule';
 import { AdminService } from '../../service/admin.service';
 
@@ -71,15 +71,18 @@ export class StaffentryComponent {
   initForm() {
     this.staffForm = this.fb.group({
       staffId: [''],
-      name: [''],
-      email: [''],
-      role: [''],
+      name: ['', Validators.required],
+      email: ['', Validators.email],
+      role: ['', Validators.required],
       isAdmin: [false],
-      contact_no: [''],
+      contact_no: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]{10}$')],
+      ],
       joining_date: [new Date().toISOString().split('T')[0]],
       age: [''],
       gender: [''],
-      salary: [''],
+      salary: ['', Validators.required],
       address: [''],
       remarks: [''],
     });
@@ -169,5 +172,14 @@ export class StaffentryComponent {
 
   close() {
     this.router.navigateByUrl('/admin');
+  }
+
+  onlyNumberKey(event: any) {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Only allow numbers 0-9
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 }

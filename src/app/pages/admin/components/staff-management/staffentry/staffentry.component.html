@@ -26,6 +26,14 @@
               placeholder="Enter staff name"
               formControlName="name"
             />
+            <div
+              *ngIf="
+                staffForm.get('name')?.touched && staffForm.get('name')?.invalid
+              "
+              class="error-msg-container"
+            >
+              <small>Please enter staff name.</small>
+            </div>
           </div>
           <div class="field-item">
             <label>Joining Date</label>
@@ -45,7 +53,19 @@
               style="width: 150px"
               placeholder="10-digit mobile"
               formControlName="contact_no"
+              maxlength="10"
+              (keypress)="onlyNumberKey($event)"
+              placeholder="9999888777"
             />
+            <div
+              *ngIf="
+                staffForm.get('contact_no')?.touched &&
+                staffForm.get('contact_no')?.invalid
+              "
+              class="error-msg-container"
+            >
+              <small>Please enter a valid Contact no.</small>
+            </div>
           </div>
           <div class="field-item">
             <label>Salary (Monthly)</label>
@@ -55,6 +75,15 @@
               placeholder="0.00"
               formControlName="salary"
             />
+            <div
+              *ngIf="
+                staffForm.get('salary')?.touched &&
+                staffForm.get('salary')?.invalid
+              "
+              class="error-msg-container"
+            >
+              <small>Please enter valid salary.</small>
+            </div>
           </div>
           <div class="field-item">
             <label>Role</label>
@@ -64,6 +93,14 @@
               (input)="filterRoles($event)"
               formControlName="role"
             />
+            <div
+              *ngIf="
+                staffForm.get('role')?.touched && staffForm.get('role')?.invalid
+              "
+              class="error-msg-container"
+            >
+              <small>Please select or enter a valid role.</small>
+            </div>
 
             <div class="dropdown-list" *ngIf="filteredRoles.length">
               <div
