@@ -48,7 +48,21 @@
         </div>
         <div class="field-item">
           <label>Order No</label>
-          <input type="text" formControlName="orderNo" style="width: 120px" />
+          <input
+            type="text"
+            formControlName="orderNo"
+            style="width: 120px"
+            (input)="searchOrders($event)"
+          />
+          <div class="dropdown-list" *ngIf="filteredOrders.length > 0">
+            <div
+              class="dropdown-item"
+              *ngFor="let order of filteredOrders"
+              (click)="selectOrder(order)"
+            >
+              {{ order.orderNo }}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -94,11 +108,11 @@
         </div>
         <div class="entry-col">
           <label>Total Paid Amt</label>
-          <input type="text" readonly />
+          <input type="text" formControlName="orderTotalPaidAmt" readonly />
         </div>
         <div class="entry-col">
           <label>Total Pending</label>
-          <input type="text" readonly />
+          <input type="text" class="text-danger" formControlName="orderTotalPendingAmt" readonly />
         </div>
       </div>
 

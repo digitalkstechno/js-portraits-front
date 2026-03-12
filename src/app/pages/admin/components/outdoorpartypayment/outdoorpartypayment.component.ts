@@ -20,6 +20,10 @@ export class OutdoorpartypaymentComponent {
   popupMessage = '';
   count: string = '';
   parties: any[] = [];
+  payments: any[] = [];
+  orders: any[] = [];
+  filteredOrders: any[] = [];
+  filteredPayments: any[] = [];
   filteredCustomers: any[] = [];
 
   constructor(private fb: FormBuilder) {}
@@ -44,6 +48,8 @@ export class OutdoorpartypaymentComponent {
       totalPaidAmt: [0],
       totalPendingAmt: [0],
       orderTotalAmt: [0],
+      orderTotalPaidAmt: [0],
+      orderTotalPendingAmt: [0],
       paymentType: ['CASH'],
       amount: [0, Validators.required],
       remark: [''],
@@ -52,11 +58,27 @@ export class OutdoorpartypaymentComponent {
     });
 
     this.loadCustomers();
+    this.loadPayments();
+    this.loadOrders();
   }
 
   loadCustomers() {
     this.outdoorService.getCustomers().subscribe((res: any) => {
       this.parties = res.data || res;
+    });
+  }
+
+  loadPayments() {
+    this.outdoorService.getAllPayments().subscribe((res) => {
+      this.payments = res.bills;
+      console.log(this.payments);
+    });
+  }
+
+  loadOrders() {
+    this.outdoorService.getOutdoorOrder().subscribe((res) => {
+      this.orders = res.orders;
+      console.log(this.orders);
     });
   }
 
@@ -79,6 +101,59 @@ export class OutdoorpartypaymentComponent {
     });
 
     this.filteredCustomers = [];
+  }
+
+  searchBills(event: any) {
+    const term = event.target.value.toString().toLowerCase();
+
+    if (term) {
+      this.filteredPayments = this.payments.filter((payment) =>
+        payment.transNo.toString().toLowerCase().includes(term),
+      );
+    } else {
+      this.filteredPayments = [];
+    }
+  }
+
+  // 2. patch data on select
+  selectBill(bill: any) {
+    console.log(bill);
+    this.paymentForm.patchValue({
+      date: this.formatDate(bill.date),
+      transNo: bill.billNo,
+      subTotal: bill.subTotal,
+      grandTotal: bill.grandTotal,
+      balanceDue: bill.balanceDue,
+      advance: bill.advance,
+      outdoorParty: bill.outdoorParty,
+    });
+
+    this.filteredPayments = []; // close the dropdown
+  }
+
+  searchOrders(event: any) {
+    const term = event.target.value.toString().toLowerCase();
+
+    if (term) {
+      this.filteredOrders = this.orders.filter((order) =>
+        order.orderNo.toString().toLowerCase().includes(term),
+      );
+    } else {
+      this.filteredOrders = [];
+    }
+  }
+
+  selectOrder(order: any) {
+    console.log(order);
+    this.paymentForm.patchValue({
+      orderNo: order.orderNo,
+      orderTotalAmt: order.subTotal,
+      orderTotalPaidAmt: order.advance,
+      grandTotal: order.grandTotal,
+      orderTotalPendingAmt: order.balanceDue,
+    });
+
+    this.filteredOrders = []; // ड्रॉपडाउन बंद करें
   }
 
   onlyNumberKey(event: any) {
@@ -124,6 +199,18 @@ export class OutdoorpartypaymentComponent {
     setTimeout(() => {
       this.showPopup = false;
     }, 3000);
+  }
+
+  formatDate(dateStr: string) {
+    if (!dateStr) return '';
+
+    const d = new Date(dateStr);
+
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
   close() {
