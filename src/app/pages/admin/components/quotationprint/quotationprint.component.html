@@ -59,8 +59,9 @@
 
     <!-- TOTAL SECTION -->
     <div class="total-section">
+      <div>Sub Total : {{ data.subTotal }}</div>
       <div *ngIf="showDiscount">Discount : {{ data.discount }}</div>
-      <div class="grand-total">TOTAL : {{ data.grandTotal }}</div>
+      <div class="grand-total" *ngIf="showDiscount">TOTAL : {{ data.grandTotal }}</div>
     </div>
 
     <!-- FOOTER -->
