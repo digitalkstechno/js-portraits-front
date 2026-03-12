@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AdminService } from '../service/admin.service';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
+import { AdminService } from '../../components/service/admin.service';
 
 @Component({
   selector: 'app-otdoorbookmaster',
@@ -23,7 +23,7 @@ export class OtdoorbookmasterComponent {
 
   ngOnInit(): void {
     this.bookForm = this.fb.group({
-      bookName: [''],
+      bookName: ['', Validators.required],
       entryBy: [''],
       updateBy: [''],
     });

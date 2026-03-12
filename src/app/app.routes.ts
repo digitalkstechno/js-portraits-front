@@ -116,7 +116,7 @@ export const routes: Routes = [
       {
         path: 'outdoor/book-master',
         loadComponent: () =>
-          import('./pages/admin/components//otdoorbookmaster/otdoorbookmaster.component').then(
+          import('./pages/admin/master/otdoorbookmaster/otdoorbookmaster.component').then(
             (m) => m.OtdoorbookmasterComponent,
           ),
       },
