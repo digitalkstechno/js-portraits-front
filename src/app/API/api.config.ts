@@ -17,6 +17,7 @@ export const Endpoints = {
   OUTDOOR_BILL: `${baseUrl}/outdoorbill`,
   OUTDOOR_BOOKS: `${baseUrl}/outdoorBookMaster`,
   PRODUCT_SELL: `${baseUrl}/productSell`,
+  OUTDOOR_PARTY_PAYMENT: `${baseUrl}/outdoorPayment`,
 
   CUSTOMERS: `${baseUrl}/outdoorParty`,
   NOTE_SETTINGS: `${baseUrl}/noteSettings`,

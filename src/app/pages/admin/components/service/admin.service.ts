@@ -187,4 +187,21 @@ export class AdminService {
   getGstConfiguration(): Observable<any> {
     return this.http.get<any>(`${Endpoints.PRODUCT_SELL}/count`);
   }
+
+  // outdoor party payment
+  getAllPayments(): Observable<any> {
+    return this.http.get<any>(Endpoints.OUTDOOR_PARTY_PAYMENT);
+  }
+
+  savePayment(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.OUTDOOR_PARTY_PAYMENT, data);
+  }
+
+  getPaymentByParty(): Observable<any> {
+    return this.http.get<any>(`${Endpoints.OUTDOOR_PARTY_PAYMENT}/count`);
+  }
+
+  deletePartyPayment(id: string): Observable<any> {
+    return this.http.delete(`${Endpoints.OUTDOOR_PARTY_PAYMENT}/${id}`);
+  }
 }
