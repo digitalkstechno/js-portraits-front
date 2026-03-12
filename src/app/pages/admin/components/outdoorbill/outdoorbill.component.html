@@ -17,6 +17,15 @@
             (input)="filterBooks($event)"
           />
           <input type="hidden" formControlName="bookName" />
+          <div
+            *ngIf="
+              billForm.get('bookName')?.touched &&
+              billForm.get('bookName')?.invalid
+            "
+            class="error-msg-container"
+          >
+            <small>Please select a book.</small>
+          </div>
           <div class="dropdown-list" *ngIf="filteredBooks.length">
             <div
               class="dropdown-item"
@@ -63,6 +72,15 @@
             placeholder="Search Outdoor party"
             (input)="filterParty($event)"
           />
+          <div
+            *ngIf="
+              billForm.get('outdoorParty')?.touched &&
+              billForm.get('outdoorParty')?.invalid
+            "
+            class="error-msg-container"
+          >
+            <small>Please select a party name.</small>
+          </div>
           <div class="dropdown-list" *ngIf="filteredCustomers.length">
             <div
               class="dropdown-item"

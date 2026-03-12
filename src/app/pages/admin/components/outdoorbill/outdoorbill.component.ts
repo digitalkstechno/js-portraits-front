@@ -63,10 +63,10 @@ export class OutdoorbillComponent {
 
   initForms() {
     this.billForm = this.fb.group({
-      bookName: [''],
+      bookName: ['', Validators.required],
       billNo: [this.count],
       date: [new Date().toISOString().split('T')[0]],
-      outdoorParty: [''],
+      outdoorParty: ['', [Validators.required]],
       address: [''],
       // orderNo: [''],
       gstType: [''],

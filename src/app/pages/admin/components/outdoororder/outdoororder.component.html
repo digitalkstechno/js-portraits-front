@@ -78,14 +78,14 @@
               formControlName="outdoorParty"
             />
             <div
-            *ngIf="
-              orderForm.get('outdoorParty')?.touched &&
-              orderForm.get('outdoorParty')?.invalid
-            "
-            class="error-msg-container"
-          >
-            <small>Please select a party name.</small>
-          </div>
+              *ngIf="
+                orderForm.get('outdoorParty')?.touched &&
+                orderForm.get('outdoorParty')?.invalid
+              "
+              class="error-msg-container"
+            >
+              <small>Please select a party name.</small>
+            </div>
             <div class="dropdown-list" *ngIf="filteredCustomers.length">
               <div
                 class="dropdown-item"
