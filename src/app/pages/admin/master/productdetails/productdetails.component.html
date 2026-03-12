@@ -11,12 +11,12 @@
       <div class="d-flex gap-4 mb-2">
         <div class="col">
           <label>Sr No.</label>
-          <input type="text" formControlName="sr_no" readonly/>
+          <input type="text" formControlName="sr_no" readonly />
         </div>
 
         <div class="col">
           <label>Item Name</label>
-          
+
           <div class="search-wrapper">
             <input
               type="text"
@@ -24,14 +24,17 @@
               class="search-input"
               [value]="selectedItemName"
               (input)="onItemSearch($any($event.target).value)"
-              (focus)="onItemSearch(selectedItemName)" 
+              (focus)="onItemSearch(selectedItemName)"
             />
-            
-            <div class="custom-dropdown" *ngIf="showDropdown && items.length > 0">
-              <div 
-                class="dropdown-item" 
+
+            <div
+              class="custom-dropdown"
+              *ngIf="showDropdown && items.length > 0"
+            >
+              <div
+                class="dropdown-item"
                 *ngFor="let item of items"
-                (mousedown)="selectItem(item)" 
+                (mousedown)="selectItem(item)"
               >
                 <div class="item-info">
                   <span class="item-text">{{ item.item_name }}</span>
@@ -44,26 +47,79 @@
         <div class="col">
           <label>Size / Product Name</label>
           <input type="text" formControlName="product_name" />
+          <div
+            *ngIf="
+              productForm.get('product_name')?.touched &&
+              productForm.get('product_name')?.invalid
+            "
+            class="error-text"
+          >
+            <small>Please enter Product name</small>
+          </div>
         </div>
 
         <div class="col">
           <label>Bill Rate</label>
-          <input type="text" formControlName="bill_rate" />
+          <input
+            type="text"
+            formControlName="bill_rate"
+            (keypress)="decimalFilter($event)"
+            placeholder="0.00"
+          />
+          <div
+            *ngIf="
+              productForm.get('bill_rate')?.touched &&
+              productForm.get('bill_rate')?.invalid
+            "
+            class="error-text"
+          >
+            <small>Please enter bill rate (Numbers only)</small>
+          </div>
         </div>
 
         <div class="col">
           <label>Per Rate</label>
-          <input type="text" formControlName="per_rate" />
+          <input type="text" formControlName="per_rate" (keypress)="decimalFilter($event)"
+          placeholder="0.00"/>
+          <div
+            *ngIf="
+              productForm.get('per_rate')?.touched &&
+              productForm.get('per_rate')?.invalid
+            "
+            class="error-text"
+          >
+            <small>Please enter per rate (Numbers only)</small>
+          </div>
         </div>
 
         <div class="col">
           <label>Op Stock</label>
-          <input type="text" formControlName="op_stock" />
+          <input type="text" formControlName="op_stock" (keypress)="decimalFilter($event)"
+          placeholder="0.00"/>
+          <div
+            *ngIf="
+              productForm.get('op_stock')?.touched &&
+              productForm.get('op_stock')?.invalid
+            "
+            class="error-text"
+          >
+            <small>Please enter stock (Numbers only)</small>
+          </div>
         </div>
 
         <div class="col">
           <label>Stock Rate</label>
-          <input type="text" formControlName="stock_rate" />
+          <input type="text" formControlName="stock_rate" (keypress)="decimalFilter($event)"
+          placeholder="0.00"/>
+          <div
+            *ngIf="
+              productForm.get('stock_rate')?.touched &&
+              productForm.get('stock_rate')?.invalid
+            "
+            class="error-text"
+          >
+            <small>Please enter stock rate (Numbers only)</small>
+          </div>
         </div>
       </div>
 

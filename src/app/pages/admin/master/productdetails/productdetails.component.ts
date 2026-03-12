@@ -2,7 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { AdminService } from '../../components/service/admin.service';
 import { ItemsService } from '../service/items.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -32,12 +32,24 @@ export class ProductdetailsComponent {
   ) {
     this.productForm = fb.group({
       sr_no: [],
-      item_name: [''],
-      product_name: [''],
-      bill_rate: [],
-      per_rate: [],
-      stock_rate: [],
-      op_stock: [],
+      item_name: ['', [Validators.required]],
+      product_name: ['', [Validators.required]],
+      bill_rate: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]*\\.?[0-9]{0,2}$')],
+      ],
+      per_rate: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]*\\.?[0-9]{0,2}$')],
+      ],
+      stock_rate: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]*\\.?[0-9]{0,2}$')],
+      ],
+      op_stock: [
+        '',
+        [Validators.required, Validators.pattern('^[0-9]*\\.?[0-9]{0,2}$')],
+      ],
       total: [],
       remark: [''],
     });
@@ -63,7 +75,7 @@ export class ProductdetailsComponent {
     this.service.searchProducts(this.page, this.limit);
 
     this.service.getProductCount().subscribe((res) => {
-      const count = res.count|| 0;
+      const count = res.count || 0;
       // console.log(res)
       this.productForm.patchValue({ sr_no: count + 1 });
     });
@@ -181,5 +193,14 @@ export class ProductdetailsComponent {
 
   close() {
     this.router.navigateByUrl('/admin');
+  }
+
+  decimalFilter(event: any) {
+    const reg = new RegExp(/^[0-9]*\.?[0-9]*$/);
+    let input = event.target.value + String.fromCharCode(event.charCode);
+
+    if (!reg.test(input)) {
+      event.preventDefault();
+    }
   }
 }
