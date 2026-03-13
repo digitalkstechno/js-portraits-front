@@ -1,20 +1,26 @@
 <!-- staff-salary-report.component.html -->
 <div class="salary-report-window">
-  <div class="report-header-row" style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+  <div
+    class="report-header-row"
+    style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px"
+  >
     <h2>Staff Salary Reports</h2>
-    
-    <div class="actions" style="margin-left: auto; display: flex; gap: 10px;">
-      <button (click)="downloadPDF()" class="btn-pdf">
-        PDF Report
-      </button>
-      <button (click)="downloadReport()" class="btn-excel">
-        Excel Report
-      </button>
+
+    <div
+      *ngIf="employeeTotals.length > 0"
+      class="actions"
+      style="margin-left: auto; display: flex; gap: 10px"
+    >
+      <button (click)="downloadPDF()" class="btn-pdf">PDF Report</button>
+      <button (click)="downloadReport()" class="btn-excel">Excel Report</button>
     </div>
   </div>
 
   <!-- Overall Employee Wise Summary -->
-  <section class="section">
+  <section
+    class="section"
+    *ngIf="employeeTotals.length > 0; else noDataTemplate"
+  >
     <div class="section-header">
       <h3>Overall Employee-wise Salary</h3>
       <span class="hint">Total salary paid per employee</span>
@@ -96,4 +102,16 @@
       </div> -->
     </div>
   </section>
+
+  <ng-template #noDataTemplate>
+    <div class="no-data-container">
+      <div class="no-data-icon">📊</div>
+      <h3>No Salary Data Found</h3>
+      <p>
+        It looks like there are no salary records available for the selected
+        period.
+      </p>
+      <button class="btn-refresh" (click)="ngOnInit()">Refresh Data</button>
+    </div>
+  </ng-template>
 </div>
