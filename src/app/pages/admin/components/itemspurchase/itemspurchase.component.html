@@ -1,6 +1,6 @@
 <div class="window" [formGroup]="purchaseForm">
   <div class="title-bar">
-    <span>Inventory Purchase (Stock Entry)</span>
+    <span>Inventory Purchase (Manual Entry)</span>
     <button class="close-btn" (click)="close()">✖</button>
   </div>
 
@@ -8,23 +8,13 @@
     <div class="main-fields">
       <div class="field-group">
         <div class="field-item">
-          <label>Supplier / Vendor</label>
+          <label>Supplier / Vendor Name</label>
           <input
             type="text"
-            style="width: 250px"
+            style="width: 300px"
             formControlName="vendorName"
-            placeholder="Search Supplier..."
-            (input)="filterVendors($event)"
+            placeholder="Type Vendor Name Manually..."
           />
-          <div class="dropdown-list" *ngIf="filteredVendors.length">
-            <div
-              class="dropdown-item"
-              *ngFor="let v of filteredVendors"
-              (click)="selectVendor(v)"
-            >
-              {{ v.name }} | {{ v.city }}
-            </div>
-          </div>
         </div>
 
         <div class="field-item">
@@ -32,7 +22,7 @@
           <input
             type="text"
             formControlName="invoiceNo"
-            placeholder="Bill from Supplier"
+            placeholder="Bill No."
           />
         </div>
 
@@ -46,22 +36,12 @@
 
   <div class="item-entry-strip" [formGroup]="entryForm">
     <div class="entry-col" style="flex: 2">
-      <label>Item / Equipment</label>
+      <label>Item Description / Stuff Name</label>
       <input
         type="text"
         formControlName="itemName"
-        (input)="onItemType($event)"
-        placeholder="Search Stock Item..."
+        placeholder="What are you purchasing?"
       />
-      <div class="dropdown-results" *ngIf="filteredItems.length">
-        <div
-          class="result-row"
-          *ngFor="let item of filteredItems"
-          (click)="selectItem(item)"
-        >
-          {{ item.item_name }}
-        </div>
-      </div>
     </div>
 
     <div class="entry-col">
@@ -70,7 +50,7 @@
     </div>
 
     <div class="entry-col">
-      <label>Purchase Rate</label>
+      <label>Unit Rate</label>
       <input
         type="number"
         formControlName="purchaseRate"
@@ -90,17 +70,17 @@
     </div>
 
     <div class="entry-col">
-      <label>Total Cost</label>
+      <label>Line Total</label>
       <input
         type="text"
         formControlName="totalCost"
         readonly
-        style="background: #e9ecef"
+        style="background: #e9ecef; font-weight: bold"
       />
     </div>
 
     <div class="entry-col">
-      <button class="btn-add" (click)="addItem()">Add to Stock</button>
+      <button class="btn-add" (click)="addItem()">Add to List</button>
     </div>
   </div>
 
@@ -109,7 +89,7 @@
       <thead>
         <tr>
           <th>Item Description</th>
-          <th width="80">Qty</th>
+          <th width="80" class="text-center">Qty</th>
           <th>Unit Rate</th>
           <th>Tax Amt</th>
           <th>Total</th>
@@ -130,6 +110,14 @@
             <button (click)="removeItem(i)" class="btn-delete">🗑</button>
           </td>
         </tr>
+        <tr *ngIf="purchaseItems.length === 0">
+          <td
+            colspan="6"
+            style="text-align: center; color: #999; padding: 20px"
+          >
+            No items added yet. Fill the strip above to add items.
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -140,7 +128,7 @@
       <textarea
         formControlName="remarks"
         rows="3"
-        placeholder="Reference for warranty or serial numbers..."
+        placeholder="Add any extra details here..."
       ></textarea>
     </div>
 
@@ -162,7 +150,7 @@
         <button class="btn btn-save" (click)="savePurchase()">
           Post Purchase
         </button>
-        <button class="btn btn-cancel" (click)="resetForm()">Clear</button>
+        <button class="btn btn-cancel" (click)="resetForm()">Clear All</button>
       </div>
     </div>
   </div>

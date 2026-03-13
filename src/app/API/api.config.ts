@@ -7,19 +7,23 @@ export const Endpoints = {
   LOGOUT: `${baseUrl}/logout`,
   REFRESH_TOKEN: `${baseUrl}/refresh-token`,
 
-  STAFF: `${baseUrl}/staff`,
-  STAFF_SALARY: `${baseUrl}/staffSalary`,
   ROLE: `${baseUrl}/role`,
+
   ITEMS: `${baseUrl}/items`,
   PRODUCTS: `${baseUrl}/products`,
+  OUTDOOR_BOOKS: `${baseUrl}/outdoorBookMaster`,
+
+  STAFF: `${baseUrl}/staff`,
+  STAFF_SALARY: `${baseUrl}/staffSalary`,
+  CUSTOMERS: `${baseUrl}/outdoorParty`,
+
   QUOTATION: `${baseUrl}/quotation`,
   OUTDOOR_ORDER: `${baseUrl}/order`,
   OUTDOOR_BILL: `${baseUrl}/outdoorbill`,
-  OUTDOOR_BOOKS: `${baseUrl}/outdoorBookMaster`,
-  PRODUCT_SELL: `${baseUrl}/productSell`,
   OUTDOOR_PARTY_PAYMENT: `${baseUrl}/outdoorPayment`,
+  PRODUCT_SELL: `${baseUrl}/productSell`,
+  PRODUCT_PURCHASE: `${baseUrl}/productPurchase`,
 
-  CUSTOMERS: `${baseUrl}/outdoorParty`,
   NOTE_SETTINGS: `${baseUrl}/noteSettings`,
   TERMS_AND_CONDITIONS: `${baseUrl}/termsAndConditions`,
   GST_CONFIGURATION: `${baseUrl}/gstConfig`,

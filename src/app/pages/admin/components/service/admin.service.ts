@@ -212,4 +212,17 @@ export class AdminService {
   deletePartyPayment(id: string): Observable<any> {
     return this.http.delete(`${Endpoints.OUTDOOR_PARTY_PAYMENT}/${id}`);
   }
+
+  // product purchase
+  getAllProductPurchase(): Observable<any> {
+    return this.http.get<any>(Endpoints.PRODUCT_PURCHASE);
+  }
+
+  savePurchase(data: any): Observable<any> {
+    return this.http.post<any>(Endpoints.PRODUCT_PURCHASE, data);
+  }
+
+  getProductPurchaseCount(): Observable<any> {
+    return this.http.get<any>(`${Endpoints.PRODUCT_PURCHASE}/count`);
+  }
 }

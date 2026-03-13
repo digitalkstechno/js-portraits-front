@@ -13,130 +13,94 @@ import { SHARED_MODULES } from '../../../../constants/sharedModule';
   styleUrl: './itemspurchase.component.css',
 })
 export class ItemspurchaseComponent {
-  fb = inject(FormBuilder);
   purchaseForm!: FormGroup;
   entryForm!: FormGroup;
-  itemService = inject(ItemsService);
   router = inject(Router);
+  fb = inject(FormBuilder);
 
-  vendors: any[] = [];
-  filteredVendors: any[] = [];
-  itemsList: any[] = [];
-  filteredItems: any[] = [];
-  productsList: any[] = [];
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.initForms();
-    // this.loadSuppliers();
-    this.loadItems();
   }
 
   initForms() {
     this.purchaseForm = this.fb.group({
       vendorName: ['', Validators.required],
-      vendorId: [''],
-      invoiceNo: ['', Validators.required],
-      purchaseDate: [new Date().toISOString().split('T')[0]],
-      items: this.fb.array([]),
+      invoiceNo: [''],
+      purchaseDate: [new Date().toISOString().substring(0, 10)], 
+      remarks: [''],
       subTotal: [0],
       totalTax: [0],
       grandTotal: [0],
-      remarks: [''],
+      purchaseItems: this.fb.array([]), // Table items storage
     });
 
+    // Top Entry Strip Form
     this.entryForm = this.fb.group({
-      itemId: [''],
       itemName: ['', Validators.required],
       qty: [1, [Validators.required, Validators.min(1)]],
       purchaseRate: [0, Validators.required],
-      taxPerc: [18],
+      taxPerc: [0],
       taxAmt: [0],
       totalCost: [0],
     });
   }
 
-  loadItems() {
-    this.itemService
-      .getItems()
-      .subscribe((res: any) => (this.itemsList = res.data));
+  // Helper to get FormArray
+  get purchaseItems() {
+    return this.purchaseForm.get('purchaseItems') as FormArray;
   }
 
-  onItemType(event: any) {
-    const query = event.target.value.toLowerCase();
-    this.filteredItems = query
-      ? this.itemsList.filter((i) => i.item_name.toLowerCase().includes(query))
-      : [];
-  }
-
-  selectItem(item: any) {
-    this.entryForm.patchValue({ itemName: item.item_name, itemId: item._id });
-    this.filteredItems = [];
-    this.itemService
-      .getProductByItem(item._id)
-      .subscribe((res: any) => (this.productsList = res.data || res));
-  }
-
-  filterVendors(vendor: any) {}
-  selectVendor(v: any){}
-
-  // --- Calculations ---
+  // Calculation for the Entry Strip
   calcEntryAmount() {
-    const qty = this.entryForm.get('qty')?.value || 0;
-    const rate = this.entryForm.get('purchaseRate')?.value || 0;
-    const taxP = this.entryForm.get('taxPerc')?.value || 0;
+    const qty = this.entryForm.value.qty || 0;
+    const rate = this.entryForm.value.purchaseRate || 0;
+    const taxPerc = this.entryForm.value.taxPerc || 0;
 
-    const basicAmt = qty * rate;
-    const taxAmt = (basicAmt * taxP) / 100;
-    const total = basicAmt + taxAmt;
+    const baseAmount = qty * rate;
+    const taxAmount = (baseAmount * taxPerc) / 100;
+    const total = baseAmount + taxAmount;
 
     this.entryForm.patchValue(
       {
-        taxAmt: taxAmt.toFixed(2),
-        totalCost: total.toFixed(2),
+        taxAmt: taxAmount,
+        totalCost: total,
       },
       { emitEvent: false },
     );
   }
 
+  // Add item from Strip to Table
   addItem() {
-    if (this.entryForm.invalid) return;
+    if (this.entryForm.invalid) {
+      alert('Please fill Item Name, Qty and Rate');
+      return;
+    }
 
     const itemData = this.entryForm.value;
-    const itemGroup = this.fb.group({
-      itemId: [itemData.itemId],
-      itemName: [itemData.itemName],
-      qty: [itemData.qty],
-      purchaseRate: [itemData.purchaseRate],
-      taxPerc: [itemData.taxPerc],
-      taxAmt: [itemData.taxAmt],
-      totalCost: [itemData.totalCost],
-    });
 
-    this.purchaseItems.push(itemGroup);
+    // Push to FormArray
+    this.purchaseItems.push(
+      this.fb.group({
+        itemName: [itemData.itemName],
+        qty: [itemData.qty],
+        purchaseRate: [itemData.purchaseRate],
+        taxPerc: [itemData.taxPerc],
+        taxAmt: [itemData.taxAmt],
+        totalCost: [itemData.totalCost],
+      }),
+    );
+
     this.calculateFinalTotals();
-    this.entryForm.reset({ qty: 1, purchaseRate: 0, taxPerc: 18 });
-  }
 
-  calculateFinalTotals() {
-    let subTotal = 0;
-    let taxTotal = 0;
-
-    this.purchaseItems.controls.forEach((control) => {
-      const qty = control.get('qty')?.value;
-      const rate = control.get('purchaseRate')?.value;
-      subTotal += qty * rate;
-      taxTotal += Number(control.get('taxAmt')?.value);
+    // Reset entry strip for next item
+    this.entryForm.reset({
+      itemName: '',
+      qty: 1,
+      purchaseRate: 0,
+      taxPerc: 0,
+      taxAmt: 0,
+      totalCost: 0,
     });
-
-    this.purchaseForm.patchValue({
-      subTotal: subTotal.toFixed(2),
-      totalTax: taxTotal.toFixed(2),
-      grandTotal: (subTotal + taxTotal).toFixed(2),
-    });
-  }
-
-  get purchaseItems() {
-    return this.purchaseForm.get('items') as FormArray;
   }
 
   removeItem(index: number) {
@@ -144,20 +108,52 @@ export class ItemspurchaseComponent {
     this.calculateFinalTotals();
   }
 
-  // --- Save Logic ---
+  // Calculate Footer Totals
+  calculateFinalTotals() {
+    let sub = 0;
+    let tax = 0;
+    let grand = 0;
+
+    this.purchaseItems.controls.forEach((control) => {
+      const item = control.value;
+      sub += item.qty * item.purchaseRate;
+      tax += item.taxAmt;
+      grand += item.totalCost;
+    });
+
+    this.purchaseForm.patchValue({
+      subTotal: sub,
+      totalTax: tax,
+      grandTotal: grand,
+    });
+  }
+
   savePurchase() {
     if (this.purchaseForm.invalid || this.purchaseItems.length === 0) {
-      alert('Please add at least one item and select a supplier.');
+      alert('Please fill vendor details and add at least one item.');
       return;
     }
 
-    const payload = this.purchaseForm.value;
-    console.log('Saving Purchase Order...', payload);
-    // Yahan aapka service call aayega
-    // this.adminService.savePurchase(payload).subscribe(...)
+    const finalData = this.purchaseForm.value;
+    console.log('Saving Purchase Data:', finalData);
+
+    // Call your service here:
+    // this.service.postPurchase(finalData).subscribe(...)
+
+    alert('Purchase Posted Successfully!');
+    this.resetForm();
   }
 
-  resetForm() {}
+  resetForm() {
+    this.purchaseItems.clear();
+    this.purchaseForm.reset({
+      purchaseDate: new Date().toISOString().substring(0, 10),
+      subTotal: 0,
+      totalTax: 0,
+      grandTotal: 0,
+    });
+  }
+
   close() {
     this.router.navigate(['/admin']);
   }
