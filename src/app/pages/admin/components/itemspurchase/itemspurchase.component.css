@@ -245,27 +245,39 @@ table td {
 }
 
 .btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #7a9bad;
+  background: #f2f2f2;
+  border-radius: 3px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 13px;
-  transition: 0.2s;
+  transition: all 0.1s;
+  min-width: 80px;
+}
+
+.btn:hover {
+  background: #fff;
+  border-color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-save {
-  background: #334e68;
-  color: white;
+  background: #e6fffa;
+  color: #006644;
+  border-color: #38a169;
 }
 
-.btn-save:hover {
-  background: #243b53;
+.btn-exit {
+  background: #fff5f5;
+  color: #c53030;
+  border-color: #fc8181;
 }
 
-.btn-cancel {
-  background: #cbd5e0;
-  color: #4a5568;
+.btn-social {
+  background: #ebf8ff;
+  color: #2b6cb0;
+  border-color: #63b3ed;
 }
 
 .btn-add {
@@ -280,14 +292,6 @@ table td {
 
 .btn-add:hover {
   background: #319795;
-}
-
-.btn-delete {
-  background: transparent;
-  border: none;
-  color: #e53e3e;
-  cursor: pointer;
-  font-size: 16px;
 }
 
 .text-center {
