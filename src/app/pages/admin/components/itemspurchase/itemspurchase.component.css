@@ -1,481 +1,295 @@
-/* Container - Consistent with Item Master & Product Detail */
+/* Container & Title Bar */
 .window {
-  width: 98%;
-  max-width: 1400px; /* Slightly wider for complex forms */
-  margin: 10px auto;
-  border: 2px solid #6b8ea3;
-  background: #e9f2f7;
-  font-family: "Segoe UI", Arial, sans-serif;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
+  background: #f4f7f6;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid #bcccdc;
 }
 
-/* Header Section */
 .title-bar {
-  background: linear-gradient(#b5d3e3, #8fb8cc);
+  background: #334e68; /* Professional Slate Blue for Purchase */
+  color: white;
   padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: bold;
-  color: #2c3e50;
-  border-bottom: 2px solid #6b8ea3;
-  font-size: 16px;
 }
 
 .close-btn {
-  background: #ff4d4d;
+  background: transparent;
+  border: none;
   color: white;
-  border: 1px solid #b30000;
-  border-radius: 3px;
-  padding: 2px 10px;
+  font-size: 18px;
   cursor: pointer;
-  font-size: 12px;
-  transition: background 0.2s;
 }
 
-/* Master Form Area (Top Sections) */
+/* Header Form Section */
 .form-container {
+  display: flex;
   padding: 15px;
-  background: #d8eaf3;
-  display: grid;
-  grid-template-columns: 1fr 300px; /* Layout for form + right-side info box */
-  gap: 15px;
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .main-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex: 1;
 }
 
-/* Row & Column Logic for Inputs */
 .field-group {
   display: flex;
+  gap: 20px;
   flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
 }
 
 .field-item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-label {
-  font-size: 12px;
-  font-weight: bold;
-  color: #4a6a7d;
-  white-space: nowrap;
-  min-width: 80px;
-}
-
-input[type="text"],
-select {
-  padding: 5px 8px;
-  border: 1px solid #999;
-  border-radius: 2px;
-  font-size: 13px;
-  background: #fff;
-}
-
-input:focus {
-  border-color: #3b82f6;
-  outline: none;
-  box-shadow: 0 0 3px rgba(59, 130, 246, 0.3);
-}
-
-/* Totals Sidebar (Sub Total, Discount, etc.) */
-.totals-sidebar {
-  background: #fdfdfd;
-  padding: 5px;
-  border: 1px solid #6b8ea3;
-  border-radius: 4px;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.field-item label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #627d98;
+  margin-bottom: 4px;
+}
+
+.field-item input {
+  padding: 7px 10px;
+  border: 1px solid #bcccdc;
+  border-radius: 4px;
+  outline: none;
+  font-size: 13px;
+}
+
+.field-item input:focus {
+  border-color: #334e68;
+}
+
+/* Item Entry Strip (Horizontal Entry) */
+.item-entry-strip {
+  display: flex;
+  align-items: flex-end;
   gap: 12px;
+  padding: 15px;
+  background: #d9e8e8; /* Light Teal Tint */
+  border-top: 1px solid #829ab1;
+  border-bottom: 1px solid #829ab1;
 }
 
-.grand-total {
-  border-top: 2px solid #6b8ea3;
-  padding-top: 10px;
-  margin-top: 5px;
-  font-size: 16px;
-  font-weight: 800;
+.entry-col {
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
-/* Entry Table Area */
+.entry-col label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #243b53;
+  margin-bottom: 3px;
+}
+
+.entry-col input,
+.entry-col select {
+  padding: 8px;
+  border: 1px solid #829ab1;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+/* Table Section */
 .table-section {
-  height: 250px;
+  height: 280px;
   overflow-y: auto;
+  padding: 10px;
   background: white;
-  margin: 0 15px;
-  border: 1px solid #999;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 12px;
 }
 
-th {
-  background: #c6e0ee;
-  border: 1px solid #999;
-  padding: 8px;
+table thead {
+  background: #f0f4f8;
   position: sticky;
   top: 0;
-  z-index: 5;
+  z-index: 10;
 }
 
-td {
-  border: 1px solid #e0e0e0;
-  padding: 6px;
-  text-align: center;
-}
-
-tbody tr:nth-child(even) {
-  background: #f8fbfe;
-}
-tbody tr:hover {
-  background: #e2eff7;
-}
-
-/* Bottom Action Bar (The large row of buttons) */
-.action-bar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 6px;
-  padding: 12px;
-  background: #d8eaf3;
-  border-top: 2px solid #6b8ea3;
-}
-
-.btn {
-  padding: 6px 12px;
-  font-size: 12px;
-  font-weight: 600;
-  border: 1px solid #7a9bad;
-  background: #f2f2f2;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.1s;
-  min-width: 80px;
-}
-
-.btn:hover {
-  background: #fff;
-  border-color: #333;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Specialized Button Colors */
-.btn-save {
-  background: #e6fffa;
-  color: #006644;
-  border-color: #38a169;
-}
-.btn-exit {
-  background: #fff5f5;
-  color: #c53030;
-  border-color: #fc8181;
-}
-.btn-social {
-  background: #ebf8ff;
-  color: #2b6cb0;
-  border-color: #63b3ed;
-} /* For WhatsApp/SMS */
-
-/* Sidebar Table Styling (Mini) */
-.totals-sidebar table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  font-size: 11px;
-  border: 1px solid #c6e0ee;
-}
-.totals-sidebar th {
-  background: #c6e0ee;
-  padding: 4px;
-  border: 1px solid #999;
-}
-.totals-sidebar td {
-  padding: 4px;
-  border: 1px solid #e0e0e0;
-  background: #fff;
-}
-
-.info-value {
-  font-weight: bold;
-  color: #2c3e50;
-}
-.status-badge {
-  background: #d4edda;
-  color: #155724;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-/* Item Entry Strip (Horizontal Entry Row) */
-.item-entry-strip {
-  display: flex;
-  background: #e3f1f8;
-  padding: 10px 15px;
-  gap: 10px;
-  border-bottom: 1px solid #6b8ea3;
-  align-items: flex-end;
-}
-.entry-col {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.entry-col label {
-  font-size: 10px;
-  font-weight: bold;
-  color: #4a6a7d;
-  text-transform: uppercase;
-}
-
-.btn-add,
-.btn-cancel {
-  background: #38a169;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.btn-cancel {
-  background: red;
-}
-
-/* Bottom Right Footer Summary */
-/* Container Box */
-.summary-box {
-  background: #ffffff;
-  border: 2px solid #6b8ea3;
-  padding: 12px;
-  border-radius: 4px;
-  min-width: 280px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.summary-row label {
-  font-size: 12px;
-  font-weight: bold;
-  color: #4a6a7d;
-  min-width: 100px;
-}
-
-.summary-row input,
-.summary-row select {
-  width: 120px;
-  padding: 4px 8px;
-  border: 1px solid #cbd5e0;
-  border-radius: 3px;
-  text-align: right;
+table th {
+  padding: 12px 10px;
+  text-align: left;
   font-size: 13px;
-  font-family: "Segoe UI", sans-serif;
+  color: #486581;
+  border-bottom: 2px solid #bcccdc;
 }
 
-/* Specific Field Styling */
-.editable-input {
-  background-color: #fff;
-  border-color: #999 !important;
-}
-
-.editable-input:focus {
-  border-color: #3182ce !important;
-  outline: none;
-  background-color: #f7fafc;
-}
-
-/* Net Total Row Styling */
-.net-total-row {
-  border-top: 1px solid #e2e8f0;
-  margin-top: 5px;
-  padding-top: 8px;
-}
-
-.highlight-net {
-  background: #edf2f7;
-  font-weight: bold;
-  color: #2d3748;
-}
-
-/* Balance Due Highlighting (The most important row) */
-.balance-due-row {
-  border-top: 2px dashed #6b8ea3;
-  margin-top: 10px;
-  padding-top: 10px;
-}
-
-.balance-due-row label {
-  color: #c53030;
+table td {
+  padding: 10px;
+  border-bottom: 1px solid #f0f4f8;
   font-size: 13px;
+  color: #243b53;
 }
 
-.highlight-balance {
-  background: #fff5f5;
-  border: 1px solid #feb2b2 !important;
-  color: #c53030;
-  font-weight: 900;
-  font-size: 15px !important;
-}
-
-.pay-mode-select {
-  text-align: left !important;
-  cursor: pointer;
-}
-
-/* Grouping taxes for visual clarity */
-.tax-group {
-  border-top: 1px solid #cbd5e0;
-  border-bottom: 1px solid #cbd5e0;
-  padding: 8px 0;
-  margin: 5px 0;
-  background: #f8fafc;
-}
-
-.tax-row label {
-  font-size: 11px !important;
-  color: #718096;
-}
-
-.tax-inputs {
-  display: flex;
-  gap: 5px;
-}
-
-/* Percentage input (Small) */
-.tax-perc {
-  width: 60px !important;
-  text-align: center !important;
-  color: #3182ce;
-  font-weight: bold;
-}
-
-/* Calculated Tax Amount */
-.tax-amt {
-  width: 75px !important;
-  background: transparent;
-  border: none !important;
-  font-weight: 600;
-}
-
-.net-total-row {
-  margin-top: 5px;
-  padding-top: 5px;
-}
-
-.highlight-net {
-  background: #2d3748 !important;
-  color: #fff !important;
-  font-weight: bold;
-}
-
-.search-container {
-  position: relative;
-}
+/* Dropdown Search Results */
+.dropdown-list,
 .dropdown-results {
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
   background: white;
-  border: 1px solid #ccc;
-  z-index: 100;
-  max-height: 150px;
-  overflow-y: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.result-row {
-  padding: 5px 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-}
-.result-row:hover {
-  background: #f0f0f0;
-}
-
-.dropdown-list {
-  position: absolute;
-  top: 100%; /* show just below input */
-  left: 90px;
-  width: 76%;
-  border: 1px solid #999;
-  background: #fff;
-  max-height: 150px;
-  overflow-y: auto;
-  border-radius: 2px;
+  border: 1px solid #bcccdc;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
 }
 
-.dropdown-item {
-  padding: 6px 8px;
-  font-size: 12px;
+.dropdown-item,
+.result-row {
+  padding: 10px;
   cursor: pointer;
+  border-bottom: 1px solid #f0f4f8;
+  font-size: 13px;
 }
 
-.dropdown-item:hover {
-  background: #e2eff7;
+.dropdown-item:hover,
+.result-row:hover {
+  background: #f0f4f8;
+  color: #334e68;
 }
 
-.toast-overlay {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: #d6eaf8; /* Light Blue to match your UI */
-  border: 2px solid #2e86c1;
-  padding: 12px 25px;
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
-  animation: slideIn 0.3s ease-out;
-}
-
-.error-toast {
-  background-color: #fadbd8; /* Light Red */
-  border-color: #e74c3c;
-}
-
-.toast-content {
+/* Footer Summary Area */
+.purchase-footer {
   display: flex;
-  align-items: center;
+  padding: 15px;
+  background: #f0f4f8;
+  border-top: 1px solid #bcccdc;
+  gap: 30px;
+}
+
+.summary-left {
+  flex: 1.5;
+}
+
+.summary-left label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #486581;
+}
+
+.summary-left textarea {
+  width: 100%;
+  margin-top: 5px;
+  border: 1px solid #bcccdc;
+  border-radius: 4px;
+  padding: 10px;
+  resize: none;
+  font-size: 13px;
+}
+
+.summary-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-row span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #486581;
+}
+
+.summary-row input {
+  width: 130px;
+  text-align: right;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #bcccdc;
+  border-radius: 4px;
   font-weight: bold;
-  color: #21618c;
 }
 
-.error-toast .toast-content {
-  color: #943126;
+.grand-total span {
+  color: #102a43;
+  font-size: 15px;
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+.grand-total input {
+  font-size: 18px;
+  color: #d64545; /* Red to indicate purchase cost/liability */
+  background: #fcebea;
+  border-color: #ef4e4e;
+  height: 35px;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.btn-save {
+  background: #334e68;
+  color: white;
+}
+
+.btn-save:hover {
+  background: #243b53;
+}
+
+.btn-cancel {
+  background: #cbd5e0;
+  color: #4a5568;
+}
+
+.btn-add {
+  background: #38b2ac; /* Teal for adding stock */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-add:hover {
+  background: #319795;
+}
+
+.btn-delete {
+  background: transparent;
+  border: none;
+  color: #e53e3e;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.text-center {
+  text-align: center;
 }

@@ -1,6 +1,6 @@
-<div class="window" [formGroup]="productSellForm">
+<div class="window" [formGroup]="purchaseForm">
   <div class="title-bar">
-    <span>Product Sell</span>
+    <span>Inventory Purchase (Stock Entry)</span>
     <button class="close-btn" (click)="close()">✖</button>
   </div>
 
@@ -8,161 +8,50 @@
     <div class="main-fields">
       <div class="field-group">
         <div class="field-item">
-          <label>Book</label>
+          <label>Supplier / Vendor</label>
           <input
             type="text"
-            style="width: 80px"
-            [value]="selectedBookName"
-            placeholder="BNI"
-            (input)="filterBooks($event)"
+            style="width: 250px"
+            formControlName="vendorName"
+            placeholder="Search Supplier..."
+            (input)="filterVendors($event)"
           />
-          <input type="hidden" formControlName="bookName" />
-          <div
-            *ngIf="
-              productSellForm.get('bookName')?.touched &&
-              productSellForm.get('bookName')?.invalid
-            "
-            class="error-msg-container"
-          >
-            <small>Please select a book.</small>
-          </div>
-          <div class="dropdown-list" *ngIf="filteredBooks.length">
+          <div class="dropdown-list" *ngIf="filteredVendors.length">
             <div
               class="dropdown-item"
-              *ngFor="let r of filteredBooks"
-              (click)="selectBook(r)"
+              *ngFor="let v of filteredVendors"
+              (click)="selectVendor(v)"
             >
-              {{ r.bookName }}
+              {{ v.name }} | {{ v.city }}
             </div>
           </div>
         </div>
+
         <div class="field-item">
-          <label>Bill No.</label>
+          <label>Invoice No.</label>
           <input
             type="text"
-            formControlName="billNo"
-            (input)="searchBills($event)"
-            placeholder="Type Bill No..."
-            autocomplete="off"
+            formControlName="invoiceNo"
+            placeholder="Bill from Supplier"
           />
-
-          <div class="dropdown-list" *ngIf="filteredBills.length > 0">
-            <div
-              class="dropdown-item"
-              *ngFor="let bill of filteredBills"
-              (click)="selectBill(bill)"
-            >
-              {{ bill.billNo }}
-            </div>
-          </div>
         </div>
+
         <div class="field-item">
-          <label>Date</label>
-          <input
-            type="date"
-            formControlName="purchaseDate"
-            style="width: 260px"
-          />
+          <label>Purchase Date</label>
+          <input type="date" formControlName="purchaseDate" />
         </div>
       </div>
-
-      <div class="field-group">
-        <div class="field-item">
-          <label>Party Name</label>
-          <input
-            type="text"
-            style="width: 280px"
-            formControlName="partyName"
-            placeholder="Search Party..."
-            (input)="filterParty($event)"
-          />
-          <div
-            *ngIf="
-              productSellForm.get('partyName')?.touched &&
-              productSellForm.get('partyName')?.invalid
-            "
-            class="error-msg-container"
-          >
-            <small>Please select a party name.</small>
-          </div>
-          <div class="dropdown-list" *ngIf="filteredCustomers.length">
-            <div
-              class="dropdown-item"
-              *ngFor="let r of filteredCustomers"
-              (click)="selectParty(r)"
-            >
-              {{ r.name }}
-            </div>
-          </div>
-        </div>
-        <div class="field-item">
-          <label>Contact No</label>
-          <input
-            type="text"
-            formControlName="contactNo"
-            style="width: 260px"
-            maxlength="10"
-            (keypress)="onlyNumberKey($event)"
-            placeholder="9999888777"
-          />
-          <div
-            *ngIf="
-              productSellForm.get('contactNo')?.touched &&
-              productSellForm.get('contactNo')?.invalid
-            "
-            class="error-msg-container"
-          >
-            <small>Please enter a valid 10 digit Contact no.</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-group">
-        <div class="field-item">
-          <small class="text-muted"
-            >GST will be auto-calculated
-            {{ gstConfig ? gstConfig.defaultGstRate : "0" }}%</small
-          >
-        </div>
-      </div>
-    </div>
-
-    <div class="totals-sidebar">
-      <table>
-        <thead>
-          <tr>
-            <th>Bill No</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ productSellForm.get("billNo")?.value }}</td>
-            <td>
-              {{
-                productSellForm.get("purchaseDate")?.value | date: "dd/MM/yyyy"
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 
   <div class="item-entry-strip" [formGroup]="entryForm">
-    <div class="entry-col">
-      <label>Date</label>
-      <input type="date" formControlName="date" style="width: 110px" />
-    </div>
-
-    <div class="entry-col search-container" style="flex: 2">
-      <label>Item Name</label>
+    <div class="entry-col" style="flex: 2">
+      <label>Item / Equipment</label>
       <input
         type="text"
         formControlName="itemName"
         (input)="onItemType($event)"
-        placeholder="Search Item..."
-        autocomplete="off"
+        placeholder="Search Stock Item..."
       />
       <div class="dropdown-results" *ngIf="filteredItems.length">
         <div
@@ -175,231 +64,106 @@
       </div>
     </div>
 
-    <div class="entry-col search-container" style="flex: 1">
-      <label>Product</label>
-      <input
-        type="text"
-        formControlName="productName"
-        (input)="onProductType($event)"
-        placeholder="Search..."
-        autocomplete="off"
-      />
-      <div class="dropdown-results" *ngIf="filteredProducts.length">
-        <div
-          class="result-row"
-          *ngFor="let p of filteredProducts"
-          (click)="selectProduct(p)"
-        >
-          {{ p.product_name }}
-        </div>
-      </div>
-    </div>
-
     <div class="entry-col">
       <label>Qty</label>
-      <input type="number" formControlName="qty" style="width: 80px" />
+      <input type="number" formControlName="qty" (input)="calcEntryAmount()" />
     </div>
+
     <div class="entry-col">
-      <label>Rate</label>
-      <input type="number" formControlName="rate" style="width: 80px" />
-    </div>
-    <div class="entry-col">
-      <label>Amount</label>
+      <label>Purchase Rate</label>
       <input
-        type="text"
-        [value]="entryForm.get('qty')?.value * entryForm.get('rate')?.value"
-        readonly
-        style="width: 90px; text-align: right; background: #f0f0f0"
+        type="number"
+        formControlName="purchaseRate"
+        (input)="calcEntryAmount()"
       />
     </div>
 
     <div class="entry-col">
-      <button class="btn-add" (click)="addItem()">+</button>
+      <label>Tax (%)</label>
+      <select formControlName="taxPerc" (change)="calcEntryAmount()">
+        <option [value]="0">0%</option>
+        <option [value]="5">5%</option>
+        <option [value]="12">12%</option>
+        <option [value]="18">18%</option>
+        <option [value]="28">28%</option>
+      </select>
     </div>
+
     <div class="entry-col">
-      <button class="btn-cancel" (click)="clearEntry()">x</button>
+      <label>Total Cost</label>
+      <input
+        type="text"
+        formControlName="totalCost"
+        readonly
+        style="background: #e9ecef"
+      />
+    </div>
+
+    <div class="entry-col">
+      <button class="btn-add" (click)="addItem()">Add to Stock</button>
     </div>
   </div>
 
-  <div class="d-flex" style="background: #d8eaf3; padding-bottom: 10px">
-    <div class="table-section flex-grow-1">
-      <table>
-        <thead>
-          <tr>
-            <th width="80">Date</th>
-            <th>Item Name</th>
-            <th>Product</th>
-            <th>Qty</th>
-            <th>Rate</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let item of itemsFormArray.controls; let i = index"
-            [formGroup]="$any(item)"
-          >
-            <td>{{ item.get("date")?.value | date: "dd/MM/yyyy" }}</td>
-            <td>{{ item.get("itemName")?.value }}</td>
-            <td>{{ item.get("productName")?.value }}</td>
-            <td class="text-center">{{ item.get("qty")?.value }}</td>
-            <td class="text-right">
-              {{ item.get("rate")?.value | number: "1.2-2" }}
-            </td>
-            <td class="text-right">
-              {{ item.get("total")?.value | number: "1.2-2" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="table-section">
+    <table>
+      <thead>
+        <tr>
+          <th>Item Description</th>
+          <th width="80">Qty</th>
+          <th>Unit Rate</th>
+          <th>Tax Amt</th>
+          <th>Total</th>
+          <th width="50"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of purchaseItems.controls; let i = index"
+          [formGroup]="$any(item)"
+        >
+          <td>{{ item.get("itemName")?.value }}</td>
+          <td class="text-center">{{ item.get("qty")?.value }}</td>
+          <td>{{ item.get("purchaseRate")?.value | number }}</td>
+          <td>{{ item.get("taxAmt")?.value | number }}</td>
+          <td>{{ item.get("totalCost")?.value | number }}</td>
+          <td>
+            <button (click)="removeItem(i)" class="btn-delete">🗑</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="purchase-footer">
+    <div class="summary-left">
+      <label>Remarks / Note:</label>
+      <textarea
+        formControlName="remarks"
+        rows="3"
+        placeholder="Reference for warranty or serial numbers..."
+      ></textarea>
     </div>
 
-    <div
-      class="footer-summary"
-      style="background: transparent; border: none; padding-top: 0"
-    >
-      <div class="summary-box">
-        <div class="summary-row">
-          <label>Sub Total</label>
-          <input type="text" formControlName="subTotal" readonly />
-        </div>
-        <div class="summary-row">
-          <label>Discount</label>
-          <input
-            type="number"
-            formControlName="discount"
-            (input)="calculateGrandTotal()"
-            class="editable-input"
-          />
-        </div>
-        <div class="tax-group" *ngIf="gstConfig">
-          <ng-container *ngIf="gstConfig.isLocal">
-            <div class="summary-row tax-row">
-              <label>CGST (%)</label>
-              <div class="tax-inputs">
-                <input
-                  type="number"
-                  formControlName="cgstPerc"
-                  readonly
-                  class="tax-perc"
-                />
-                <input
-                  type="text"
-                  formControlName="cgstAmt"
-                  readonly
-                  class="tax-amt"
-                />
-              </div>
-            </div>
+    <div class="summary-right">
+      <div class="summary-row">
+        <span>Sub Total:</span>
+        <input type="text" formControlName="subTotal" readonly />
+      </div>
+      <div class="summary-row">
+        <span>Total Tax:</span>
+        <input type="text" formControlName="totalTax" readonly />
+      </div>
+      <div class="summary-row grand-total">
+        <span>GRAND TOTAL:</span>
+        <input type="text" formControlName="grandTotal" readonly />
+      </div>
 
-            <div class="summary-row tax-row">
-              <label>SGST (%)</label>
-              <div class="tax-inputs">
-                <input
-                  type="number"
-                  formControlName="sgstPerc"
-                  readonly
-                  class="tax-perc"
-                />
-                <input
-                  type="text"
-                  formControlName="sgstAmt"
-                  readonly
-                  class="tax-amt"
-                />
-              </div>
-            </div>
-          </ng-container>
-
-          <div class="summary-row tax-row" *ngIf="gstConfig.isInterstate">
-            <label>IGST (%)</label>
-            <div class="tax-inputs">
-              <input
-                type="number"
-                formControlName="igstPerc"
-                readonly
-                class="tax-perc"
-              />
-              <input
-                type="text"
-                formControlName="igstAmt"
-                readonly
-                class="tax-amt"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="summary-row net-total-row">
-          <label>GRAND TOTAL</label>
-          <input
-            type="text"
-            formControlName="grandTotal"
-            readonly
-            class="highlight-net"
-          />
-        </div>
-
-        <hr class="summary-divider" />
-
-        <div class="payment-section">
-          <div class="summary-row">
-            <label>Payment Mode</label>
-            <select formControlName="paymentMode" class="editable-input">
-              <option value="Cash">Cash</option>
-              <option value="UPI">UPI</option>
-              <option value="Card">Card</option>
-              <option value="Net Banking">Net Banking</option>
-            </select>
-          </div>
-
-          <div
-            class="summary-row"
-            *ngIf="productSellForm.get('paymentMode')?.value !== 'Cash'"
-          >
-            <label>Transaction ID</label>
-            <input
-              type="text"
-              formControlName="transactionId"
-              placeholder="UPI/UTR No."
-              class="editable-input"
-            />
-          </div>
-
-          <div class="summary-row">
-            <label style="color: #2f855a; font-weight: bold">Amount Paid</label>
-            <input
-              type="number"
-              formControlName="amountPaid"
-              (input)="calculateGrandTotal()"
-              class="editable-input highlight-paid"
-            />
-          </div>
-
-          <div class="summary-row balance-due-row">
-            <label>BALANCE DUE</label>
-            <input
-              type="text"
-              formControlName="balanceDue"
-              readonly
-              class="highlight-balance"
-            />
-          </div>
-        </div>
+      <div class="action-buttons">
+        <button class="btn btn-save" (click)="savePurchase()">
+          Post Purchase
+        </button>
+        <button class="btn btn-cancel" (click)="resetForm()">Clear</button>
       </div>
     </div>
-  </div>
-
-  <div class="action-bar">
-    <button class="btn btn-save" (click)="onSubmit()">Save</button>
-    <button class="btn" (click)="clearAll()">Cancel</button>
-    <button class="btn">Print</button>
-    <button class="btn btn-exit" (click)="close()">Exit</button>
-  </div>
-</div>
-
-<div *ngIf="showPopup" class="toast-overlay" [class.error-toast]="isError">
-  <div class="toast-content">
-    <span class="icon">{{ isError ? "⚠️" : "✅" }}</span>
-    <span class="message">{{ popupMessage }}</span>
   </div>
 </div>
