@@ -84,6 +84,15 @@ export const routes: Routes = [
           import('./pages/admin/components/itemspurchase/itemspurchase.component').then(
             (m) => m.ItemspurchaseComponent,
           ),
+        children: [
+          {
+            path: 'view',
+            loadComponent: () =>
+              import('./pages/admin/components/itempurchaselist/itempurchaselist.component').then(
+                (m) => m.ItempurchaselistComponent,
+              ),
+          },
+        ],
       },
       {
         path: 'summary',

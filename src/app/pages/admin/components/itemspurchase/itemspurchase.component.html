@@ -163,6 +163,7 @@
           Save
         </button>
         <button class="btn btn-cancel" (click)="resetForm()">Cancel</button>
+        <button class="btn btn-cancel" (click)="onView()">View</button>
       </div>
     </div>
   </div>
@@ -173,3 +174,4 @@
     <span class="message">{{ popupMessage }}</span>
   </div>
 </div>
+<router-outlet></router-outlet>

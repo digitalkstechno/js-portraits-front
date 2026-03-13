@@ -197,4 +197,8 @@ export class ItemspurchaseComponent {
   close() {
     this.router.navigate(['/admin']);
   }
+
+  onView(){
+    this.router.navigateByUrl('admin/product/purchase/view');
+  }
 }
