@@ -17,8 +17,23 @@ export class ItemspurchaseComponent {
   entryForm!: FormGroup;
   router = inject(Router);
   fb = inject(FormBuilder);
+  itemservice = inject(AdminService);
+
+  isError = false;
+  showPopup = false;
+  popupMessage = '';
+  count: string = '';
 
   ngOnInit(): void {
+    this.itemservice.getProductPurchaseCount().subscribe((res) => {
+      // console.log(res.count);
+      const count = res.count;
+      this.count = count + 1;
+      // console.log(this.count);
+      this.purchaseForm.patchValue({
+        invoiceNo: this.count,
+      });
+    });
     this.initForms();
   }
 
@@ -26,19 +41,19 @@ export class ItemspurchaseComponent {
     this.purchaseForm = this.fb.group({
       vendorName: ['', Validators.required],
       invoiceNo: [''],
-      purchaseDate: [new Date().toISOString().substring(0, 10)], 
+      purchaseDate: [new Date().toISOString().substring(0, 10)],
       remarks: [''],
       subTotal: [0],
       totalTax: [0],
       grandTotal: [0],
-      purchaseItems: this.fb.array([]), // Table items storage
+      items: this.fb.array([]), // Table items storage
     });
 
     // Top Entry Strip Form
     this.entryForm = this.fb.group({
       itemName: ['', Validators.required],
-      qty: [1, [Validators.required, Validators.min(1)]],
-      purchaseRate: [0, Validators.required],
+      qty: [, [Validators.required, Validators.min(1)]],
+      purchaseRate: [, Validators.required],
       taxPerc: [0],
       taxAmt: [0],
       totalCost: [0],
@@ -46,8 +61,8 @@ export class ItemspurchaseComponent {
   }
 
   // Helper to get FormArray
-  get purchaseItems() {
-    return this.purchaseForm.get('purchaseItems') as FormArray;
+  get items() {
+    return this.purchaseForm.get('items') as FormArray;
   }
 
   // Calculation for the Entry Strip
@@ -79,7 +94,7 @@ export class ItemspurchaseComponent {
     const itemData = this.entryForm.value;
 
     // Push to FormArray
-    this.purchaseItems.push(
+    this.items.push(
       this.fb.group({
         itemName: [itemData.itemName],
         qty: [itemData.qty],
@@ -104,7 +119,7 @@ export class ItemspurchaseComponent {
   }
 
   removeItem(index: number) {
-    this.purchaseItems.removeAt(index);
+    this.items.removeAt(index);
     this.calculateFinalTotals();
   }
 
@@ -114,7 +129,7 @@ export class ItemspurchaseComponent {
     let tax = 0;
     let grand = 0;
 
-    this.purchaseItems.controls.forEach((control) => {
+    this.items.controls.forEach((control) => {
       const item = control.value;
       sub += item.qty * item.purchaseRate;
       tax += item.taxAmt;
@@ -129,29 +144,54 @@ export class ItemspurchaseComponent {
   }
 
   savePurchase() {
-    if (this.purchaseForm.invalid || this.purchaseItems.length === 0) {
-      alert('Please fill vendor details and add at least one item.');
+    if (this.purchaseForm.invalid) {
+      this.purchaseForm.markAllAsTouched();
+      this.triggerPopup('Please fill all required fields!', true);
       return;
     }
 
     const finalData = this.purchaseForm.value;
     console.log('Saving Purchase Data:', finalData);
 
-    // Call your service here:
-    // this.service.postPurchase(finalData).subscribe(...)
-
-    alert('Purchase Posted Successfully!');
-    this.resetForm();
+    this.itemservice.savePurchase(finalData).subscribe({
+      next: (res: any) => {
+        this.triggerPopup('Product purchase recorded Successfully!', false);
+        this.resetForm();
+      },
+      error: (err: any) => {
+        console.error('Error saving purchase:', err);
+        this.triggerPopup('Error: Could not save the transaction.', true);
+      },
+    });
   }
 
   resetForm() {
-    this.purchaseItems.clear();
+    this.entryForm.reset({
+      itemName: '',
+      qty: '',
+      purchaseRate: '',
+      taxPerc: 0,
+      taxAmt: 0,
+      totalCost: 0,
+    });
     this.purchaseForm.reset({
       purchaseDate: new Date().toISOString().substring(0, 10),
+      invoiceNo: this.count,
       subTotal: 0,
       totalTax: 0,
       grandTotal: 0,
     });
+  }
+
+  triggerPopup(message: string, error: boolean) {
+    this.popupMessage = message;
+    this.isError = error;
+    this.showPopup = true;
+
+    // 3 second baad apne aap gayab ho jayega
+    setTimeout(() => {
+      this.showPopup = false;
+    }, 3000);
   }
 
   close() {
