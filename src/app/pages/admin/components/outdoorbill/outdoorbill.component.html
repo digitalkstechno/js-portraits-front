@@ -385,8 +385,12 @@
   <div class="action-bar">
     <button class="btn btn-save" (click)="onSubmit()">Save</button>
     <button class="btn btn-exit">Delete</button>
-    <button class="btn" (click)="printBill(true)">Print with Rate</button>
-    <button class="btn" (click)="printBill(false)">Print without Rate</button>
+    <button class="btn" [disabled]="!billData" (click)="printBill(true)">
+      Print with Rate
+    </button>
+    <button class="btn" [disabled]="!billData" (click)="printBill(false)">
+      Print without Rate
+    </button>
     <button class="btn" (click)="clearAll()">Cancel</button>
     <button class="btn btn-exit" (click)="close()">Exit</button>
     <button class="btn btn-social">Send SMS</button>
@@ -401,9 +405,6 @@
   </div>
 </div>
 <div class="print-area" *ngIf="billData">
-  <app-outdoorbillprint
-    [data]="billData"
-    [showRate]="showRate"
-  >
+  <app-outdoorbillprint [data]="billData" [showRate]="showRate">
   </app-outdoorbillprint>
 </div>

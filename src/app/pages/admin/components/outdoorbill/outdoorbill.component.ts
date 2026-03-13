@@ -29,7 +29,7 @@ export class OutdoorbillComponent {
   parties: any[] = [];
   books: any[] = [];
   bills: any[] = [];
-  billData: any[] = [];
+  billData: any;
   itemsList: any[] = [];
   productsList: any[] = [];
   filteredItems: any[] = [];
@@ -116,14 +116,14 @@ export class OutdoorbillComponent {
     this.billService.getOutdoorBooks().subscribe((res: any) => {
       const books = res.books;
       this.books = books.filter((b: any) => !b.notDisplayInOutBill);
-      console.log(this.books);
+      // console.log(this.books);
     });
   }
 
   loadBills() {
     this.billService.getOutdoorBill().subscribe((res) => {
       this.bills = res.bills;
-      console.log(this.bills);
+      // console.log(this.bills);
     });
   }
 
@@ -208,7 +208,7 @@ export class OutdoorbillComponent {
   // 2. बिल सिलेक्ट होने पर सारा डेटा फॉर्म में भरना
   selectBill(bill: any) {
     this.billData = bill;
-    console.log(bill);
+    // console.log(bill);
     this.billForm.patchValue({
       date: this.formatDate(bill.date),
       billNo: bill.billNo,
