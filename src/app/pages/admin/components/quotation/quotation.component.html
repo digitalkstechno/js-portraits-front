@@ -45,6 +45,7 @@
             type="text"
             style="width: 280px"
             placeholder="Search Outdoor party"
+            [value]="selectedPartyName"
             (input)="filterParty($event)"
             formControlName="outdoorParty"
           />

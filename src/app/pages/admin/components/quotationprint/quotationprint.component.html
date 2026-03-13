@@ -12,7 +12,7 @@
         <div class="company-block">
           <div class="company-name">{{ printSettings?.companyName }}</div>
           <!-- <div class="company-sub">Photography Studio</div> -->
-          <div>{{ printSettings.phone }}</div>
+          <div>{{ printSettings?.phone }}</div>
         </div>
       </div>
 
@@ -67,7 +67,7 @@
     <!-- FOOTER -->
     <div class="invoice-footer">
       <div class="footer-left"  [innerHTML]="formattedAddress">
-      {{ printSettings.address }}
+      {{ printSettings?.address }}
       </div>
 
       <div class="footer-right">

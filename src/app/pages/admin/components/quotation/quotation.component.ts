@@ -35,6 +35,7 @@ export class QuotationComponent {
   showPopup = false;
   popupMessage = '';
   savedTermsFromMaster: any[] = [];
+  selectedPartyName: string = '';
 
   // ENTRY FORM (Item Entry Strip)
   entryForm: FormGroup = this.fb.group({
@@ -121,7 +122,7 @@ export class QuotationComponent {
   loadQuotations() {
     this.quotationService.getQuotation().subscribe((res) => {
       this.quotation = res;
-      console.log(this.quotation);
+      // console.log(this.quotation);
     });
   }
 
@@ -147,6 +148,7 @@ export class QuotationComponent {
 
   filterParty(event: any) {
     const value = event.target.value.toLowerCase();
+    this.selectedPartyName = value;
     if (!value) {
       this.filteredCustomers = [];
       return;
@@ -159,9 +161,11 @@ export class QuotationComponent {
   }
 
   selectParty(party: any) {
+    this.selectedPartyName = party.name;
     this.quotationForm.patchValue({
-      outdoorParty: party.name,
+      outdoorParty: party._id,
       contactNo: party.contact,
+      address: party.address,
     });
 
     this.filteredCustomers = [];
@@ -205,6 +209,8 @@ export class QuotationComponent {
       { emitEvent: false },
     );
 
+    this.selectedPartyName = quot.outdoorParty?.name;
+
     // 2. Items Array साफ़ करें
     const itemsArray = this.quotationForm.get('items') as FormArray;
     itemsArray.clear(); // removeAt(0) वाले लूप से बेहतर है
@@ -215,7 +221,9 @@ export class QuotationComponent {
         this.fb.group({
           date: this.formatDate(item.date),
           itemName: item.itemName,
-          productName: item.productName,
+          productName: item.productId?.product_name,
+          productId: item.productId?._id,
+          event: item.event,
           qty: item.qty,
           rate: item.rate,
           total: item.amount || item.qty * item.rate,
@@ -223,27 +231,12 @@ export class QuotationComponent {
       );
     });
 
+    // console.log("items",this.items.value);
+
     // 4. सबसे जरूरी: पैच करने के बाद दोबारा कैलकुलेट करें
     this.calculateGrandTotal();
 
     this.filteredQuotations = [];
-  }
-
-  // 3. FormArray (Items) को भरने के लिए (अगर जरूरत हो)
-  setQuotationItems(items: any[]) {
-    const itemFormArray = this.quotationForm.get('items') as FormArray;
-    itemFormArray.clear(); // पुराना डेटा साफ़ करें
-
-    items.forEach((item) => {
-      itemFormArray.push(
-        this.fb.group({
-          itemName: item.name,
-          productName: item.productName,
-          qty: item.qty,
-          price: item.price,
-        }),
-      );
-    });
   }
 
   // Item search logic

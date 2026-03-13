@@ -12,15 +12,15 @@
 
       <div class="invoice-info-row">
         <div class="left-info">
-          <div><b>Invoice number:</b> {{ data.billNo }}</div>
+          <div><b>Invoice number:</b> {{ data.orderNo }}</div>
           <div><b>Issue date:</b> {{ data.date | date: "MMMM dd, yyyy" }}</div>
         </div>
         <div class="right-info">
           <div><b>Billed To</b></div>
           <div class="customer-name">
-            {{ data.outdoorPartyName || "Rose Daniel" }}
+            {{ data.outdoorParty?.name || "Rose Daniel" }}
           </div>
-          <div class="customer-address">{{ data.address }}</div>
+          <div class="customer-address">{{ data.outdoorParty?.address }}</div>
         </div>
       </div>
     </div>

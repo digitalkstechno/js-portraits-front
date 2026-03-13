@@ -40,6 +40,7 @@ export class QuotationprintComponent {
   loadPrintSettings() {
     this.printService.getPrintSettings().subscribe((res) => {
       this.printSettings = res;
+      console.log(this.printSettings)
       if (this.printSettings?.address) {
         this.formattedAddress = this.printSettings.address.replace(
           /\n/g,

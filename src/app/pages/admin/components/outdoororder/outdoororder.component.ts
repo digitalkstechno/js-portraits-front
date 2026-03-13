@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { AdminService } from '../service/admin.service';
 import { ItemsService } from '../../master/service/items.service';
-import { OutdoororderprintComponent } from "../outdoororderprint/outdoororderprint.component";
+import { OutdoororderprintComponent } from '../outdoororderprint/outdoororderprint.component';
 
 @Component({
   selector: 'app-outdoororder',
@@ -33,7 +33,8 @@ export class OutdoororderComponent implements OnInit {
   filteredOrders: any[] = [];
   orders: any[] = [];
   orderData: any[] = [];
-
+  selectedPartyName: string = '';
+  
   ngOnInit() {
     this.orderForm = this.fb.group({
       orderNo: [''],
@@ -98,6 +99,7 @@ export class OutdoororderComponent implements OnInit {
 
   filterParty(event: any) {
     const value = event.target.value.toLowerCase();
+    this.selectedPartyName = value;
     if (!value) {
       this.filteredCustomers = [];
       return;
@@ -110,9 +112,12 @@ export class OutdoororderComponent implements OnInit {
   }
 
   selectParty(party: any) {
+    console.log(party)
+    this.selectedPartyName = party.name;
     this.orderForm.patchValue({
-      outdoorParty: party.name,
+      outdoorParty: party._id,
       contactNo: party.contact,
+      address: party.address,
     });
 
     this.filteredCustomers = [];
@@ -169,6 +174,7 @@ export class OutdoororderComponent implements OnInit {
 
   // 2. बिल सिलेक्ट होने पर सारा डेटा फॉर्म में भरना
   selectOrder(order: any) {
+    console.log(order);
     this.orderData = order;
     this.orderForm.patchValue({
       date: this.formatDate(order.date),
@@ -184,7 +190,7 @@ export class OutdoororderComponent implements OnInit {
       grandTotal: order.grandTotal,
       balanceDue: order.balanceDue,
       advance: order.advance,
-      outdoorParty: order.outdoorParty,
+      outdoorParty: order.outdoorParty?._id,
       contactNo: order.contactNo,
       quotationNo: order.quotationNo,
       couple: order.couple,
@@ -192,6 +198,8 @@ export class OutdoororderComponent implements OnInit {
       remarks: order.remarks,
       notes: order.notes,
     });
+
+    this.selectedPartyName = order.outdoorParty?.name;
 
     // 2. Items (FormArray) को अपडेट करें
     const itemsArray = this.orderForm.get('items') as FormArray;
@@ -254,7 +262,9 @@ export class OutdoororderComponent implements OnInit {
 
   searchQuotation() {
     const qNo = this.orderForm.get('quotationNo')?.value;
+    console.log(qNo);
     this.outdoorService.getQuotationByNumber(qNo).subscribe((res: any) => {
+      console.log(res);
       // Patch Main Form
       this.orderForm.patchValue({
         date: this.formatDate(res.date),
