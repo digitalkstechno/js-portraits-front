@@ -67,7 +67,11 @@ export class AdminheaderComponent {
         { label: 'Terms & Conditions', link: '/admin/terms&conditions' },
       ],
     },
-    { key: 'purchase', label: 'New Purchase' },
+    {
+      key: 'purchase',
+      label: 'New Purchase',
+      children: [{ label: 'Product Purchase', link: '/admin/product/purchase' }],
+    },
     { key: 'discount', label: 'Discount' },
     { key: 'booking', label: 'Booking Form' },
     { key: 'sms', label: 'SMS' },
