@@ -53,6 +53,14 @@ export class OutdoororderComponent implements OnInit {
       discount: [0],
       advance: [0],
       grandTotal: [0],
+
+      // GST fields (VERY IMPORTANT)
+      igstPerc: [0],
+      igstAmt: [0],
+      cgstPerc: [0],
+      cgstAmt: [0],
+      sgstPerc: [0],
+      sgstAmt: [0],
       // Payment Section
       paymentMode: ['Cash'], // Added
       transactionId: [''], // Added          // Matches your "Amount Paid" logic
@@ -71,6 +79,24 @@ export class OutdoororderComponent implements OnInit {
 
     // Listen for Discount or Advance changes
     this.orderForm.valueChanges.subscribe(() => {
+      if (!this.isLoadingQuotation) {
+        this.calculateSubtotal();
+      }
+    });
+
+    this.items.valueChanges.subscribe(() => {
+      if (!this.isLoadingQuotation) {
+        this.calculateSubtotal();
+      }
+    });
+
+    this.orderForm.get('discount')?.valueChanges.subscribe(() => {
+      if (!this.isLoadingQuotation) {
+        this.calculateSubtotal();
+      }
+    });
+
+    this.orderForm.get('advance')?.valueChanges.subscribe(() => {
       if (!this.isLoadingQuotation) {
         this.calculateSubtotal();
       }
@@ -233,24 +259,35 @@ export class OutdoororderComponent implements OnInit {
 
   calculateSubtotal() {
     let subtotal = 0;
+
     this.items.controls.forEach((row: any) => {
-      subtotal += row.get('total')?.value || 0;
+      subtotal += Number(row.get('total')?.value) || 0;
     });
 
     const f = this.orderForm.getRawValue();
-    const taxable = subtotal - (f.discount || 0);
 
-    // GST Calculation
-    const totalGstAmt = f.igstAmt || 0;
-    const netTotal = taxable + totalGstAmt;
-    const paid = f.advance || 0;
+    const discount = Number(f.discount) || 0;
+    const igstPerc = Number(f.igstPerc) || 0;
+    const cgstPerc = Number(f.cgstPerc) || 0;
+    const sgstPerc = Number(f.sgstPerc) || 0;
+    const advance = Number(f.advance) || 0;
+
+    const taxable = subtotal - discount;
+    const igstAmt = (taxable * igstPerc) / 100;
+    const cgstAmt = (taxable * cgstPerc) / 100;
+    const sgstAmt = (taxable * sgstPerc) / 100;
+    const grandTotal = taxable + igstAmt + cgstAmt + sgstAmt;
+
+    const balanceDue = grandTotal - advance;
 
     this.orderForm.patchValue(
       {
         subTotal: subtotal,
-        totalGst: totalGstAmt.toFixed(2),
-        grandTotal: netTotal,
-        balanceDue: netTotal - paid,
+        igstAmt: igstAmt,
+        cgstAmt: cgstAmt,
+        sgstAmt: sgstAmt,
+        grandTotal: grandTotal,
+        balanceDue: balanceDue,
       },
       { emitEvent: false },
     );
@@ -280,6 +317,10 @@ export class OutdoororderComponent implements OnInit {
         remarks: res.remarks,
         subTotal: res.subTotal,
         discount: res.discount,
+        cgstPerc: res.cgstPerc,
+        cgstAmt: res.cgstAmt,
+        sgstPerc: res.sgstPerc,
+        sgstAmt: res.sgstAmt,
         advance: 0,
         grandTotal: res.grandTotal,
         igstPerc: res.igstPerc,
@@ -364,6 +405,12 @@ export class OutdoororderComponent implements OnInit {
       paymentMode: formValue.paymentMode,
       transactionId: formValue.transactionId,
       balanceDue: formValue.balanceDue,
+      igstPerc: formValue.igstPerc,
+      igstAmt: formValue.igstAmt,
+      cgstPerc: formValue.cgstPerc,
+      cgstAmt: formValue.cgstAmt,
+      sgstPerc: formValue.sgstPerc,
+      sgstAmt: formValue.sgstAmt,
 
       items: this.items.value,
     };
