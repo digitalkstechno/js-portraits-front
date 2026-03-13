@@ -70,7 +70,7 @@ export class AdminheaderComponent {
     {
       key: 'purchase',
       label: 'New Purchase',
-      children: [{ label: 'Product Purchase', link: '/admin/product/purchase' }],
+      // children: [{ label: 'Product Purchase', link: '/admin/product/purchase' }],
     },
     { key: 'discount', label: 'Discount' },
     { key: 'booking', label: 'Booking Form' },
