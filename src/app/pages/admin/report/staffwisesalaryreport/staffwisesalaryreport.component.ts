@@ -1,4 +1,10 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  inject,
+} from '@angular/core';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { StaffService } from '../../components/staff-management/service/staff.service';
@@ -28,6 +34,7 @@ export class StaffwisesalaryreportComponent implements AfterViewInit {
   staffService = inject(StaffService);
 
   salaries: StaffSalary[] = [];
+  chartInstance: Chart | null = null;
 
   selectedStaffId: string | null = null;
   selectedStaffName = '';
@@ -101,7 +108,6 @@ export class StaffwisesalaryreportComponent implements AfterViewInit {
       this.onSelectEmployee(this.employeeTotals[0].staffId);
     }
   }
-
   onSelectEmployee(staffId: string) {
     this.selectedStaffId = staffId;
     const staff = this.employeeTotals.find((e) => e.staffId === staffId);
@@ -119,11 +125,21 @@ export class StaffwisesalaryreportComponent implements AfterViewInit {
       remarks: s.remarks,
     }));
 
-    this.buildEmployeeLineChart();
+    // Build chart only if history exists
+    if (this.employeeHistory.length > 0) {
+      // Thoda delay taaki DOM render ho jaye (ngIf ke case mein zaroori hai)
+      setTimeout(() => this.buildEmployeeLineChart(), 0);
+    }
   }
 
   private buildEmployeeLineChart() {
-    if (!this.employeeHistory.length) return;
+    // Purane chart ko destroy karein agar woh exist karta hai
+    if (this.chartInstance) {
+      this.chartInstance.destroy();
+    }
+
+    // Canvas element check karein (kyunki fallback ke waqt canvas DOM mein nahi hoga)
+    if (!this.employeeLineChart) return;
 
     const labels = this.employeeHistory.map((h) => h.date);
     const values = this.employeeHistory.map((h) => h.amount);
@@ -167,7 +183,7 @@ export class StaffwisesalaryreportComponent implements AfterViewInit {
       },
     };
 
-    new Chart(ctx, config);
+    this.chartInstance = new Chart(ctx, config);
   }
 
   private toDate(iso: string): string {

@@ -120,15 +120,65 @@ tbody tr:hover {
   color: #4b5563;
 }
 
-.employee-select select {
-  padding: 4px 8px;
-  font-size: 12px;
-  border-radius: 4px;
-  border: 1px solid #cbd5e1;
-}
-
 @media (max-width: 992px) {
   .grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Placeholder for when no employee is picked */
+.no-selection-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e0;
+  border-radius: 8px;
+  margin-top: 15px;
+}
+
+.placeholder-content {
+  text-align: center;
+  color: #718096;
+}
+
+.placeholder-content .icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+/* Mini version of your no-data container for history */
+.no-data-container.mini {
+  padding: 40px 20px;
+  border: none;
+  background: #fff5f5; /* Light red tint for empty history */
+}
+
+/* Existing design maintained, adding fallback style */
+.no-data-msg {
+  grid-column: span 2; /* Full width in your grid */
+  padding: 40px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.employee-select select {
+  padding: 6px 10px;
+  border: 1px solid #bcccdc;
+  border-radius: 4px;
+  min-width: 200px;
+  outline: none;
+}
+
+/* Ensure chart container has a fixed height as per your previous design */
+.chart-container {
+  height: 300px; 
+  position: relative;
 }
