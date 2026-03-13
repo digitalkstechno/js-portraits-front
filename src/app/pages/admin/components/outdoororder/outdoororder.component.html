@@ -16,7 +16,7 @@
               (input)="searchOrders($event)"
               formControlName="orderNo"
             />
-            <div class="dropdown-list" *ngIf="filteredOrders.length > 0">
+            <div class="dropdown-list order-width" *ngIf="filteredOrders.length > 0">
               <div
                 class="dropdown-item"
                 *ngFor="let order of filteredOrders"
@@ -87,7 +87,7 @@
             >
               <small>Please select a party name.</small>
             </div>
-            <div class="dropdown-list" *ngIf="filteredCustomers.length">
+            <div class="dropdown-list party-width" *ngIf="filteredCustomers.length">
               <div
                 class="dropdown-item"
                 *ngFor="let r of filteredCustomers"

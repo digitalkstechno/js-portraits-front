@@ -404,7 +404,6 @@ select {
   position: absolute;
   top: 100%; /* show just below input */
   left: 90px;
-  width: 82%;
   border: 1px solid #999;
   background: #fff;
   max-height: 150px;
@@ -412,6 +411,14 @@ select {
   border-radius: 2px;
   z-index: 1000;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.order-width{
+  width: 46%;
+}
+
+.party-width{
+  width: 81%;
 }
 
 .dropdown-item {
