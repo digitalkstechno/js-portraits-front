@@ -200,7 +200,7 @@ export class OutdoorpartypaymentComponent {
       billTotalAmt: 0,
       totalPaidAmt: order.advance,
       totalPendingAmt: -order.advance,
-      orderTotalAmt: order.subTotal,
+      orderTotalAmt: order.grandTotal,
       orderTotalPaidAmt: order.advance,
       grandTotal: order.grandTotal,
       orderTotalPendingAmt: order.balanceDue,
