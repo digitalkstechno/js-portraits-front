@@ -34,7 +34,7 @@ export class OutdoororderComponent implements OnInit {
   orders: any[] = [];
   orderData: any[] = [];
   selectedPartyName: string = '';
-  
+
   ngOnInit() {
     this.orderForm = this.fb.group({
       orderNo: [''],
@@ -268,13 +268,14 @@ export class OutdoororderComponent implements OnInit {
       // Patch Main Form
       this.orderForm.patchValue({
         date: this.formatDate(res.date),
-        outdoorParty: res.outdoorParty,
+        outdoorParty: res.outdoorParty?._id,
         contactNo: res.contactNo,
         couple: res.couple,
         address: res.address,
         remarks: res.remarks,
         // ... other fields
       });
+    this.selectedPartyName = res.outdoorParty?.name;
 
       // Clear and Fill Table
       // this.items.clear();
