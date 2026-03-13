@@ -97,7 +97,7 @@
             <tr *ngFor="let order of outdoorOrders">
               <td>{{ order.date | date: "dd MMM" }}</td>
               <td class="font-medium">
-                {{ order.outdoorParty || order.address || "N/A" }}
+                {{ order.outdoorParty?.name || order.address || "N/A" }}
               </td>
               <td><span class="text-muted">#</span>{{ order.orderNo }}</td>
               <td class="text-right">₹{{ order.grandTotal | number }}</td>
