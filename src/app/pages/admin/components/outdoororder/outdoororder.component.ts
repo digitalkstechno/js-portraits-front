@@ -34,6 +34,7 @@ export class OutdoororderComponent implements OnInit {
   orders: any[] = [];
   orderData: any[] = [];
   selectedPartyName: string = '';
+  isLoadingQuotation = false;
 
   ngOnInit() {
     this.orderForm = this.fb.group({
@@ -70,7 +71,9 @@ export class OutdoororderComponent implements OnInit {
 
     // Listen for Discount or Advance changes
     this.orderForm.valueChanges.subscribe(() => {
-      this.calculateSubtotal();
+      if (!this.isLoadingQuotation) {
+        this.calculateSubtotal();
+      }
     });
 
     this.loadItems();
@@ -112,7 +115,7 @@ export class OutdoororderComponent implements OnInit {
   }
 
   selectParty(party: any) {
-    console.log(party)
+    console.log(party);
     this.selectedPartyName = party.name;
     this.orderForm.patchValue({
       outdoorParty: party._id,
@@ -143,6 +146,7 @@ export class OutdoororderComponent implements OnInit {
 
     // This ensures that when you patch qty or rate, the total updates immediately
     item.valueChanges.subscribe(() => {
+      if (this.isLoadingQuotation) return;
       const qty = item.get('qty')?.value || 0;
       const rate = item.get('rate')?.value || 0;
       const total = qty * rate;
@@ -237,16 +241,16 @@ export class OutdoororderComponent implements OnInit {
     const taxable = subtotal - (f.discount || 0);
 
     // GST Calculation
-    const totalGstAmt = (taxable * this.fixedGstRate) / 100;
+    const totalGstAmt = f.igstAmt || 0;
     const netTotal = taxable + totalGstAmt;
     const paid = f.advance || 0;
 
     this.orderForm.patchValue(
       {
-        subTotal: subtotal.toFixed(2),
+        subTotal: subtotal,
         totalGst: totalGstAmt.toFixed(2),
-        grandTotal: netTotal.toFixed(2),
-        balanceDue: (netTotal - paid).toFixed(2),
+        grandTotal: netTotal,
+        balanceDue: netTotal - paid,
       },
       { emitEvent: false },
     );
@@ -264,21 +268,27 @@ export class OutdoororderComponent implements OnInit {
     const qNo = this.orderForm.get('quotationNo')?.value;
     console.log(qNo);
     this.outdoorService.getQuotationByNumber(qNo).subscribe((res: any) => {
-      console.log(res);
+      this.isLoadingQuotation = true; // stop recalculation
+      console.log('quote', res);
       // Patch Main Form
       this.orderForm.patchValue({
         date: this.formatDate(res.date),
         outdoorParty: res.outdoorParty?._id,
         contactNo: res.contactNo,
-        couple: res.couple,
+        couple: res.functionName,
         address: res.address,
         remarks: res.remarks,
-        // ... other fields
+        subTotal: res.subTotal,
+        discount: res.discount,
+        advance: 0,
+        grandTotal: res.grandTotal,
+        igstPerc: res.igstPerc,
+        igstAmt: res.igstAmt,
       });
-    this.selectedPartyName = res.outdoorParty?.name;
+      this.selectedPartyName = res.outdoorParty?.name;
 
       // Clear and Fill Table
-      // this.items.clear();
+      this.items.clear();
       res.items.forEach((item: any) => {
         const row = this.createItem();
         row.patchValue({
@@ -292,6 +302,9 @@ export class OutdoororderComponent implements OnInit {
           total: item.total,
         });
         this.items.push(row);
+      });
+      setTimeout(() => {
+        this.isLoadingQuotation = false; // enable calculation again
       });
     });
   }
