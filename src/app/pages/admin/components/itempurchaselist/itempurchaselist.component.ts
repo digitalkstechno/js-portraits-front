@@ -27,22 +27,43 @@ export class ItempurchaselistComponent {
       this.calculateGrandTotal();
     });
   }
-
-  onSearch(event: any) {
-    const query = event.target.value.toLowerCase();
-    this.filteredPurchases = this.purchases.filter(
-      (p) =>
-        p.vendorName.toLowerCase().includes(query) ||
-        p.invoiceNo.toString().includes(query),
-    );
-    this.calculateGrandTotal();
-  }
-
+  
   calculateGrandTotal() {
     this.totalSpending = this.filteredPurchases.reduce(
       (acc, curr) => acc + curr.grandTotal,
       0,
     );
+  }
+
+  startDate: string = '';
+  endDate: string = '';
+
+  onSearch(event?: any) {
+    let filtered = [...this.purchases];
+
+    // 1. Text Search Logic
+    const query = event?.target?.value?.toLowerCase() || '';
+    if (query) {
+      filtered = filtered.filter(
+        (p) =>
+          p.vendorName.toLowerCase().includes(query) ||
+          p.invoiceNo.toString().includes(query),
+      );
+    }
+
+    // 2. Date Filter Logic
+    if (this.startDate && this.endDate) {
+      const start = new Date(this.startDate).getTime();
+      const end = new Date(this.endDate).getTime();
+
+      filtered = filtered.filter((p) => {
+        const pDate = new Date(p.purchaseDate).getTime();
+        return pDate >= start && pDate <= end;
+      });
+    }
+
+    this.filteredPurchases = filtered;
+    this.calculateGrandTotal();
   }
 
   close() {

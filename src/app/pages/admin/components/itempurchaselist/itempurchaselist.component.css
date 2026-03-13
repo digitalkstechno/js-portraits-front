@@ -160,3 +160,75 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Center alignment logic */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Background dimming */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.purchase-list-window {
+  width: 90%;
+  max-width: 1100px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+}
+
+/* Date Filter Styles */
+.date-filters {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.date-input {
+  border: none;
+  border-radius: 3px;
+  padding: 3px 5px;
+  font-size: 12px;
+  outline: none;
+}
+
+.to-text {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #d9e8e8;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Table Text Optimization */
+.item-names {
+  font-size: 12px;
+  color: #4a5568;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.no-data {
+  text-align: center;
+  padding: 50px;
+  color: #a0aec0;
+  font-style: italic;
+}

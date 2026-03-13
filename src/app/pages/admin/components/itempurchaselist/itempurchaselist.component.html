@@ -1,83 +1,99 @@
-<div class="purchase-list-window">
-  <div class="title-bar">
-    <span>Purchase History / Stock Inward Records</span>
-    <div class="header-actions">
-      <input
-        type="text"
-        placeholder="Search Vendor or Invoice..."
-        (input)="onSearch($event)"
-        class="search-box"
-      />
-      <button class="btn-refresh" (click)="fetchPurchases()">🔄 Refresh</button>
-      <button class="close-btn" (click)="close()">✖</button>
+<div class="overlay">
+  <div class="purchase-list-window">
+    <div class="title-bar">
+      <span>Purchase History / Stock Inward Records</span>
+      <div class="header-actions">
+        <div class="date-filters">
+          <input
+            type="date"
+            [(ngModel)]="startDate"
+            (change)="onSearch()"
+            class="date-input"
+          />
+          <span class="to-text">to</span>
+          <input
+            type="date"
+            [(ngModel)]="endDate"
+            (change)="onSearch()"
+            class="date-input"
+          />
+        </div>
+
+        <input
+          type="text"
+          placeholder="Search Vendor or Invoice..."
+          (input)="onSearch($event)"
+          class="search-box"
+        />
+        <button class="btn-refresh" (click)="fetchPurchases()">🔄</button>
+        <button class="close-btn" (click)="close()">✖</button>
+      </div>
     </div>
-  </div>
 
-  <div class="table-container">
-    <table class="styled-table">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Invoice #</th>
-          <th>Supplier / Vendor</th>
-          <th>Items Purchased</th>
-          <th>Qty</th>
-          <th class="text-right">Total Amount (₹)</th>
-          <th class="text-center">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let p of filteredPurchases">
-          <td>{{ p.purchaseDate | date: "dd/MM/yyyy" }}</td>
-          <td>
-            <span class="badge-invoice">#{{ p.invoiceNo }}</span>
-          </td>
-          <td>
-            <strong>{{ p.vendorName }}</strong>
-          </td>
-          <td>
-            <div class="item-list-text">
-              <span *ngFor="let item of p.items; let last = last">
-                {{ item.itemName }}{{ !last ? ", " : "" }}
-              </span>
-            </div>
-          </td>
-          <td>
-            <div class="item-tags">
-              <span *ngFor="let item of p.items" class="tag">
-                {{ item.qty }}
-              </span>
-            </div>
-          </td>
-          <td class="text-right bold-amount">
-            ₹{{ p.grandTotal | number: "1.2-2" }}
-          </td>
-          <td class="text-center">
-            <button class="btn-view">👁 View</button>
-            <button class="btn-print">🖨</button>
-          </td>
-        </tr>
-
-        <tr *ngIf="filteredPurchases.length === 0">
-          <td
-            colspan="7"
-            class="no-data"
-            style="text-align: center; padding: 30px"
-          >
-            No purchase records found.
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="list-footer">
-    <div class="footer-stats">
-      <span>Total Records: {{ filteredPurchases.length }}</span>
-      <span class="total-spending" style="margin-left: 20px">
-        Total Purchase Value: ₹{{ totalSpending | number: "1.2-2" }}
-      </span>
+    <div class="table-container">
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Invoice #</th>
+            <th>Supplier / Vendor</th>
+            <th>Items Purchased</th>
+            <th>Qty</th>
+            <th class="text-right">Total Amount (₹)</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of filteredPurchases">
+            <td>{{ p.purchaseDate | date: "dd/MM/yyyy" }}</td>
+            <td>
+              <span class="badge-invoice">#{{ p.invoiceNo }}</span>
+            </td>
+            <td>
+              <strong>{{ p.vendorName }}</strong>
+            </td>
+            <td>
+              <div class="item-names">
+                <span *ngFor="let item of p.items; let last = last">
+                  {{ item.itemName }}{{ !last ? ", " : "" }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="item-tags">
+                <span *ngFor="let item of p.items" class="tag">{{
+                  item.qty
+                }}</span>
+              </div>
+            </td>
+            <td class="text-right bold-amount">
+              ₹{{ p.grandTotal | number: "1.2-2" }}
+            </td>
+            <td class="text-center">
+              <button class="btn-view">👁</button>
+              <button class="btn-print">🖨</button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredPurchases.length === 0">
+            <td colspan="7" class="no-data">
+              No records found for this period.
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <button class="btn-exit" (click)="close()">Exit Panel</button>
+
+    <div class="list-footer">
+      <div class="footer-stats">
+        <span
+          >Total Records: <strong>{{ filteredPurchases.length }}</strong></span
+        >
+        <span class="total-spending"
+          >Total Value:
+          <strong>₹{{ totalSpending | number: "1.2-2" }}</strong></span
+        >
+      </div>
+      <button class="btn-exit" (click)="close()">Exit Panel</button>
+    </div>
   </div>
 </div>
