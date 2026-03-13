@@ -27,7 +27,7 @@ export class ItempurchaselistComponent {
       this.calculateGrandTotal();
     });
   }
-  
+
   calculateGrandTotal() {
     this.totalSpending = this.filteredPurchases.reduce(
       (acc, curr) => acc + curr.grandTotal,
@@ -39,9 +39,9 @@ export class ItempurchaselistComponent {
   endDate: string = '';
 
   onSearch(event?: any) {
-    let filtered = [...this.purchases];
+    let filtered = [...this.purchases]; // Original data from API
 
-    // 1. Text Search Logic
+    // 1. Filter by Search Query
     const query = event?.target?.value?.toLowerCase() || '';
     if (query) {
       filtered = filtered.filter(
@@ -51,7 +51,7 @@ export class ItempurchaselistComponent {
       );
     }
 
-    // 2. Date Filter Logic
+    // 2. Filter by Date Range
     if (this.startDate && this.endDate) {
       const start = new Date(this.startDate).getTime();
       const end = new Date(this.endDate).getTime();
@@ -64,6 +64,11 @@ export class ItempurchaselistComponent {
 
     this.filteredPurchases = filtered;
     this.calculateGrandTotal();
+  }
+
+  getItemNames(items: any[]): string {
+    if (!items || items.length === 0) return 'No items';
+    return items.map((i) => i.itemName).join(', ');
   }
 
   close() {
