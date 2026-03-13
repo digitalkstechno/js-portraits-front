@@ -275,8 +275,8 @@
         Save
       </button>
       <button class="btn btn-exit">Delete</button>
-      <button class="btn" (click)="printOrder(true)">Print with Rate</button>
-      <button class="btn" (click)="printOrder(false)">Print without Rate</button>
+      <button class="btn" [disabled]="!orderData" (click)="printOrder(true)">Print with Rate</button>
+      <button class="btn" [disabled]="!orderData" (click)="printOrder(false)">Print without Rate</button>
       <button class="btn" (click)="clear()">Cancel</button>
       <button type="button" class="btn btn-exit" (click)="close()">Exit</button>
       <button class="btn btn-social">Send SMS</button>

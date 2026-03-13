@@ -32,7 +32,7 @@ export class OutdoororderComponent implements OnInit {
   fixedGstRate: number = 0; // Config se aayega
   filteredOrders: any[] = [];
   orders: any[] = [];
-  orderData: any[] = [];
+  orderData: any;
   selectedPartyName: string = '';
   isLoadingQuotation = false;
 
