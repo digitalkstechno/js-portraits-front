@@ -9,23 +9,21 @@ import { SHARED_MODULES } from '../../../../constants/sharedModule';
   styleUrl: './pendingpaymentsreport.component.css',
 })
 export class PendingpaymentsreportComponent {
-  // report.component.ts
   pendingList: any[] = [];
-  billService = inject(AdminService);
+  outdoorService = inject(AdminService);
 
-  loadPendingReport() {
-    this.billService.getPendingPaymentsReport().subscribe((res: any) => {
-      this.pendingList = res.data;
+  ngOnInit() {
+    this.loadPendingSummary();
+  }
+
+  loadPendingSummary(sDate?: string, eDate?: string) {
+    this.outdoorService.getPendingAmountSummary(sDate, eDate).subscribe({
+      next: (res) => {
+        console.log(res);
+        // Force Angular to detect changes before initializing charts
+        // this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error:', err),
     });
-  }
-
-  // Total Pending Amount nikalne ke liye
-  getTotalPending() {
-    return this.pendingList.reduce((acc, curr) => acc + curr.balanceDue, 0);
-  }
-
-  getAvgPending() {
-    if (this.pendingList.length === 0) return 0;
-    return this.getTotalPending() / this.pendingList.length;
   }
 }
