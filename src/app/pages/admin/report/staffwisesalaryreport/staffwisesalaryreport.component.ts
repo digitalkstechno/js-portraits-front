@@ -4,6 +4,7 @@ import {
   ViewChild,
   AfterViewInit,
   inject,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
@@ -32,10 +33,10 @@ export class StaffwisesalaryreportComponent implements AfterViewInit {
   @ViewChild('employeeLineChart')
   employeeLineChart!: ElementRef<HTMLCanvasElement>;
   staffService = inject(StaffService);
+  private cdr = inject(ChangeDetectorRef); // 2. Inject karein
 
   salaries: StaffSalary[] = [];
-  chartInstance: Chart | null = null;
-
+  chartInstance: any = null;
   selectedStaffId: string | null = null;
   selectedStaffName = '';
   employeeHistory: {
@@ -64,11 +65,17 @@ export class StaffwisesalaryreportComponent implements AfterViewInit {
   loadStaffSalary() {
     this.staffService.getStaffSalary().subscribe((res: any) => {
       this.salaries = res.salary || [];
-      console.log('salary', this.salaries);
-
-      // now that data is here, build summary and default chart
       this.buildEmployeeTotals();
-      this.initDefaultEmployee();
+
+      if (this.employeeTotals.length) {
+        this.onSelectEmployee(this.employeeTotals[0].staffId);
+
+        // 3. Force Angular to update HTML (Canvas ko DOM mein laane ke liye)
+        this.cdr.detectChanges();
+
+        // 4. Phir chart build karein
+        this.buildEmployeeLineChart();
+      }
     });
   }
 
@@ -133,28 +140,29 @@ export class StaffwisesalaryreportComponent implements AfterViewInit {
   }
 
   private buildEmployeeLineChart() {
-    // Purane chart ko destroy karein agar woh exist karta hai
     if (this.chartInstance) {
       this.chartInstance.destroy();
     }
 
-    // Canvas element check karein (kyunki fallback ke waqt canvas DOM mein nahi hoga)
     if (!this.employeeLineChart) return;
 
-    const labels = this.employeeHistory.map((h) => h.date);
-    const values = this.employeeHistory.map((h) => h.amount);
+    // FIX: Typescript ko explicit bataein ki labels strings hain
+    // aur values numbers hain (ya null ho sakte hain)
+    const labels: string[] = this.employeeHistory.map((h) => h.date);
+    const values: (number | null)[] = this.employeeHistory.map((h) => h.amount);
 
     const ctx = this.employeeLineChart.nativeElement.getContext('2d');
     if (!ctx) return;
 
+    // Config ko strictly type karein
     const config: ChartConfiguration<'line'> = {
       type: 'line',
       data: {
-        labels,
+        labels: labels, // Yahan Type mismatch solve ho gaya
         datasets: [
           {
             label: `${this.selectedStaffName} - Salary (₹)`,
-            data: values,
+            data: values, // Yahan data mismatch solve ho gaya
             borderColor: '#22c55e',
             backgroundColor: 'rgba(34,197,94,0.15)',
             borderWidth: 2,
@@ -171,19 +179,29 @@ export class StaffwisesalaryreportComponent implements AfterViewInit {
           legend: { display: true },
           tooltip: {
             callbacks: {
-              label: (ctx) =>
-                ` ₹${ctx.parsed.y?.toLocaleString('en-IN') ?? '0'}`,
+              label: (context) => {
+                // context ka type automatic detect hoga
+                const label = context.dataset.label || '';
+                const value = context.parsed.y;
+                return `${label}: ₹${value?.toLocaleString('en-IN') ?? '0'}`;
+              },
             },
           },
         },
         scales: {
           x: { grid: { display: false } },
-          y: { beginAtZero: true, grid: { color: '#e5e7eb' } },
+          y: {
+            beginAtZero: true,
+            grid: { color: '#e5e7eb' },
+            ticks: {
+              callback: (value) => '₹' + value.toLocaleString('en-IN'),
+            },
+          },
         },
       },
     };
 
-    this.chartInstance = new Chart(ctx, config);
+    this.chartInstance = new Chart(ctx, config as any);
   }
 
   private toDate(iso: string): string {
