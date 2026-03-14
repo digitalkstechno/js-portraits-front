@@ -82,8 +82,6 @@ export class SummaryComponent implements OnInit, AfterViewInit {
   }
 
   loadFinancialSummary(sDate?: string, eDate?: string) {
-    console.log('start date', sDate);
-    console.log('end date', eDate);
     this.outdoorService.getFinancialSummary(sDate, eDate).subscribe({
       next: (res) => {
         this.summaryData = res.reportData;
@@ -106,6 +104,13 @@ export class SummaryComponent implements OnInit, AfterViewInit {
       },
       error: (err) => console.error('Error:', err),
     });
+  }
+
+  onDateChange(sDate: string, eDate: string) {
+    if (sDate && eDate) {
+      // console.log('Filtering from:', sDate, 'to:', eDate);
+      this.loadFinancialSummary(sDate, eDate);
+    }
   }
 
   get netProfit(): number {
@@ -323,14 +328,5 @@ export class SummaryComponent implements OnInit, AfterViewInit {
     });
 
     doc.save(`Financial_Report_${new Date().getTime()}.pdf`);
-  }
-
-  onDateChange(sDate: string, eDate: string) {
-    if (sDate && eDate) {
-      console.log('Filtering from:', sDate, 'to:', eDate); // Debugging ke liye
-
-      // API call trigger karein
-      this.loadFinancialSummary(sDate, eDate);
-    }
   }
 }
