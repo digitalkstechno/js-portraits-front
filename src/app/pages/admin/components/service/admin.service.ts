@@ -225,4 +225,15 @@ export class AdminService {
   getProductPurchaseCount(): Observable<any> {
     return this.http.get<any>(`${Endpoints.PRODUCT_PURCHASE}/count`);
   }
+
+  // summary report of all revenues
+  getFinancialSummary(startDate?: string, endDate?: string): Observable<any> {
+    let params: any = {};
+    if (startDate) params.startDate = startDate;
+    if (endDate) params.endDate = endDate;
+
+    return this.http.get<any>(Endpoints.REVENUE_REPORT, {
+      params,
+    });
+  }
 }

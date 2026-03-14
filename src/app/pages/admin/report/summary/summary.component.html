@@ -3,27 +3,27 @@
   <div class="flex-container mb-8">
     <div class="card card-blue flex-item">
       <h3 class="card-title">Outdoor Order Revenue</h3>
-      <p class="card-value">{{ outdoorOrderRevenue | currency }}</p>
+      <p class="card-value">{{ outdoorOrderRevenue | indiancurrency }}</p>
     </div>
 
     <div class="card card-green flex-item">
       <h3 class="card-title">Outdoor Bill Revenue</h3>
-      <p class="card-value">{{ outdoorBillRevenue | currency }}</p>
+      <p class="card-value">{{ outdoorBillRevenue | indiancurrency }}</p>
     </div>
 
     <div class="card card-purple flex-item">
       <h3 class="card-title">Total Salary Cost</h3>
-      <p class="card-value">{{ totalSalaryCost | currency }}</p>
+      <p class="card-value">{{ totalSalaryCost | indiancurrency }}</p>
     </div>
 
     <div class="card card-purple flex-item">
       <h3 class="card-title">Total Purchase</h3>
-      <p class="card-value">{{ totalPurchase | currency }}</p>
+      <p class="card-value">{{ totalPurchase | indiancurrency }}</p>
     </div>
 
     <div class="card card-purple flex-item">
-      <h3 class="card-title">Total Spend</h3>
-      <p class="card-value">{{ totalSpend | currency }}</p>
+      <h3 class="card-title">Total Sales</h3>
+      <p class="card-value">{{ totalSell | indiancurrency }}</p>
     </div>
   </div>
 
@@ -43,49 +43,49 @@
           <tr>
             <td>Outdoor Order Revenue</td>
             <td class="text-right">
-              {{ outdoorOrderRevenue | currency }}
+              {{ outdoorOrderRevenue | indiancurrency }}
             </td>
           </tr>
           <tr>
             <td>Outdoor Bill Revenue</td>
             <td class="text-right">
-              {{ outdoorBillRevenue | currency }}
+              {{ outdoorBillRevenue | indiancurrency }}
+            </td>
+          </tr>
+          <tr>
+            <td>Total Sell</td>
+            <td class="text-right">
+              {{ totalSell | indiancurrency }}
             </td>
           </tr>
           <tr class="summary-separator">
             <td><strong>Total Revenue</strong></td>
             <td class="text-right font-bold">
-              {{ totalRevenue | currency }}
+              {{ totalRevenue | indiancurrency }}
             </td>
           </tr>
           <tr>
             <td>Total Salary Cost</td>
             <td class="text-right">
-              {{ totalSalaryCost | currency }}
+              {{ totalSalaryCost | indiancurrency }}
             </td>
           </tr>
           <tr>
             <td>Total Purchase</td>
             <td class="text-right">
-              {{ totalPurchase | currency }}
-            </td>
-          </tr>
-          <tr>
-            <td>Total Spend</td>
-            <td class="text-right">
-              {{ totalSpend | currency }}
+              {{ totalPurchase | indiancurrency }}
             </td>
           </tr>
           <tr class="summary-separator">
             <td><strong>Total Cost</strong></td>
             <td class="text-right font-bold">
-              {{ totalCost | currency }}
+              {{ totalCost | indiancurrency }}
             </td>
           </tr>
           <tr class="summary-profit">
             <td><strong>Net Profit</strong></td>
             <td class="text-right font-bold">
-              {{ netProfit | currency }}
+              {{ netProfit | indiancurrency }}
             </td>
           </tr>
         </tbody>

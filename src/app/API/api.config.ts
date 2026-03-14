@@ -24,6 +24,8 @@ export const Endpoints = {
   PRODUCT_SELL: `${baseUrl}/productSell`,
   PRODUCT_PURCHASE: `${baseUrl}/productPurchase`,
 
+  REVENUE_REPORT: `${baseUrl}/summary`,
+
   NOTE_SETTINGS: `${baseUrl}/noteSettings`,
   TERMS_AND_CONDITIONS: `${baseUrl}/termsAndConditions`,
   GST_CONFIGURATION: `${baseUrl}/gstConfig`,
