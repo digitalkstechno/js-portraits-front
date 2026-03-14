@@ -274,59 +274,166 @@ export class SummaryComponent implements OnInit, AfterViewInit {
   downloadPDF() {
     const doc = new jsPDF();
 
-    // Header
-    doc.setFontSize(18);
-    doc.text('Business Financial Report', 14, 20);
+    // 1. COLORS & THEME (Matching the Beige Image)
+    const bgBeige: [number, number, number] = [225, 213, 201]; // Header box color
+    const textDark: [number, number, number] = [44, 44, 44]; // Dark slate/black
+    const accentBrown: [number, number, number] = [101, 67, 33]; // Brown logo box color
 
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 30);
+    // 2. HEADER BOX (The Beige Rectangle)
+    doc.setFillColor(...bgBeige);
+    doc.roundedRect(10, 10, 190, 50, 2, 2, 'F');
 
-    // Table Data
-    const head = [['Category', 'Description', 'Amount (INR)']];
+    // Title "FINANCIAL REPORT" (Using Serif style)
+    doc.setFont('times', 'bold');
+    doc.setFontSize(28);
+    doc.setTextColor(...textDark);
+    doc.text('REPORT', 20, 35);
+
+    // Small Brown Logo Box (Matching the image)
+    doc.setFillColor(...accentBrown);
+    doc.rect(130, 15, 8, 15, 'F');
+
+    // Business Name
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text('JS BUSINESS ANALYTICS', 142, 22);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text('Financial Summary Report', 142, 28);
+
+    // Metadata (Billed To / Dates)
+    doc.setFontSize(9);
+    // doc.text(`Report No: ${new Date().getTime().toString().slice(-6)}`, 20, 48);
+    doc.text(`Issue Date: ${new Date().toLocaleDateString()}`, 20, 53);
+
+    doc.setFont('helvetica', 'bold');
+    doc.text('Date Range:', 142, 48);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${this.startDate || 'N/A'} to ${this.endDate || 'N/A'}`, 142, 53);
+
+    // 3. TABLE SECTION (Clean & Modern)
+    const head = [['No.', 'Item Description', 'Category', 'Amount (INR)']];
     const data = [
       [
+        1,
+        'Outdoor Order Revenue',
         'Revenue',
-        'Outdoor Orders',
         this.outdoorOrderRevenue.toLocaleString('en-IN'),
       ],
       [
+        2,
+        'Outdoor Bill Revenue',
         'Revenue',
-        'Outdoor Bills',
         this.outdoorBillRevenue.toLocaleString('en-IN'),
       ],
-      ['Revenue', 'Product Sales', this.totalSell.toLocaleString('en-IN')],
-      ['---', 'TOTAL REVENUE', this.totalRevenue.toLocaleString('en-IN')],
       [
+        3,
+        'Direct Product Sales',
+        'Revenue',
+        this.totalSell.toLocaleString('en-IN'),
+      ],
+      [
+        4,
+        'Staff Salary Cost',
         'Expense',
-        'Staff Salaries',
         this.totalSalaryCost.toLocaleString('en-IN'),
       ],
       [
+        5,
+        'Stock/Product Purchases',
         'Expense',
-        'Stock Purchases',
         this.totalPurchase.toLocaleString('en-IN'),
       ],
-      ['---', 'TOTAL COST', this.totalCost.toLocaleString('en-IN')],
-      ['RESULT', 'NET PROFIT', this.netProfit.toLocaleString('en-IN')],
     ];
 
     autoTable(doc, {
-      startY: 40,
+      startY: 65,
       head: head,
       body: data,
-      theme: 'grid',
-      headStyles: { fillColor: [15, 23, 42] }, // Dark Slate matching your theme
-      didParseCell: (data) => {
-        if (data.row.index === 7) {
-          // Net Profit Row
-          data.cell.styles.fontStyle = 'bold';
-          data.cell.styles.textColor =
-            this.netProfit >= 0 ? [34, 197, 94] : [239, 68, 68];
-        }
+      theme: 'striped',
+      headStyles: {
+        fillColor: [190, 170, 150], // Slightly darker beige for header
+        textColor: [255, 255, 255],
+        fontStyle: 'bold',
+      },
+      styles: { font: 'helvetica', fontSize: 10, cellPadding: 4 },
+      columnStyles: {
+        0: { cellWidth: 10 },
+        3: { halign: 'right' },
       },
     });
 
-    doc.save(`Financial_Report_${new Date().getTime()}.pdf`);
+    // 4. TOTALS SECTION (Right Aligned)
+    // --- TABLE KE BAAD KA SECTION ---
+    const finalY = (doc as any).lastAutoTable.finalY + 15;
+    const rightAlignX = 195; // Right margin focus
+
+    // 1. SUB-DETAILS (Subtle & Small)
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100); // Gray text
+
+    doc.text(`Total Gross Revenue :`, 140, finalY, { align: 'right' });
+    doc.text(
+      `${this.totalRevenue.toLocaleString('en-IN')}`,
+      rightAlignX,
+      finalY,
+      { align: 'right' },
+    );
+
+    doc.text(`Total Operating Cost :`, 140, finalY + 8, { align: 'right' });
+    doc.text(
+      `${this.totalCost.toLocaleString('en-IN')}`,
+      rightAlignX,
+      finalY + 8,
+      { align: 'right' },
+    );
+
+    // 2. DIVIDER LINE
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.5);
+    doc.line(130, finalY + 12, rightAlignX, finalY + 12);
+
+    // 3. MAIN TOTAL (Net Profit - High Impact)
+    // Ek chota beige background box "Net Profit" ke liye
+    doc.setFillColor(245, 240, 235); // Very light beige
+    doc.rect(120, finalY + 15, 80, 15, 'F');
+
+    doc.setFont('times', 'bold'); // Professional Serif Font
+    doc.setFontSize(16);
+    doc.setTextColor(...textDark);
+
+    // "NET PROFIT" Label
+    doc.text('NET TOTAL :', 155, finalY + 25, { align: 'right' });
+
+    // Profit Value (Color according to profit/loss)
+    const profitColor: [number, number, number] =
+      this.netProfit >= 0 ? [22, 101, 52] : [153, 27, 27];
+    doc.setTextColor(...profitColor);
+    doc.text(
+      `INR  ${this.netProfit.toLocaleString('en-IN')}`,
+      rightAlignX,
+      finalY + 25,
+      { align: 'right' },
+    );
+
+    // 5. FOOTER (Matching the image layout)
+    const footerY = 270;
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100);
+
+    // Left Side: Address/Contact
+    doc.text('Vesu, Surat, Gujarat', 15, footerY);
+    doc.text('support@jsanalytics.com', 15, footerY + 5);
+
+    // Right Side: Notes
+    doc.setFont('helvetica', 'bold');
+    doc.text('Summary Note', 140, footerY);
+    doc.setFont('helvetica', 'normal');
+    doc.text('This report is generated based on selected', 140, footerY + 5);
+    doc.text('filters and reflects real-time data.', 140, footerY + 10);
+
+    doc.save(`Financial_Report_${this.endDate}.pdf`);
   }
 }
