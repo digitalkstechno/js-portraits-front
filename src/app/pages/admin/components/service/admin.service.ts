@@ -236,4 +236,15 @@ export class AdminService {
       params,
     });
   }
+
+  // penidng amount summary
+  getPendingAmountSummary(startDate?: string, endDate?: string): Observable<any> {
+    let params: any = {};
+    if (startDate) params.startDate = startDate;
+    if (endDate) params.endDate = endDate;
+
+    return this.http.get<any>(Endpoints.PENDING_AMOUNT_REPORT, {
+      params,
+    });
+  }
 }
