@@ -93,34 +93,81 @@ export class SummaryComponent implements OnInit, AfterViewInit {
 
   initLineChart() {
     if (!this.chartCanvas) return;
-    if (this.revenueChartInstance) this.revenueChartInstance.destroy();
+    if (this.revenueChartInstance) {
+      this.revenueChartInstance.destroy();
+    }
 
     const ctx = this.chartCanvas.nativeElement.getContext('2d');
     if (!ctx) return;
 
+    // Trend dikhane ke liye humein datasets mein Revenue aur Cost dono dalne honge
     this.revenueChartInstance = new Chart(ctx, {
-      type: 'bar', // Line ki jagah Bar zyada suit karega comparison ke liye
+      type: 'line',
       data: {
-        labels: ['Orders', 'Bills', 'Direct Sales'],
-        datasets: [{
-          label: 'Revenue Analysis',
-          data: [this.outdoorOrderRevenue, this.outdoorBillRevenue, this.totalSell],
-          backgroundColor: ['#60a5fa', '#34d399', '#a855f7'],
-          borderRadius: 8
-        }]
+        // Filhal labels static hain, agar aapke paas monthly data hai toh wo yahan aayega
+        labels: ['Orders', 'Bills', 'Direct Sales', 'Salaries', 'Purchases'],
+        datasets: [
+          {
+            label: 'Revenue Stream',
+            data: [
+              this.outdoorOrderRevenue,
+              this.outdoorBillRevenue,
+              this.totalSell,
+              null,
+              null,
+            ],
+            borderColor: '#22c55e', // Green
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: '#22c55e',
+          },
+          {
+            label: 'Expense Stream',
+            data: [null, null, null, this.totalSalaryCost, this.totalPurchase],
+            borderColor: '#ef4444', // Red
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: '#ef4444',
+          },
+        ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { labels: { color: '#e5e7eb' } },
+          legend: {
+            display: true,
+            position: 'top',
+            labels: { color: '#e5e7eb', usePointStyle: true },
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            backgroundColor: '#1e293b',
+            titleColor: '#fff',
+            bodyColor: '#cbd5e1',
+            callbacks: {
+              label: (ctx: any) => ` ₹${ctx.raw.toLocaleString('en-IN')}`,
+            },
+          },
         },
         scales: {
-          y: {
+          x: {
+            grid: { display: false },
             ticks: { color: '#9ca3af' },
-            grid: { color: 'rgba(255,255,255,0.1)' },
           },
-          x: { ticks: { color: '#9ca3af' }, grid: { display: false } },
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: {
+              color: '#9ca3af',
+              callback: (value) => '₹' + value.toLocaleString('en-IN'),
+            },
+          },
         },
       },
     });
