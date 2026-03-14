@@ -198,7 +198,7 @@ export class QuotationComponent {
         sgstAmt: quot.sgstAmt,
         igstPerc: quot.igstPerc,
         igstAmt: quot.igstAmt,
-        outdoorParty: quot.outdoorParty,
+        outdoorParty: quot.outdoorParty?._id,
         contactNo: quot.contactNo,
         address: quot.address,
         email: quot.email,
