@@ -70,19 +70,21 @@
       </div>
     </div>
 
-    <div class="grid">
+    <div class="">
       <!-- Summary table -->
       <div class="table-wrapper">
         <table>
           <thead>
             <tr>
+              <th>#</th>
               <th>Employee</th>
               <th class="text-right">Total Paid (₹)</th>
               <th>Last Paid On</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let row of employeeTotals">
+            <tr *ngFor="let row of employeeTotals; let i = index">
+              <td>{{ i+1 }}</td>
               <td>{{ row.staffName }}</td>
               <td class="text-right">
                 {{ row.totalPaid | number: "1.2-2" }}

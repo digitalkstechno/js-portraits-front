@@ -37,8 +37,11 @@ export class OverallsalaryreportComponent implements AfterViewInit {
   @ViewChild('donutChart') donutChart!: ElementRef<HTMLCanvasElement>;
 
   staffService = inject(StaffService);
-
   salaries: StaffSalary[] = [];
+  // Instances track karne ke liye (taaki destroy kar sakein)
+  barChartInstance: any = null;
+  pieChartInstance: any = null;
+  donutChartInstance: any = null;
 
   employeeTotals: {
     staffId: string;
@@ -62,13 +65,15 @@ export class OverallsalaryreportComponent implements AfterViewInit {
   loadStaffSalary() {
     this.staffService.getStaffSalary().subscribe((res: any) => {
       this.salaries = res.salary || [];
-      console.log('salary', this.salaries);
-
       this.buildOverallSummary();
       this.computeStats();
-      this.buildOverallChart();
-      this.buildPieChart();
-      this.buildDonutChart();
+
+      // Give DOM a tick to render canvas elements
+      setTimeout(() => {
+        this.buildOverallChart();
+        this.buildPieChart();
+        this.buildDonutChart();
+      }, 100);
     });
   }
 
@@ -116,48 +121,38 @@ export class OverallsalaryreportComponent implements AfterViewInit {
   }
 
   private buildOverallChart() {
-    if (!this.employeeTotals.length) return;
+    // 1. Purana instance destroy karein
+    if (this.barChartInstance) this.barChartInstance.destroy();
 
-    const labels = this.employeeTotals.map((e) => e.staffName);
-    const values = this.employeeTotals.map((e) => e.totalPaid);
+    if (!this.overallBarChart || !this.employeeTotals.length) return;
 
     const ctx = this.overallBarChart.nativeElement.getContext('2d');
     if (!ctx) return;
 
-    const config: ChartConfiguration<'bar'> = {
+    // 2. Use 'any' type to bypass DeepPartialObject errors
+    const config: any = {
       type: 'bar',
       data: {
-        labels,
+        labels: this.employeeTotals.map((e) => e.staffName),
         datasets: [
           {
             label: 'Total Salary Paid (₹)',
-            data: values,
+            data: this.employeeTotals.map((e) => e.totalPaid),
             backgroundColor: '#0ea5e9',
             borderRadius: 6,
-            maxBarThickness: 40,
           },
         ],
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-          legend: { display: true },
-          tooltip: {
-            callbacks: {
-              label: (ctx) =>
-                ` ₹${ctx.parsed.y?.toLocaleString('en-IN') ?? '0'}`,
-            },
-          },
-        },
         scales: {
-          x: { grid: { display: false } },
-          y: { beginAtZero: true, grid: { color: '#e5e7eb' } },
+          y: { beginAtZero: true },
         },
       },
     };
 
-    new Chart(ctx, config);
+    this.barChartInstance = new Chart(ctx, config);
   }
 
   // Pie: salary share per employee
