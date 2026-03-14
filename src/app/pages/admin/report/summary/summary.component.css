@@ -232,3 +232,100 @@
   min-height: 250px;
   width: 100%;
 }
+
+/* --- HEADER & DATE FILTER STYLES --- */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* Bottom alignment for clean look */
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.main-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.date-filter-container {
+  display: flex;
+  gap: 15px;
+  background: #f8fafc;
+  padding: 8px 15px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+.date-input {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  color: #334155;
+  outline: none;
+  background: white;
+}
+
+.date-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Maintain your 5-column grid */
+.flex-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+
+/* Original Card Gradients */
+.card-blue { background: radial-gradient(circle at top left, #e0f2fe, #7dd3fc); }
+.card-green { background: radial-gradient(circle at top left, #dcfce7, #86efac); }
+.card-purple { background: radial-gradient(circle at top left, #f3e8ff, #d8b4fe); }
+.card-orange { background: radial-gradient(circle at top left, #ffedd5, #fdba74); }
+.card-indigo { background: radial-gradient(circle at top left, #e0e7ff, #a5b4fc); }
+
+.btn-filter-go {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0 15px;
+  cursor: pointer;
+  margin-left: 5px;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-filter-go:hover {
+  background: #2563eb;
+}
+
+.date-filter-container {
+  display: flex;
+  align-items: stretch; /* Button height match karne ke liye */
+  gap: 10px;
+}

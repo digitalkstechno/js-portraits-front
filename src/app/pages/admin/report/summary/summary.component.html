@@ -1,41 +1,50 @@
 <div class="dashboard-wrapper">
+  
   <div class="header-section">
-    <div class="header-text">
+    <div class="header-left">
       <h1 class="main-title">Financial Dashboard</h1>
-      <p class="sub-title">Performance Overview & Analytics</p>
+      <div class="date-filter-container">
+        <div class="filter-group">
+          <label>From</label>
+          <input type="date" #sDate class="date-input">
+        </div>
+        <div class="filter-group">
+          <label>To</label>
+          <input type="date" #eDate class="date-input">
+        </div>
+        <button (click)="onDateChange(sDate.value, eDate.value)" class="btn-filter-go">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
     </div>
-
+    
     <div class="header-actions">
       <button (click)="downloadExcel()" class="btn-action btn-excel">
-        <i class="fas fa-file-excel"></i> Export Excel
+        <i class="fas fa-file-excel"></i> Excel
       </button>
       <button (click)="downloadPDF()" class="btn-action btn-pdf">
-        <i class="fas fa-file-pdf"></i> Download PDF
+        <i class="fas fa-file-pdf"></i> PDF
       </button>
     </div>
   </div>
 
   <div class="flex-container mb-8">
     <div class="card card-blue">
-      <h3 class="card-title">Outdoor Order Revenue</h3>
+      <h3 class="card-title">Order Revenue</h3>
       <p class="card-value">{{ outdoorOrderRevenue | indiancurrency }}</p>
     </div>
-
     <div class="card card-green">
-      <h3 class="card-title">Outdoor Bill Revenue</h3>
+      <h3 class="card-title">Bill Revenue</h3>
       <p class="card-value">{{ outdoorBillRevenue | indiancurrency }}</p>
     </div>
-
     <div class="card card-purple">
-      <h3 class="card-title">Total Salary Cost</h3>
+      <h3 class="card-title">Salary Cost</h3>
       <p class="card-value">{{ totalSalaryCost | indiancurrency }}</p>
     </div>
-
     <div class="card card-orange">
-      <h3 class="card-title">Total Purchase</h3>
+      <h3 class="card-title">Purchases</h3>
       <p class="card-value">{{ totalPurchase | indiancurrency }}</p>
     </div>
-
     <div class="card card-indigo">
       <h3 class="card-title">Total Sales</h3>
       <p class="card-value">{{ totalSell | indiancurrency }}</p>
@@ -54,47 +63,22 @@
       <h2 class="section-title">KPI Summary</h2>
       <table class="summary-table">
         <tbody>
-          <tr>
-            <td>Outdoor Order Revenue</td>
-            <td class="text-right">
-              {{ outdoorOrderRevenue | indiancurrency }}
-            </td>
-          </tr>
-          <tr>
-            <td>Outdoor Bill Revenue</td>
-            <td class="text-right">
-              {{ outdoorBillRevenue | indiancurrency }}
-            </td>
-          </tr>
-          <tr>
-            <td>Total Sell</td>
-            <td class="text-right">{{ totalSell | indiancurrency }}</td>
-          </tr>
+          <tr><td>Outdoor Orders</td><td class="text-right">{{ outdoorOrderRevenue | indiancurrency }}</td></tr>
+          <tr><td>Outdoor Bills</td><td class="text-right">{{ outdoorBillRevenue | indiancurrency }}</td></tr>
+          <tr><td>Product Sales</td><td class="text-right">{{ totalSell | indiancurrency }}</td></tr>
           <tr class="summary-separator">
             <td><strong>Total Revenue</strong></td>
-            <td class="text-right font-bold text-blue-700">
-              {{ totalRevenue | indiancurrency }}
-            </td>
+            <td class="text-right font-bold text-blue-700">{{ totalRevenue | indiancurrency }}</td>
           </tr>
-          <tr>
-            <td>Total Salary Cost</td>
-            <td class="text-right">{{ totalSalaryCost | indiancurrency }}</td>
-          </tr>
-          <tr>
-            <td>Total Purchase</td>
-            <td class="text-right">{{ totalPurchase | indiancurrency }}</td>
-          </tr>
+          <tr><td>Salary Cost</td><td class="text-right">{{ totalSalaryCost | indiancurrency }}</td></tr>
+          <tr><td>Purchases</td><td class="text-right">{{ totalPurchase | indiancurrency }}</td></tr>
           <tr class="summary-separator">
             <td><strong>Total Cost</strong></td>
-            <td class="text-right font-bold text-orange-700">
-              {{ totalCost | indiancurrency }}
-            </td>
+            <td class="text-right font-bold text-orange-700">{{ totalCost | indiancurrency }}</td>
           </tr>
           <tr class="summary-profit">
             <td><strong>Net Profit</strong></td>
-            <td class="text-right font-bold">
-              {{ netProfit | indiancurrency }}
-            </td>
+            <td class="text-right font-bold">{{ netProfit | indiancurrency }}</td>
           </tr>
         </tbody>
       </table>

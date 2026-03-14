@@ -56,7 +56,24 @@ export class SummaryComponent implements OnInit, AfterViewInit {
   donutChartInstance: any;
 
   ngOnInit(): void {
-    this.loadFinancialSummary();
+    const now = new Date();
+
+    // 1. Local dates nikalne ka sabse safe tarika (YYYY-MM-DD)
+    const today = now.toLocaleDateString('en-CA');
+    const firstDay = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+    ).toLocaleDateString('en-CA');
+
+    // 2. Variables ko update karein taaki UI boxes mein bhi date dikhe
+    this.startDate = firstDay;
+    this.endDate = today;
+
+    console.log('Initial Load with Dates:', firstDay, 'to', today);
+
+    // 3. Dates ke saath call karein
+    this.loadFinancialSummary(this.startDate, this.endDate);
   }
 
   ngAfterViewInit(): void {
@@ -65,6 +82,8 @@ export class SummaryComponent implements OnInit, AfterViewInit {
   }
 
   loadFinancialSummary(sDate?: string, eDate?: string) {
+    console.log('start date', sDate);
+    console.log('end date', eDate);
     this.outdoorService.getFinancialSummary(sDate, eDate).subscribe({
       next: (res) => {
         this.summaryData = res.reportData;
@@ -304,5 +323,14 @@ export class SummaryComponent implements OnInit, AfterViewInit {
     });
 
     doc.save(`Financial_Report_${new Date().getTime()}.pdf`);
+  }
+
+  onDateChange(sDate: string, eDate: string) {
+    if (sDate && eDate) {
+      console.log('Filtering from:', sDate, 'to:', eDate); // Debugging ke liye
+
+      // API call trigger karein
+      this.loadFinancialSummary(sDate, eDate);
+    }
   }
 }

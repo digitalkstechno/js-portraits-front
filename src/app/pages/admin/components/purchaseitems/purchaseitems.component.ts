@@ -65,7 +65,7 @@ export class PurchaseitemsComponent {
     this.productSellForm = this.fb.group({
       bookName: ['', Validators.required],
       billNo: [this.count],
-      purchaseDate: [new Date().toISOString().split('T')[0]],
+      date: [new Date().toISOString().split('T')[0]],
       partyName: ['', Validators.required],
       contactNo: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
 
@@ -247,7 +247,7 @@ export class PurchaseitemsComponent {
   selectBill(bill: any) {
     this.productSellForm.patchValue(
       {
-        date: this.formatDate(bill.sellDate),
+        date: this.formatDate(bill.date),
         billNo: bill.billNo,
         discount: bill.discount || 0,
         amountPaid: bill.amountPaid || 0,
@@ -404,7 +404,7 @@ export class PurchaseitemsComponent {
     this.productSellForm.reset({
       bookName: '',
       billNo: '',
-      sellDate: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split('T')[0],
       partyName: '',
       contactNo: '',
       subTotal: 0,

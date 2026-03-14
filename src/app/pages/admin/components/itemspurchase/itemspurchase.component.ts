@@ -41,7 +41,7 @@ export class ItemspurchaseComponent {
     this.purchaseForm = this.fb.group({
       vendorName: ['', Validators.required],
       invoiceNo: [''],
-      purchaseDate: [new Date().toISOString().substring(0, 10)],
+      date: [new Date().toISOString().substring(0, 10)],
       remarks: [''],
       subTotal: [0],
       totalTax: [0],
@@ -175,7 +175,7 @@ export class ItemspurchaseComponent {
       totalCost: 0,
     });
     this.purchaseForm.reset({
-      purchaseDate: new Date().toISOString().substring(0, 10),
+      date: new Date().toISOString().substring(0, 10),
       invoiceNo: this.count,
       subTotal: 0,
       totalTax: 0,
