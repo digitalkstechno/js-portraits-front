@@ -7,11 +7,13 @@ import {
   inject,
   ChangeDetectorRef,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Chart, registerables, ChartOptions } from 'chart.js';
 import { AdminService } from '../../components/service/admin.service';
 import { SHARED_MODULES } from '../../../../constants/sharedModule';
 import { IndiancurrencyPipe } from '../../pipe/indiancurrency.pipe';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 Chart.register(...registerables); // Required in newer Chart.js versions
 
@@ -206,5 +208,101 @@ export class SummaryComponent implements OnInit, AfterViewInit {
         },
       },
     });
+  }
+
+  downloadExcel() {
+    const report = [
+      {
+        Category: 'Revenue',
+        Item: 'Outdoor Orders',
+        Amount: this.outdoorOrderRevenue,
+      },
+      {
+        Category: 'Revenue',
+        Item: 'Outdoor Bills',
+        Amount: this.outdoorBillRevenue,
+      },
+      { Category: 'Revenue', Item: 'Product Sales', Amount: this.totalSell },
+      { Category: 'Summary', Item: 'TOTAL REVENUE', Amount: this.totalRevenue },
+      {
+        Category: 'Expense',
+        Item: 'Staff Salaries',
+        Amount: this.totalSalaryCost,
+      },
+      {
+        Category: 'Expense',
+        Item: 'Stock Purchases',
+        Amount: this.totalPurchase,
+      },
+      { Category: 'Summary', Item: 'TOTAL COST', Amount: this.totalCost },
+      { Category: 'Summary', Item: 'NET PROFIT', Amount: this.netProfit },
+    ];
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(report);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Financial Summary');
+
+    const fileName = `Financial_Report_${new Date().toLocaleDateString()}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+  }
+
+  // 2. PDF DOWNLOAD
+  downloadPDF() {
+    const doc = new jsPDF();
+
+    // Header
+    doc.setFontSize(18);
+    doc.text('Business Financial Report', 14, 20);
+
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 30);
+
+    // Table Data
+    const head = [['Category', 'Description', 'Amount (INR)']];
+    const data = [
+      [
+        'Revenue',
+        'Outdoor Orders',
+        this.outdoorOrderRevenue.toLocaleString('en-IN'),
+      ],
+      [
+        'Revenue',
+        'Outdoor Bills',
+        this.outdoorBillRevenue.toLocaleString('en-IN'),
+      ],
+      ['Revenue', 'Product Sales', this.totalSell.toLocaleString('en-IN')],
+      ['---', 'TOTAL REVENUE', this.totalRevenue.toLocaleString('en-IN')],
+      [
+        'Expense',
+        'Staff Salaries',
+        this.totalSalaryCost.toLocaleString('en-IN'),
+      ],
+      [
+        'Expense',
+        'Stock Purchases',
+        this.totalPurchase.toLocaleString('en-IN'),
+      ],
+      ['---', 'TOTAL COST', this.totalCost.toLocaleString('en-IN')],
+      ['RESULT', 'NET PROFIT', this.netProfit.toLocaleString('en-IN')],
+    ];
+
+    autoTable(doc, {
+      startY: 40,
+      head: head,
+      body: data,
+      theme: 'grid',
+      headStyles: { fillColor: [15, 23, 42] }, // Dark Slate matching your theme
+      didParseCell: (data) => {
+        if (data.row.index === 7) {
+          // Net Profit Row
+          data.cell.styles.fontStyle = 'bold';
+          data.cell.styles.textColor =
+            this.netProfit >= 0 ? [34, 197, 94] : [239, 68, 68];
+        }
+      },
+    });
+
+    doc.save(`Financial_Report_${new Date().getTime()}.pdf`);
   }
 }

@@ -1,33 +1,47 @@
 <div class="dashboard-wrapper">
-  <!-- KPI CARDS -->
+  <div class="header-section">
+    <div class="header-text">
+      <h1 class="main-title">Financial Dashboard</h1>
+      <p class="sub-title">Performance Overview & Analytics</p>
+    </div>
+
+    <div class="header-actions">
+      <button (click)="downloadExcel()" class="btn-action btn-excel">
+        <i class="fas fa-file-excel"></i> Export Excel
+      </button>
+      <button (click)="downloadPDF()" class="btn-action btn-pdf">
+        <i class="fas fa-file-pdf"></i> Download PDF
+      </button>
+    </div>
+  </div>
+
   <div class="flex-container mb-8">
-    <div class="card card-blue flex-item">
+    <div class="card card-blue">
       <h3 class="card-title">Outdoor Order Revenue</h3>
       <p class="card-value">{{ outdoorOrderRevenue | indiancurrency }}</p>
     </div>
 
-    <div class="card card-green flex-item">
+    <div class="card card-green">
       <h3 class="card-title">Outdoor Bill Revenue</h3>
       <p class="card-value">{{ outdoorBillRevenue | indiancurrency }}</p>
     </div>
 
-    <div class="card card-purple flex-item">
+    <div class="card card-purple">
       <h3 class="card-title">Total Salary Cost</h3>
       <p class="card-value">{{ totalSalaryCost | indiancurrency }}</p>
     </div>
 
-    <div class="card card-purple flex-item">
+    <div class="card card-orange">
       <h3 class="card-title">Total Purchase</h3>
       <p class="card-value">{{ totalPurchase | indiancurrency }}</p>
     </div>
 
-    <div class="card card-purple flex-item">
+    <div class="card card-indigo">
       <h3 class="card-title">Total Sales</h3>
       <p class="card-value">{{ totalSell | indiancurrency }}</p>
     </div>
   </div>
 
-  <!-- TOP ROW: Donut + Summary -->
   <div class="kpi-top">
     <div class="donut-card">
       <h2 class="section-title">Revenue vs Cost Split</h2>
@@ -54,31 +68,25 @@
           </tr>
           <tr>
             <td>Total Sell</td>
-            <td class="text-right">
-              {{ totalSell | indiancurrency }}
-            </td>
+            <td class="text-right">{{ totalSell | indiancurrency }}</td>
           </tr>
           <tr class="summary-separator">
             <td><strong>Total Revenue</strong></td>
-            <td class="text-right font-bold">
+            <td class="text-right font-bold text-blue-700">
               {{ totalRevenue | indiancurrency }}
             </td>
           </tr>
           <tr>
             <td>Total Salary Cost</td>
-            <td class="text-right">
-              {{ totalSalaryCost | indiancurrency }}
-            </td>
+            <td class="text-right">{{ totalSalaryCost | indiancurrency }}</td>
           </tr>
           <tr>
             <td>Total Purchase</td>
-            <td class="text-right">
-              {{ totalPurchase | indiancurrency }}
-            </td>
+            <td class="text-right">{{ totalPurchase | indiancurrency }}</td>
           </tr>
           <tr class="summary-separator">
             <td><strong>Total Cost</strong></td>
-            <td class="text-right font-bold">
+            <td class="text-right font-bold text-orange-700">
               {{ totalCost | indiancurrency }}
             </td>
           </tr>
@@ -93,7 +101,6 @@
     </div>
   </div>
 
-  <!-- BOTTOM ROW: FULL-WIDTH LINE CHART -->
   <div class="chart-row">
     <div class="chart-container">
       <h2 class="section-title">Revenue vs Cost Trend</h2>
